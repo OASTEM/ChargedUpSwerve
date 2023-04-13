@@ -8,6 +8,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants;
+import frc.robot.Constants.MotorConstants;
+
 public class SwerveModule {
   private TalonFX driveMotor;
   private TalonFX steerMotor;
@@ -32,11 +37,24 @@ public class SwerveModule {
     steerMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public void setDrivePosition(double position) {
-    driveMotor.set(ControlMode.Position, position);
+  private void setSteerPosition(double degrees) {
   }
 
-  public void setSteerPosition(double position) {
-    steerMotor.set(ControlMode.Position, position);
+  public double encoderToAngle(double encoderCount) {
+    return encoderCount * 360 / MotorConstants.encoderCountsPerRotation * MotorConstants.angleMotorGearRatio;
+  }
+
+  public double angleToEncoder(double angle) {
+    return angle * MotorConstants.encoderCountsPerRotation / 360 / MotorConstants.angleMotorGearRatio;
+  }
+
+  public void drive(SwerveModuleState state) {
+    // setDriveSpeed(state.speedMetersPerSecond);
+    // setSteerSpeed(state.angle.getDegrees());
+    state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(encoderToAngle(steerMotor.getSelectedSensorPosition())));
+    double stateAngle = state.angle.getDegrees();
+
+    setSteerPosition(angleToEncoder(state.angle.getDegrees()));
+    setDriveSpeed(state.speedMetersPerSecond / MotorConstants.maxSpeed);
   }
 }

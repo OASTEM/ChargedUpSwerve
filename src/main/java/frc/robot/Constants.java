@@ -25,6 +25,10 @@ public final class Constants {
     public static final int backLeftSteerId = 6;
     public static final int backRightDriveId = 7;
     public static final int backRightSteerId = 8;
+
+    public static final double maxSpeed = 1;
+    public static final double encoderCountsPerRotation = 2048;
+    public static final double angleMotorGearRatio = 1;
   }
 
   public static class SwerveConstants {
