@@ -37,10 +37,23 @@ public class DriveTrain extends SubsystemBase {
         // Constants.MotorConstants.backRightSteerId);
 
         modules = new SwerveModule[] {
-                new SwerveModule(MotorConstants.frontLeftDriveId, MotorConstants.frontLeftSteerId),
-                new SwerveModule(MotorConstants.frontRightDriveId, MotorConstants.frontRightSteerId),
-                new SwerveModule(MotorConstants.backLeftDriveId, MotorConstants.backLeftSteerId),
-                new SwerveModule(MotorConstants.backRightDriveId, MotorConstants.backRightSteerId) };
+            new SwerveModule(
+                MotorConstants.frontLeftDriveId,
+                MotorConstants.frontLeftSteerId
+            ),
+            new SwerveModule(
+                MotorConstants.frontRightDriveId,
+                MotorConstants.frontRightSteerId
+            ),
+            new SwerveModule(
+                MotorConstants.backLeftDriveId,
+                MotorConstants.backLeftSteerId
+            ),
+            new SwerveModule(
+                MotorConstants.backRightDriveId,
+                MotorConstants.backRightSteerId
+            ) 
+        };
     }
 
     public void drive(double forwardSpeed, double leftSpeed, double rotationSpeed) {
@@ -49,8 +62,11 @@ public class DriveTrain extends SubsystemBase {
                 leftSpeed,
                 rotationSpeed,
                 Rotation2d.fromDegrees(navX.getAngle()));
-        SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(speeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, MotorConstants.maxSpeed);
+        SwerveModuleState[] states =
+            SwerveConstants.kinematics.toSwerveModuleStates(speeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+            states, MotorConstants.maxSpeed
+        );
 
         for (int i = 0; i < modules.length; i++) {
             modules[i].drive(states[i]);

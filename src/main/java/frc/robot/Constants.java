@@ -50,14 +50,20 @@ public final class Constants {
             throw new IllegalStateException(UTILITY_CLASS);
         }
 
-        public static final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
-        public static final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
-        public static final Translation2d backLeftLocation = new Translation2d(-0.381, 0.381);
-        public static final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
-        public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+        public static final Translation2d frontLeftLocation =
+            new Translation2d(0.381, 0.381);
+        public static final Translation2d frontRightLocation =
+            new Translation2d(0.381, -0.381);
+        public static final Translation2d backLeftLocation =
+            new Translation2d(-0.381, 0.381);
+        public static final Translation2d backRightLocation =
+            new Translation2d(-0.381, -0.381);
+        public static final SwerveDriveKinematics kinematics =
+            new SwerveDriveKinematics(
                 frontLeftLocation,
                 frontRightLocation,
                 backLeftLocation,
-                backRightLocation);
+                backRightLocation
+            );
     }
 }
