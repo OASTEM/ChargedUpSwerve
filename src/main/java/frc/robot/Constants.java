@@ -20,50 +20,44 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    private static final String UTILITY_CLASS = "Utility class";
+  private static final String UTILITY_CLASS = "Utility class";
 
-    private Constants() {
-        throw new IllegalStateException(UTILITY_CLASS);
+  private Constants() {
+    throw new IllegalStateException(UTILITY_CLASS);
+  }
+
+  public static class MotorConstants {
+    private MotorConstants() {
+      throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static class MotorConstants {
-        private MotorConstants() {
-            throw new IllegalStateException(UTILITY_CLASS);
-        }
+    public static final int FRONT_LEFT_DRIVE_ID = 1;
+    public static final int FRONT_LEFT_STEER_ID = 2;
+    public static final int FRONT_RIGHT_DRIVE_ID = 3;
+    public static final int FRONT_RIGHT_STEER_ID = 4;
+    public static final int BACK_LEFT_DRIVE_ID = 5;
+    public static final int BACK_LEFT_STEER_ID = 6;
+    public static final int BACK_RIGHT_DRIVE_ID = 7;
+    public static final int BACK_RIGHT_STEER_ID = 8;
 
-        public static final int frontLeftDriveId = 1;
-        public static final int frontLeftSteerId = 2;
-        public static final int frontRightDriveId = 3;
-        public static final int frontRightSteerId = 4;
-        public static final int backLeftDriveId = 5;
-        public static final int backLeftSteerId = 6;
-        public static final int backRightDriveId = 7;
-        public static final int backRightSteerId = 8;
+    public static final double MAX_SPEED = 1;
+    public static final double ENCODER_COUNTS_PER_ROTATION = 2048;
+    public static final double STEER_MOTOR_GEAR_RATIO = 1;
+  }
 
-        public static final double maxSpeed = 1;
-        public static final double encoderCountsPerRotation = 2048;
-        public static final double angleMotorGearRatio = 1;
+  public static class SwerveConstants {
+    private SwerveConstants() {
+      throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static class SwerveConstants {
-        private SwerveConstants() {
-            throw new IllegalStateException(UTILITY_CLASS);
-        }
-
-        public static final Translation2d frontLeftLocation =
-            new Translation2d(0.381, 0.381);
-        public static final Translation2d frontRightLocation =
-            new Translation2d(0.381, -0.381);
-        public static final Translation2d backLeftLocation =
-            new Translation2d(-0.381, 0.381);
-        public static final Translation2d backRightLocation =
-            new Translation2d(-0.381, -0.381);
-        public static final SwerveDriveKinematics kinematics =
-            new SwerveDriveKinematics(
-                frontLeftLocation,
-                frontRightLocation,
-                backLeftLocation,
-                backRightLocation
-            );
-    }
+    public static final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
+    public static final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.381, 0.381);
+    public static final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
+    public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+        frontLeftLocation,
+        frontRightLocation,
+        backLeftLocation,
+        backRightLocation);
+  }
 }

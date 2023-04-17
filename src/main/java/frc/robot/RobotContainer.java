@@ -20,54 +20,54 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    // The robot's subsystems and commands are defined here...
-    private final LogitechGamingPad pad = new LogitechGamingPad(0);
+  // The robot's subsystems and commands are defined here...
+  private final LogitechGamingPad pad = new LogitechGamingPad(0);
 
-    // Buttons
-    // private final JoystickButton padA = new JoystickButton(pad, 1);
-    // private final JoystickButton padB = new JoystickButton(pad, 2);
-    // private final JoystickButton padX = new JoystickButton(pad, 3);
-    // private final JoystickButton padY = new JoystickButton(pad, 4);
-    // private final JoystickButton rightBumper = new JoystickButton(pad, 6);
-    // private final JoystickButton leftBumper = new JoystickButton(pad, 5);
+  // Buttons
+  // private final JoystickButton padA = new JoystickButton(pad, 1);
+  // private final JoystickButton padB = new JoystickButton(pad, 2);
+  // private final JoystickButton padX = new JoystickButton(pad, 3);
+  // private final JoystickButton padY = new JoystickButton(pad, 4);
+  // private final JoystickButton rightBumper = new JoystickButton(pad, 6);
+  // private final JoystickButton leftBumper = new JoystickButton(pad, 5);
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        // Configure the trigger bindings
-        configureBindings();
-    }
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
+  public RobotContainer() {
+    // Configure the trigger bindings
+    configureBindings();
+  }
 
-    /**
-     * Use this method to define your trigger->command mappings. Triggers can be
-     * created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-     * an arbitrary
-     * predicate, or via the named factories in {@link
-     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-     * {@link
-     * CommandXboxController
-     * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-     * PS4} controllers or
-     * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-     * joysticks}.
-     */
-    private void configureBindings() {
-        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+  /**
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link
+   * CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
+  private void configureBindings() {
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-        // pressed,
-        // cancelling on release.
-    }
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
+    // pressed,
+    // cancelling on release.
+  }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        return null;
-    }
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return null;
+  }
 }
