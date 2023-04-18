@@ -9,24 +9,23 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class SwerveJoystick extends CommandBase {
+public class Drive extends CommandBase {
 
   private final SwerveSubsystem swerveSubsystem;
-  private final Supplier<Double> xSpdFunction,
-      ySpdFunction, turningSpdFunction;
-  private final Supplier<Boolean> fieldOrientedFunction;
+  private final double x, y, turn;
+  private final boolean isFieldOriented;
 
   /** Creates a new SwerveJoystick. */
-  public SwerveJoystick(SwerveSubsystem swerveSubsystem,
-      Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction,
-      Supplier<Double> turningSpdFunction,
-      Supplier<Boolean> fieldOrientedFunction) {
+  public Drive(SwerveSubsystem swerveSubsystem,
+      double x, double y,
+      double turn,
+      boolean isFieldOriented) {
 
     this.swerveSubsystem = swerveSubsystem;
-    this.xSpdFunction = xSpdFunction;
-    this.ySpdFunction = ySpdFunction;
-    this.turningSpdFunction = turningSpdFunction;
-    this.fieldOrientedFunction = fieldOrientedFunction;
+    this.x = x;
+    this.y = y;
+    this.turn = turn;
+    this.isFieldOriented = isFieldOriented;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerveSubsystem);
@@ -40,6 +39,7 @@ public class SwerveJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   }
 
   // Called once the command ends or is interrupted.

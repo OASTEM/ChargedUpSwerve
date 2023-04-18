@@ -61,12 +61,21 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void drive(double forwardSpeed,
-      double leftSpeed, double rotationSpeed) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+      double leftSpeed, double rotationSpeed, boolean isFieldOriented) {
+    ChassisSpeeds speeds;
+    if (isFieldOriented) {
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         forwardSpeed,
         leftSpeed,
         rotationSpeed,
         Rotation2d.fromDegrees(navX.getAngle()));
+    } else {
+      speeds = new ChassisSpeeds(
+        forwardSpeed,
+        leftSpeed,
+        rotationSpeed);
+    }
+    
 
     SwerveModuleState[] states =
       SwerveConstants.kinematics.toSwerveModuleStates(speeds);
