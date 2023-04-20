@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.commands.Drive;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final LogitechGamingPad pad = new LogitechGamingPad(0);
 
   // Buttons
@@ -35,6 +38,11 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    swerveSubsystem.setDefaultCommand(
+      new Drive(
+        swerveSubsystem, pad, true
+      )
+    );
     // Configure the trigger bindings
     configureBindings();
   }

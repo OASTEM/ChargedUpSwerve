@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.MotorConstants;
 
@@ -32,6 +33,14 @@ public class SwerveModule {
     steerMotor.config_kD(0, 0);
 
     resetEncoders();
+  }
+
+  public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(
+        driveMotor.getSelectedSensorPosition() * MotorConstants.DRIVE_GEAR_RATIO,
+        Rotation2d.fromDegrees(
+            encoderToAngle(steerMotor.getSelectedSensorPosition(),
+                MotorConstants.STEER_GEAR_RATIO)));
   }
 
   public void setDriveSpeed(double speed) {
@@ -61,6 +70,13 @@ public class SwerveModule {
   public double angleToEncoder(double angle, double gearRatio) {
     return angle * MotorConstants.ENCODER_COUNTS_PER_ROTATION / 360 /
         gearRatio;
+  }
+
+  public double encodertoMeters(double encoderCount, double gearRatio) {
+    // return encoderCount * MotorConstants.WHEEL_DIAMETER * Math.PI /
+    //     MotorConstants.ENCODER_COUNTS_PER_ROTATION * gearRatio;
+
+    return encoderCount/MotorENCODER_COUNTS_PER_ROTATION * WHEEL_DIAMETER * Math.PI * gearRatio;
   }
 
   public void setState(SwerveModuleState state) {

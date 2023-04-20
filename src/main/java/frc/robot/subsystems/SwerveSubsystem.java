@@ -9,6 +9,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorConstants;
@@ -22,6 +24,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule backLeft;
   // private SwerveModule backRight;
   private SwerveModule[] modules;
+  private SwerveDriveOdometry odometry;
 
   private final AHRS navX = new AHRS(SPI.Port.kMXP);
 
@@ -51,13 +54,19 @@ public class SwerveSubsystem extends SubsystemBase {
             MotorConstants.BACK_RIGHT_STEER_ID)
     };
 
-    new Thread(() -> {
-      try {
-        Thread.sleep(1000);
-        zeroHeading();
-      } catch (Exception e) {
-      }
-    }).start();
+    SwerveModulePosition[] initPositions = {}
+
+    odometry = new SwerveDriveOdometry(
+      SwerveConstants.kinematics, getHeading(), new SwerveModulePosition[] {}
+    );
+
+    // new Thread(() -> {
+    //   try {
+    //     Thread.sleep(1000);
+    //     zeroHeading();
+    //   } catch (Exception e) {
+    //   }
+    // }).start();
   }
 
   public void drive(double forwardSpeed,
@@ -92,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public double getHeading() {
-    return Math.IEEEremainder(navX.getAngle(), 360);
+    return navX.getAngle() % 360;
   }
 
   /** Gets the NavX angle as a Rotation2d. */

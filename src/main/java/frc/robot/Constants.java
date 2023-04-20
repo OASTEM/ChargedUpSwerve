@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -40,9 +42,11 @@ public final class Constants {
     public static final int BACK_RIGHT_DRIVE_ID = 7;
     public static final int BACK_RIGHT_STEER_ID = 8;
 
-    public static final double MAX_SPEED = 1;
+    public static final double MAX_SPEED = 4.96824;
+    public static final double MAX_ANGULAR_SPEED = 4.24547626559;
     public static final double ENCODER_COUNTS_PER_ROTATION = 2048;
     public static final double STEER_MOTOR_GEAR_RATIO = 1;
+    public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
   }
 
   public static class SwerveConstants {
