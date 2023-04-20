@@ -4,22 +4,19 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
-public class Drive extends CommandBase {
+public class PadDrive extends CommandBase {
 
   private final SwerveSubsystem swerveSubsystem;
   private final boolean isFieldOriented;
   private final LogitechGamingPad pad;
 
   /** Creates a new SwerveJoystick. */
-  public Drive(SwerveSubsystem swerveSubsystem,
+  public PadDrive(SwerveSubsystem swerveSubsystem,
       LogitechGamingPad pad,
       boolean isFieldOriented) {
     this.swerveSubsystem = swerveSubsystem;
@@ -27,7 +24,7 @@ public class Drive extends CommandBase {
     this.isFieldOriented = isFieldOriented;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(swerveSubsystem);
+    addRequirements(this.swerveSubsystem);
   }
 
   // Called when the command is initially scheduled.

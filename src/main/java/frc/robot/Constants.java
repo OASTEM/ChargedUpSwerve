@@ -4,10 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -47,6 +47,9 @@ public final class Constants {
     public static final double ENCODER_COUNTS_PER_ROTATION = 2048;
     public static final double STEER_MOTOR_GEAR_RATIO = 1;
     public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
+    public static final double STEER_GEAR_RATIO = 0;
+    public static final double DRIVE_GEAR_RATIO = 0;
+    public static final double WHEEL_DIAMETER = 0;
   }
 
   public static class SwerveConstants {
@@ -63,5 +66,7 @@ public final class Constants {
         frontRightLocation,
         backLeftLocation,
         backRightLocation);
+    public static final Pose2d STARTING_POSE = new Pose2d(5.0, 13.5, new Rotation2d());
+    public static final double STATE_SPEED_THRESHOLD = 0.001;
   }
 }

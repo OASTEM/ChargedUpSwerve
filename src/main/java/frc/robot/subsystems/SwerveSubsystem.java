@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -13,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
 import edu.wpi.first.wpilibj.SPI;
@@ -54,18 +56,23 @@ public class SwerveSubsystem extends SubsystemBase {
             MotorConstants.BACK_RIGHT_STEER_ID)
     };
 
-    SwerveModulePosition[] initPositions = {}
-
+    // Creating my odometry object from the kinematics object and the initial wheel
+    // positions.
+    // Here, our starting pose is 5 meters along the long end of the field and in
+    // the
+    // center of the field along the short end, facing the opposing alliance wall.
     odometry = new SwerveDriveOdometry(
-      SwerveConstants.kinematics, getHeading(), new SwerveModulePosition[] {}
-    );
+        SwerveConstants.kinematics,
+        getRotation2d(),
+        getModulePositions(),
+        Constants.SwerveConstants.STARTING_POSE);
 
     // new Thread(() -> {
-    //   try {
-    //     Thread.sleep(1000);
-    //     zeroHeading();
-    //   } catch (Exception e) {
-    //   }
+    // try {
+    // Thread.sleep(1000);
+    // zeroHeading();
+    // } catch (Exception e) {
+    // }
     // }).start();
   }
 
@@ -74,26 +81,36 @@ public class SwerveSubsystem extends SubsystemBase {
     ChassisSpeeds speeds;
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        forwardSpeed,
-        leftSpeed,
-        rotationSpeed,
-        Rotation2d.fromDegrees(navX.getAngle()));
+          forwardSpeed,
+          leftSpeed,
+          rotationSpeed,
+          Rotation2d.fromDegrees(navX.getAngle()));
     } else {
       speeds = new ChassisSpeeds(
-        forwardSpeed,
-        leftSpeed,
-        rotationSpeed);
+          forwardSpeed,
+          leftSpeed,
+          rotationSpeed);
     }
-    
 
-    SwerveModuleState[] states =
-      SwerveConstants.kinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorConstants.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
     }
+  }
+
+  public SwerveModulePosition[] getModulePositions() {
+    SwerveModulePosition[] positions = new SwerveModulePosition[modules.length];
+    for (int i = 0; i < modules.length; i++) {
+      positions[i] = modules[i].getPosition();
+    }
+    return positions;
+  }
+
+  public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
+    odometry.resetPosition(gyroAngle, modulePositions, newPose);
   }
 
   public void zeroHeading() {
@@ -113,6 +130,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Robot Heading", getHeading());
+    Rotation2d gyroAngle = getRotation2d();
+    odometry.update(gyroAngle, getModulePositions());
   }
 
   public void stopModules() {

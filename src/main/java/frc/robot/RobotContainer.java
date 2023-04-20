@@ -4,12 +4,11 @@
 
 package frc.robot;
 
-import frc.robot.commands.Drive;
+import frc.robot.commands.PadDrive;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -39,10 +38,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(
-      new Drive(
-        swerveSubsystem, pad, true
-      )
-    );
+        new PadDrive(
+            swerveSubsystem, pad, true));
     // Configure the trigger bindings
     configureBindings();
   }

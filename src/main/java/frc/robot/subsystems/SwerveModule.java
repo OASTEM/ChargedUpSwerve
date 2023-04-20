@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.MotorConstants;
+import frc.robot.Constants.SwerveConstants;
 
 public class SwerveModule {
   private TalonFX driveMotor;
@@ -37,7 +38,8 @@ public class SwerveModule {
 
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        driveMotor.getSelectedSensorPosition() * MotorConstants.DRIVE_GEAR_RATIO,
+        encoderToMeters(
+            driveMotor.getSelectedSensorPosition(), MotorConstants.DRIVE_GEAR_RATIO),
         Rotation2d.fromDegrees(
             encoderToAngle(steerMotor.getSelectedSensorPosition(),
                 MotorConstants.STEER_GEAR_RATIO)));
@@ -72,29 +74,28 @@ public class SwerveModule {
         gearRatio;
   }
 
-  public double encodertoMeters(double encoderCount, double gearRatio) {
-    // return encoderCount * MotorConstants.WHEEL_DIAMETER * Math.PI /
-    //     MotorConstants.ENCODER_COUNTS_PER_ROTATION * gearRatio;
+  public double encoderToMeters(double encoderCount, double gearRatio) {
+    return encoderCount / (MotorConstants.ENCODER_COUNTS_PER_ROTATION *
+        gearRatio) * MotorConstants.WHEEL_DIAMETER * Math.PI;
+  }
 
-    return encoderCount/MotorENCODER_COUNTS_PER_ROTATION * WHEEL_DIAMETER * Math.PI * gearRatio;
+  public double metersToEncoder(double meters, double gearRatio) {
+    return meters / (MotorConstants.WHEEL_DIAMETER * Math.PI) *
+        MotorConstants.ENCODER_COUNTS_PER_ROTATION * gearRatio;
   }
 
   public void setState(SwerveModuleState state) {
-    // setDriveSpeed(state.speedMetersPerSecond);
-    // setSteerSpeed(state.angle.getDegrees());
-    if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-      stop();
-      return;
-    }
-
     state = SwerveModuleState.optimize(state,
         Rotation2d.fromDegrees(
             encoderToAngle(steerMotor.getSelectedSensorPosition(),
                 MotorConstants.STEER_MOTOR_GEAR_RATIO)));
 
-    setSteerPosition(angleToEncoder(
-        state.angle.getDegrees(), MotorConstants.STEER_MOTOR_GEAR_RATIO));
     setDriveSpeed(state.speedMetersPerSecond / MotorConstants.MAX_SPEED);
+
+    if (Math.abs(state.speedMetersPerSecond) > SwerveConstants.STATE_SPEED_THRESHOLD) {
+      setSteerPosition(angleToEncoder(
+        state.angle.getDegrees(), MotorConstants.STEER_MOTOR_GEAR_RATIO));
+    }
   }
 
   public void stop() {
