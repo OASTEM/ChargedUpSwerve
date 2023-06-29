@@ -66,7 +66,8 @@ public final class Constants {
         frontRightLocation,
         backLeftLocation,
         backRightLocation);
-    public static final Pose2d STARTING_POSE = new Pose2d(5.0, 13.5, new Rotation2d());
+    public static final Pose2d 
+    STARTING_POSE = new Pose2d(5.0, 13.5, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.001;
   }
 }
