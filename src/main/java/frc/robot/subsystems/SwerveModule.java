@@ -4,9 +4,16 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.motorcontrol.ControlMode;
-import com.ctre.phoenix6.motorcontrol.NeutralMode;
-import com.ctre.phoenix6.motorcontrol.can.TalonFX;
+
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot2Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -18,20 +25,48 @@ public class SwerveModule {
   private TalonFX driveMotor;
   private TalonFX steerMotor;
 
+  private MotorOutputConfigs motorConfigs;
+
+  private TalonFXConfigurator driveConfigurator;
+  private TalonFXConfigurator steerConfigurator;
+
+  private Slot0Configs driveslot0Configs;
+  private Slot0Configs steerslot0Configs;
+
+  private VoltageOut m_request;
+
+  private PositionDutyCycle m_position;
+
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveId, int steerId) {
     driveMotor = new TalonFX(driveId);
     steerMotor = new TalonFX(steerId);
 
-    driveMotor.configFactoryDefault();
-    steerMotor.configFactoryDefault();
+    motorConfigs = new MotorOutputConfigs();
 
-    driveMotor.setNeutralMode(NeutralMode.Brake);
-    steerMotor.setNeutralMode(NeutralMode.Brake);
+    driveConfigurator = driveMotor.getConfigurator();
+    steerConfigurator = steerMotor.getConfigurator();
 
-    steerMotor.config_kP(0, 0);
-    steerMotor.config_kI(0, 0);
-    steerMotor.config_kD(0, 0);
+    driveslot0Configs = new Slot0Configs();
+    steerslot0Configs = new Slot0Configs();
+    
+    m_request = new VoltageOut(0);
+    m_position = new PositionDutyCycle(0);
+
+    driveMotor.getConfigurator().apply(new TalonFXConfiguration());
+    steerMotor.getConfigurator().apply(new TalonFXConfiguration());
+
+    motorConfigs.NeutralMode = NeutralModeValue.Brake;
+    driveConfigurator.apply(motorConfigs);
+    steerConfigurator.apply(motorConfigs);
+
+    driveslot0Configs.kP = 0;
+    driveslot0Configs.kI = 0;
+    driveslot0Configs.kD = 0;
+
+    steerslot0Configs.kP = 0;
+    steerslot0Configs.kI = 0;
+    steerslot0Configs.kD = 0;
 
     resetEncoders();
   }
@@ -39,30 +74,30 @@ public class SwerveModule {
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         encoderToMeters(
-            driveMotor.getSelectedSensorPosition(), MotorConstants.DRIVE_GEAR_RATIO
+            driveMotor.getRotorPosition().getValue(), MotorConstants.DRIVE_GEAR_RATIO
         ),
         Rotation2d.fromDegrees(
-            encoderToAngle(steerMotor.getSelectedSensorPosition(),
+            encoderToAngle(steerMotor.getRotorPosition().getValue(),
                            MotorConstants.STEER_GEAR_RATIO)
         )
     );
   }
 
   public void setDriveSpeed(double speed) {
-    driveMotor.set(ControlMode.PercentOutput, speed);
+    driveMotor.setControl(m_request.withOutput(speed));
   }
 
   public void setSteerSpeed(double speed) {
-    steerMotor.set(ControlMode.PercentOutput, speed);
+    steerMotor.setControl(m_request.withOutput(speed));
   }
 
   public void setSteerPosition(double encoderCount) {
-    steerMotor.set(ControlMode.Position, encoderCount);
+    steerMotor.setControl(m_position.withPosition(encoderCount));
   }
 
   public void resetEncoders() {
-    driveMotor.setSelectedSensorPosition(0);
-    steerMotor.setSelectedSensorPosition(0);
+    driveMotor.setRotorPosition(0);
+    steerMotor.setRotorPosition(0);
   }
 
   /** Converts encoder counts to degrees. */
@@ -90,7 +125,7 @@ public class SwerveModule {
   public void setState(SwerveModuleState state) {
     state = SwerveModuleState.optimize(state,
         Rotation2d.fromDegrees(
-            encoderToAngle(steerMotor.getSelectedSensorPosition(),
+            encoderToAngle(steerMotor.getRotorPosition().getValue(),
                 MotorConstants.STEER_MOTOR_GEAR_RATIO)));
 
     setDriveSpeed(state.speedMetersPerSecond / MotorConstants.MAX_SPEED);
