@@ -41,10 +41,14 @@ public final class Constants {
     public static final int BACK_LEFT_STEER_ID = 6;
     public static final int BACK_RIGHT_DRIVE_ID = 7;
     public static final int BACK_RIGHT_STEER_ID = 8;
+    public static final int FRONT_LEFT_CAN_CODER_ID = 9;
+    public static final int FRONT_RIGHT_CAN_CODER_ID = 10;
+    public static final int BACK_LEFT_CAN_CODER_ID =11;
+    public static final int BACK_RIGHT_CAN_CODER_ID = 12;
 
     public static final double MAX_SPEED = 4.96824;
     public static final double MAX_ANGULAR_SPEED = 4.24547626559;
-    public static final double ENCODER_COUNTS_PER_ROTATION = 2048;
+    public static final double ENCODER_COUNTS_PER_ROTATION = 1; //2048 for v5, 1 for v6
     public static final double STEER_MOTOR_GEAR_RATIO = 1;
     public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
     public static final double STEER_GEAR_RATIO = 0;

@@ -5,12 +5,15 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot2Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -24,6 +27,7 @@ import frc.robot.Constants.SwerveConstants;
 public class SwerveModule {
   private TalonFX driveMotor;
   private TalonFX steerMotor;
+  private CANCoder canCoder;
 
   private MotorOutputConfigs motorConfigs;
 
@@ -33,14 +37,15 @@ public class SwerveModule {
   private Slot0Configs driveslot0Configs;
   private Slot0Configs steerslot0Configs;
 
-  private VoltageOut m_request;
+  private DutyCycleOut m_request;
 
-  private PositionDutyCycle m_position;
+  private PositionVoltage m_position;
 
   /** Creates a new SwerveModule. */
-  public SwerveModule(int driveId, int steerId) {
+  public SwerveModule(int driveId, int steerId, int canCoderID) {
     driveMotor = new TalonFX(driveId);
     steerMotor = new TalonFX(steerId);
+    canCoder = new CANCoder(canCoderID);
 
     motorConfigs = new MotorOutputConfigs();
 
@@ -50,8 +55,8 @@ public class SwerveModule {
     driveslot0Configs = new Slot0Configs();
     steerslot0Configs = new Slot0Configs();
     
-    m_request = new VoltageOut(0);
-    m_position = new PositionDutyCycle(0);
+    m_request = new DutyCycleOut(0);
+    m_position = new PositionVoltage(0);
 
     driveMotor.getConfigurator().apply(new TalonFXConfiguration());
     steerMotor.getConfigurator().apply(new TalonFXConfiguration());
