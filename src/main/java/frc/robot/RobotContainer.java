@@ -39,7 +39,7 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(
         new PadDrive(
-            swerveSubsystem, pad, false));
+            swerveSubsystem, pad, true));
     // Configure the trigger bindings
     configureBindings();
   }

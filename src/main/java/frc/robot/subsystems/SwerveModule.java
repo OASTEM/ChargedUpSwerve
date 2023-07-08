@@ -21,6 +21,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
 
@@ -65,11 +66,11 @@ public class SwerveModule {
     driveConfigurator.apply(motorConfigs);
     steerConfigurator.apply(motorConfigs);
 
-    driveslot0Configs.kP = 0;
+    driveslot0Configs.kP = 0.01;
     driveslot0Configs.kI = 0;
     driveslot0Configs.kD = 0;
 
-    steerslot0Configs.kP = 0;
+    steerslot0Configs.kP = 0.01;
     steerslot0Configs.kI = 0;
     steerslot0Configs.kD = 0;
 
@@ -79,11 +80,11 @@ public class SwerveModule {
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         encoderToMeters(
-            driveMotor.getRotorPosition().getValue(), MotorConstants.DRIVE_GEAR_RATIO
+            driveMotor.getRotorPosition().getValue(), MotorConstants.DRIVE_MOTOR_GEAR_RATIO
         ),
         Rotation2d.fromDegrees(
             encoderToAngle(steerMotor.getRotorPosition().getValue(),
-                           MotorConstants.STEER_GEAR_RATIO)
+                           MotorConstants.STEER_MOTOR_GEAR_RATIO)
         )
     );
   }
@@ -111,6 +112,10 @@ public class SwerveModule {
         MotorConstants.ENCODER_COUNTS_PER_ROTATION * gearRatio;
   }
 
+  public double angleToRotations(double angle, double gearRatio) {
+    return angle / 360 * gearRatio;
+  }
+
   /** Converts degrees to encoder counts. */
   public double angleToEncoder(double angle, double gearRatio) {
     return angle * MotorConstants.ENCODER_COUNTS_PER_ROTATION / 360 /
@@ -133,16 +138,23 @@ public class SwerveModule {
             encoderToAngle(steerMotor.getRotorPosition().getValue(),
                 MotorConstants.STEER_MOTOR_GEAR_RATIO)));
 
+    System.out.println(state.speedMetersPerSecond);
     setDriveSpeed(state.speedMetersPerSecond / MotorConstants.MAX_SPEED);
 
     if (Math.abs(state.speedMetersPerSecond) > SwerveConstants.STATE_SPEED_THRESHOLD) {
-      setSteerPosition(angleToEncoder(
-        state.angle.getDegrees(), MotorConstants.STEER_MOTOR_GEAR_RATIO));
+      double newRotations = angleToRotations(
+        state.angle.getDegrees(), MotorConstants.STEER_MOTOR_GEAR_RATIO);
+      SmartDashboard.putNumber("Set Falcon " + this.steerMotor.getDeviceID(), newRotations);
+      setSteerPosition(newRotations);
     }
   }
 
   public void stop() {
     setDriveSpeed(0);
     setSteerSpeed(0);
+  }
+
+  public void updateSteerPositionSmartDashboard() {
+    SmartDashboard.putNumber("Actual Falcon " + this.steerMotor.getDeviceID(), this.steerMotor.getRotorPosition().refresh().getValue());
   }
 }

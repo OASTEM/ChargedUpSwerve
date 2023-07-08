@@ -35,6 +35,9 @@ public class PadDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //swerveSubsystem.test(0, pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED, pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED);
+
+    System.out.println("Inside PadDrive");
     double x = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED;
     double y = pad.getLeftAnalogYAxis() * MotorConstants.MAX_SPEED;
     double turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;

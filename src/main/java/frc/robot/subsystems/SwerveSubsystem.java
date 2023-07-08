@@ -32,6 +32,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
+    navX.reset();
+
     // frontLeft = new SwerveModule(Constants.MotorConstants.frontLeftDriveId,
     // Constants.MotorConstants.frontLeftSteerId);
     // frontRight = new SwerveModule(Constants.MotorConstants.frontRightDriveId,
@@ -83,6 +85,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public void drive(double forwardSpeed,
       double leftSpeed, double rotationSpeed, boolean isFieldOriented) {
     ChassisSpeeds speeds;
+
+    System.out.println("NavX Angle " + navX.getAngle());
+
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           forwardSpeed,
@@ -103,6 +108,7 @@ public class SwerveSubsystem extends SubsystemBase {
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
     }
+    updateAllSteerPositionSmartDashboard();
   }
 
   public SwerveModulePosition[] getModulePositions() {
@@ -144,10 +150,16 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-  // public void test(int moduleNum, double driveSpeed, double rotationSpeed) {
-  //   SwerveModule module = modules[moduleNum];
+  public void updateAllSteerPositionSmartDashboard() {
+    for (SwerveModule currModule : modules) {
+      currModule.updateSteerPositionSmartDashboard();
+    }
+  }
 
-  //   module.setDriveSpeed(driveSpeed);
-  //   module.setSteerSpeed(rotationSpeed);
-  // }
+  public void test(int moduleNum, double driveSpeed, double rotationSpeed) {
+    SwerveModule module = modules[moduleNum];
+
+    module.setDriveSpeed(driveSpeed);
+    module.setSteerSpeed(rotationSpeed);
+  }
 }
