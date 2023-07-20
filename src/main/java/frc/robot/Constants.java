@@ -43,7 +43,7 @@ public final class Constants {
     public static final int BACK_RIGHT_DRIVE_ID = 8;
     public static final int FRONT_LEFT_CAN_CODER_ID = 9;
     public static final int FRONT_RIGHT_CAN_CODER_ID = 10;
-    public static final int BACK_LEFT_CAN_CODER_ID =11;
+    public static final int BACK_LEFT_CAN_CODER_ID = 11;
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
 
     public static final double MAX_SPEED = 4.96824;
@@ -59,10 +59,10 @@ public final class Constants {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
-    public static final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
-    public static final Translation2d backLeftLocation = new Translation2d(-0.381, 0.381);
-    public static final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
+    public static final Translation2d frontLeftLocation = new Translation2d(0.381, -0.381);
+    public static final Translation2d frontRightLocation = new Translation2d(0.381, 0.381);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.381, -0.381);
+    public static final Translation2d backRightLocation = new Translation2d(-0.381, +0.381);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         frontLeftLocation,
         frontRightLocation,
@@ -70,6 +70,13 @@ public final class Constants {
         backRightLocation);
     public static final Pose2d 
     STARTING_POSE = new Pose2d(5.0, 13.5, new Rotation2d());
-    public static final double STATE_SPEED_THRESHOLD = 0.001;
+    public static final double STATE_SPEED_THRESHOLD = 0.03;
+
+    public static final double CANCoderValue9 = 0.539794;
+    public static final double CANCoderValue10 = 0.984863;
+    public static final double CANCoderValue11 = 0.9174805;
+    public static final double CANCoderValue12 = 0.328613;
+
+
   }
 }

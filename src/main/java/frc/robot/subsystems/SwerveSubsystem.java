@@ -47,19 +47,23 @@ public class SwerveSubsystem extends SubsystemBase {
         new SwerveModule(
             MotorConstants.FRONT_LEFT_DRIVE_ID,
             MotorConstants.FRONT_LEFT_STEER_ID,
-            MotorConstants.FRONT_LEFT_CAN_CODER_ID),
+            MotorConstants.FRONT_LEFT_CAN_CODER_ID,
+            Constants.SwerveConstants.CANCoderValue9),
         new SwerveModule(
             MotorConstants.FRONT_RIGHT_DRIVE_ID,
             MotorConstants.FRONT_RIGHT_STEER_ID,
-            MotorConstants.FRONT_RIGHT_CAN_CODER_ID),
+            MotorConstants.FRONT_RIGHT_CAN_CODER_ID,
+            Constants.SwerveConstants.CANCoderValue10),
         new SwerveModule(
             MotorConstants.BACK_LEFT_DRIVE_ID,
             MotorConstants.BACK_LEFT_STEER_ID,
-            MotorConstants.BACK_LEFT_CAN_CODER_ID),
+            MotorConstants.BACK_LEFT_CAN_CODER_ID,
+            Constants.SwerveConstants.CANCoderValue11),
         new SwerveModule(
             MotorConstants.BACK_RIGHT_DRIVE_ID,
             MotorConstants.BACK_RIGHT_STEER_ID,
-            MotorConstants.BACK_RIGHT_CAN_CODER_ID)
+            MotorConstants.BACK_RIGHT_CAN_CODER_ID,
+            Constants.SwerveConstants.CANCoderValue12)
     };
 
     // Creating my odometry object from the kinematics object and the initial wheel
@@ -86,7 +90,7 @@ public class SwerveSubsystem extends SubsystemBase {
       double leftSpeed, double rotationSpeed, boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
-    System.out.println("NavX Angle " + navX.getAngle());
+    // System.out.println("NavX Angle " + navX.getAngle());
 
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -101,12 +105,17 @@ public class SwerveSubsystem extends SubsystemBase {
           rotationSpeed);
     }
 
+    // System.out.println(speeds);
+
     SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(speeds);
+    // System.out.println(states);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorConstants.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
+      // System.out.println(states[i]);
+      // System.out.println(i);
     }
     updateAllSteerPositionSmartDashboard();
   }
@@ -161,5 +170,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     module.setDriveSpeed(driveSpeed);
     module.setSteerSpeed(rotationSpeed);
+  }
+
+  public void steer(){
+    modules[1].setSteerPosition(2);
   }
 }
