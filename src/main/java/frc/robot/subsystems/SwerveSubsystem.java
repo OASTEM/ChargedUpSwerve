@@ -46,24 +46,16 @@ public class SwerveSubsystem extends SubsystemBase {
     modules = new SwerveModule[] {
         new SwerveModule(
             MotorConstants.FRONT_LEFT_DRIVE_ID,
-            MotorConstants.FRONT_LEFT_STEER_ID,
-            MotorConstants.FRONT_LEFT_CAN_CODER_ID,
-            Constants.SwerveConstants.CANCoderValue9),
+            MotorConstants.FRONT_LEFT_STEER_ID),
         new SwerveModule(
             MotorConstants.FRONT_RIGHT_DRIVE_ID,
-            MotorConstants.FRONT_RIGHT_STEER_ID,
-            MotorConstants.FRONT_RIGHT_CAN_CODER_ID,
-            Constants.SwerveConstants.CANCoderValue10),
+            MotorConstants.FRONT_RIGHT_STEER_ID),
         new SwerveModule(
             MotorConstants.BACK_LEFT_DRIVE_ID,
-            MotorConstants.BACK_LEFT_STEER_ID,
-            MotorConstants.BACK_LEFT_CAN_CODER_ID,
-            Constants.SwerveConstants.CANCoderValue11),
+            MotorConstants.BACK_LEFT_STEER_ID),
         new SwerveModule(
             MotorConstants.BACK_RIGHT_DRIVE_ID,
-            MotorConstants.BACK_RIGHT_STEER_ID,
-            MotorConstants.BACK_RIGHT_CAN_CODER_ID,
-            Constants.SwerveConstants.CANCoderValue12)
+            MotorConstants.BACK_RIGHT_STEER_ID)
     };
 
     // Creating my odometry object from the kinematics object and the initial wheel

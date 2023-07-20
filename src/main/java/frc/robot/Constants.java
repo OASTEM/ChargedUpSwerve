@@ -72,11 +72,6 @@ public final class Constants {
     STARTING_POSE = new Pose2d(5.0, 13.5, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.03;
 
-    public static final double CANCoderValue9 = 0.539794;
-    public static final double CANCoderValue10 = 0.984863;
-    public static final double CANCoderValue11 = 0.9174805;
-    public static final double CANCoderValue12 = 0.328613;
-
 
   }
 }

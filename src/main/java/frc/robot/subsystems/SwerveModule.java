@@ -42,15 +42,11 @@ public class SwerveModule {
   private PositionDutyCycle m_cycle;
   private double initialCANCoderValue;
 
-  private final double CANCoderDriveStraightSteerSetPoint;
 
   /** Creates a new SwerveModule. */
-  public SwerveModule(int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
+  public SwerveModule(int driveId, int steerId) {
     driveMotor = new TalonFX(driveId);
     steerMotor = new TalonFX(steerId);
-    canCoder = new CANcoder(canCoderID);
-
-    this.CANCoderDriveStraightSteerSetPoint = CANCoderDriveStraightSteerSetPoint;
 
     motorConfigs = new MotorOutputConfigs();
 
@@ -84,11 +80,8 @@ public class SwerveModule {
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
 
-    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
-    m_cycle.Position = (initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO;
+    setSteerTo0();
     // steerMotor.setControl(m_position.withPosition((initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO));
-
-    // canCoder.setPositionToAbsolute();
 
   }
 
@@ -181,7 +174,8 @@ public class SwerveModule {
     SmartDashboard.putNumber("CAN Coder Value" + canCoder.getDeviceID(), canCoder.getAbsolutePosition().getValue());
   }
 
+  //TODO Set encoders to 0 not position
   public void setSteerTo0() {
-    steerMotor.setRotorPosition(0);
+    steerMotor.se(0);
   }
 }
