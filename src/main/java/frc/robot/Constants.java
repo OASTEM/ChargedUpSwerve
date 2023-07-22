@@ -49,7 +49,7 @@ public final class Constants {
     public static final double MAX_SPEED = 4.96824;
     public static final double MAX_ANGULAR_SPEED = 4.24547626559;
     public static final double ENCODER_COUNTS_PER_ROTATION = 1; //2048 for v5, 1 for v6 (rotations)
-    public static final double STEER_MOTOR_GEAR_RATIO = 12;
+    public static final double STEER_MOTOR_GEAR_RATIO = 24;
     public static final double DRIVE_MOTOR_GEAR_RATIO = 6;
     public static final double WHEEL_DIAMETER = 0.1;
   }
@@ -61,8 +61,8 @@ public final class Constants {
 
     public static final Translation2d frontLeftLocation = new Translation2d(0.381, -0.381);
     public static final Translation2d frontRightLocation = new Translation2d(0.381, 0.381);
-    public static final Translation2d backLeftLocation = new Translation2d(-0.381, -0.381);
-    public static final Translation2d backRightLocation = new Translation2d(-0.381, +0.381);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.381, +0.381);
+    public static final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         frontLeftLocation,
         frontRightLocation,
@@ -72,10 +72,10 @@ public final class Constants {
     STARTING_POSE = new Pose2d(5.0, 13.5, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.03;
 
-    public static final double CANCoderValue9 = 0.539794;
+    public static final double CANCoderValue9 = 0.539794 - 0.5;
     public static final double CANCoderValue10 = 0.984863;
     public static final double CANCoderValue11 = 0.9174805;
-    public static final double CANCoderValue12 = 0.328613;
+    public static final double CANCoderValue12 = 0.328613 + 0.5;
 
 
   }

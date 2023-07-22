@@ -39,8 +39,8 @@ public class PadDrive extends CommandBase {
     //swerveSubsystem.test(0, pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED, pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED);
         
     //System.out.println("Inside PadDrive");
-    double x = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED;
-    double y = pad.getLeftAnalogYAxis() * MotorConstants.MAX_SPEED;
+    double y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED;
+    double x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED;
     double turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;
     SmartDashboard.putNumber("X", x);
     SmartDashboard.putNumber("Y", y);

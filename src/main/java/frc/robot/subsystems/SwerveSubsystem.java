@@ -114,9 +114,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
+
       // System.out.println(states[i]);
       // System.out.println(i);
     }
+    
     updateAllSteerPositionSmartDashboard();
   }
 
