@@ -46,12 +46,14 @@ public final class Constants {
     public static final int BACK_LEFT_CAN_CODER_ID = 11;
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
 
-    public static final double MAX_SPEED = 4.96824;
+    public static final double MAX_SPEED = 4.96824;  
     public static final double MAX_ANGULAR_SPEED = 4.24547626559;
     public static final double ENCODER_COUNTS_PER_ROTATION = 1; //2048 for v5, 1 for v6 (rotations)
-    public static final double STEER_MOTOR_GEAR_RATIO = 24;
-    public static final double DRIVE_MOTOR_GEAR_RATIO = 6;
+    public static final double STEER_MOTOR_GEAR_RATIO = 150.0/7; //24
+    public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER = 0.1;
+    public static final double SPEED_CONSTANT = 0.3; //0.3
+    public static final double TURN_CONSTANT = 0.5; //0.3
   }
 
   public static class SwerveConstants {
@@ -59,10 +61,10 @@ public final class Constants {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static final Translation2d frontLeftLocation = new Translation2d(0.381, -0.381);
-    public static final Translation2d frontRightLocation = new Translation2d(0.381, 0.381);
-    public static final Translation2d backLeftLocation = new Translation2d(-0.381, +0.381);
-    public static final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
+    public static final Translation2d frontLeftLocation = new Translation2d(0.24, -0.24);
+    public static final Translation2d frontRightLocation = new Translation2d(0.24, 0.24);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.24, 0.24);
+    public static final Translation2d backRightLocation = new Translation2d(-0.24, -0.24);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         frontLeftLocation,
         frontRightLocation,
@@ -73,7 +75,7 @@ public final class Constants {
     public static final double STATE_SPEED_THRESHOLD = 0.03;
 
     public static final double CANCoderValue9 = 0.539794 - 0.5;
-    public static final double CANCoderValue10 = 0.984863;
+    public static final double CANCoderValue10 = 0.984863; 
     public static final double CANCoderValue11 = 0.9174805;
     public static final double CANCoderValue12 = 0.328613 + 0.5;
 

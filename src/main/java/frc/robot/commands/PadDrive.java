@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
@@ -46,7 +47,7 @@ public class PadDrive extends CommandBase {
     SmartDashboard.putNumber("Y", y);
     SmartDashboard.putNumber("Turn", turn);
     //swerveSubsystem.steer();
-    swerveSubsystem.drive(x, y, turn, isFieldOriented);
+    swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
   }
 
   // Called once the command ends or is interrupted.

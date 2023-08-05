@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenixpro.configs.ClosedLoopRampsConfigs;
+import com.ctre.phoenixpro.configs.CurrentLimitsConfigs;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
 import com.ctre.phoenixpro.configs.Slot0Configs;
 import com.ctre.phoenixpro.configs.TalonFXConfiguration;
@@ -27,7 +29,7 @@ public class SwerveModule {
   private TalonFX driveMotor;
   private TalonFX steerMotor;
   private CANcoder canCoder;
-
+  
   private MotorOutputConfigs motorConfigs;
 
   private TalonFXConfigurator driveConfigurator;
@@ -43,6 +45,14 @@ public class SwerveModule {
   private double initialCANCoderValue;
 
   private final double CANCoderDriveStraightSteerSetPoint;
+
+  private CurrentLimitsConfigs driveCurrentLimitsConfigs;
+  private CurrentLimitsConfigs steerCurrentLimitsConfigs;
+
+  private ClosedLoopRampsConfigs driveClosedRampsConfigs;
+  private ClosedLoopRampsConfigs steerClosedRampsConfigs;
+
+  static int printSlower = 0;
 
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
@@ -75,21 +85,34 @@ public class SwerveModule {
     driveslot0Configs.kI = 0;
     driveslot0Configs.kD = 0;
 
-    steerslot0Configs.kP = 0.1;
+    steerslot0Configs.kP = 0.06;
     steerslot0Configs.kI = 0;
-    steerslot0Configs.kD = 0;
-    
-    resetEncoders();
+    steerslot0Configs.kD = 0.008;
 
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
 
-    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
-    m_cycle.Position = (initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO;
+    // initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
+    // m_cycle.Position = (initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO;
     // steerMotor.setControl(m_position.withPosition((initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO));
-    steerMotor.setRotorPosition(-(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO);
+    // steerMotor.setRotorPosition(-(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO);
 
     // canCoder.setPositionToAbsolute();
+
+    driveCurrentLimitsConfigs = new CurrentLimitsConfigs();
+    steerCurrentLimitsConfigs = new CurrentLimitsConfigs();
+    driveClosedRampsConfigs = new ClosedLoopRampsConfigs();
+    steerClosedRampsConfigs = new ClosedLoopRampsConfigs();
+
+    // currentLimitsConfigs.SupplyCurrentLimit = 40;
+    // currentLimitsConfigs.StatorCurrentLimit = 40;
+    // currentLimitsConfigs.Enable = true;
+    
+    driveClosedRampsConfigs.DutyCycleClosedLoopRampPeriod = 0.1;
+    steerClosedRampsConfigs.DutyCycleClosedLoopRampPeriod = 0.05;
+
+    driveMotor.getConfigurator().apply(driveCurrentLimitsConfigs);
+    steerMotor.getConfigurator().apply(steerCurrentLimitsConfigs);
 
   }
 
@@ -114,8 +137,8 @@ public class SwerveModule {
   }
 
   public void setSteerPosition(double rotations) {
-    System.out.println("Rotor Pos " + steerMotor.getRotorPosition());
-    System.out.println("Setting Steer " + rotations);
+    // System.out.println("Rotor Pos " + steerMotor.getRotorPosition());
+    // System.out.println("Setting Steer " + rotations);
     steerMotor.setControl(m_cycle.withPosition(rotations));
     //steerMotor.setRotorPosition(rotations);
   }
@@ -156,19 +179,38 @@ public class SwerveModule {
   }
 
   public void setState(SwerveModuleState state) {
-    state = SwerveModuleState.optimize(state,
-        Rotation2d.fromDegrees(
-            rotationsToAngle(steerMotor.getRotorPosition().getValue(),
-                MotorConstants.STEER_MOTOR_GEAR_RATIO)));
+    // state = optimize(state,
+        // Rotation2d.fromDegrees(
+        //     rotationsToAngle(steerMotor.getRotorPosition().getValue(),
+        //         MotorConstants.STEER_MOTOR_GEAR_RATIO)));
+    
+    var currentRotations = (steerMotor.getRotorPosition().getValue());
+
+    var currentAngle = Rotation2d.fromDegrees(
+        rotationsToAngle(currentRotations, MotorConstants.STEER_MOTOR_GEAR_RATIO));     
+        
 
     // System.out.println(state.speedMetersPerSecond);
     setDriveSpeed(state.speedMetersPerSecond / MotorConstants.MAX_SPEED);
 
     if (Math.abs(state.speedMetersPerSecond) > SwerveConstants.STATE_SPEED_THRESHOLD) {
-      double newRotations = angleToRotations(
-        state.angle.getDegrees(), MotorConstants.STEER_MOTOR_GEAR_RATIO);
-      SmartDashboard.putNumber("Set Falcon " + this.steerMotor.getDeviceID(), newRotations);
+      double newRotations;
+      // SmartDashboard.putNumber("Set Falcon " + this.steerMotor.getDeviceID(), newRotations);
+      var delta = state.angle.minus(currentAngle);
+
+      double change = delta.getDegrees();
+
+      if (change > 90){
+        change -= 180;
+      }
+
+      else if (change < -90){
+        change += 180;
+      }
+
+      newRotations = currentRotations + angleToRotations(change, MotorConstants.STEER_MOTOR_GEAR_RATIO);
       setSteerPosition(newRotations);
+
     }
   }
 
@@ -176,13 +218,77 @@ public class SwerveModule {
     setDriveSpeed(0);
     setSteerSpeed(0);
   }
+  
+
 
   public void updateSteerPositionSmartDashboard() {
     SmartDashboard.putNumber("Actual Falcon " + this.steerMotor.getDeviceID(), this.steerMotor.getRotorPosition().refresh().getValue());
     SmartDashboard.putNumber("CAN Coder Value" + canCoder.getDeviceID(), canCoder.getAbsolutePosition().getValue());
   }
 
-  public void setSteerTo0() {
-    steerMotor.setRotorPosition(0);
+  public void setRotorPos(){
+    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
+    steerMotor.setRotorPosition(-(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO);
   }
+
+  public static SwerveModuleState optimize(
+      SwerveModuleState desiredState, Rotation2d currentAngle) {
+
+    // System.out.println(currentAngle.minus(desiredState.angle).getDegrees());   
+
+    SmartDashboard.putNumber("Difference: " , currentAngle.minus(desiredState.angle).getDegrees()); 
+    while (currentAngle.minus(desiredState.angle).getDegrees() > 180.0){
+      desiredState.angle = desiredState.angle.plus(Rotation2d.fromDegrees(360));
+      System.out.println("LAHDIOAH");
+    }
+
+    while (currentAngle.minus(desiredState.angle).getDegrees() < -180.0){
+      desiredState.angle = desiredState.angle.minus(Rotation2d.fromDegrees(360));
+      System.out.println("LAHDIOAH");
+    }
+
+    
+
+
+    if (printSlower == 25) {
+       System.out.println("Desired: " + desiredState.angle.getDegrees());
+       System.out.println("Current: " + currentAngle.getDegrees());
+       System.out.println("Difference: " + currentAngle.minus(desiredState.angle).getDegrees());   
+
+      printSlower = 0;
+    
+    }
+
+    else{
+        printSlower++;
+    }
+
+    SmartDashboard.putNumber("Desired: " , desiredState.angle.getDegrees());
+    SmartDashboard.putNumber("Current: " , currentAngle.getDegrees());
+  
+
+    var delta = desiredState.angle.minus(currentAngle);
+    
+    // if (delta.getDegrees() > 90) {
+    //  delta = delta.minus(Rotation2d.fromDegrees(180));
+    // }
+
+    // else if (delta.getDegrees() < -90){
+    //   delta = delta.plus(Rotation2d.fromDegrees(180));
+    // }
+
+    
+    if (Math.abs(delta.getDegrees()) > 90.0) {
+      System.out.println(delta.getDegrees());
+      // System.exit(0);
+      return new SwerveModuleState(
+
+          
+          -desiredState.speedMetersPerSecond,
+          desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
+    } else {
+      return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
+    }
+  }
+
 }

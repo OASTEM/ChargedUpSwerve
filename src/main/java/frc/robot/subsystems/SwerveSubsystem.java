@@ -74,8 +74,8 @@ public class SwerveSubsystem extends SubsystemBase {
     odometry = new SwerveDriveOdometry(
         SwerveConstants.kinematics,
         getRotation2d(),
-        getModulePositions(),
-        Constants.SwerveConstants.STARTING_POSE);
+        getModulePositions());
+        // Constants.SwerveConstants.STARTING_POSE);
 
     // new Thread(() -> {
     // try {
@@ -174,7 +174,9 @@ public class SwerveSubsystem extends SubsystemBase {
     module.setSteerSpeed(rotationSpeed);
   }
 
-  public void steer(){
-    modules[1].setSteerPosition(2);
+  public void addRotorPositionsforModules(){
+    for(int i = 0; i < modules.length; i++){
+      modules[i].setRotorPos();
+    }
   }
 }
