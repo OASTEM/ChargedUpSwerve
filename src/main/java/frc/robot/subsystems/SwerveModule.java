@@ -239,12 +239,10 @@ public class SwerveModule {
     SmartDashboard.putNumber("Difference: " , currentAngle.minus(desiredState.angle).getDegrees()); 
     while (currentAngle.minus(desiredState.angle).getDegrees() > 180.0){
       desiredState.angle = desiredState.angle.plus(Rotation2d.fromDegrees(360));
-      System.out.println("LAHDIOAH");
     }
 
     while (currentAngle.minus(desiredState.angle).getDegrees() < -180.0){
       desiredState.angle = desiredState.angle.minus(Rotation2d.fromDegrees(360));
-      System.out.println("LAHDIOAH");
     }
 
     
