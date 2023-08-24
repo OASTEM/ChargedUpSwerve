@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
@@ -39,14 +40,29 @@ public class PadDrive extends CommandBase {
     //swerveSubsystem.test(0, pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED, pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED);
         
     //System.out.println("Inside PadDrive");
-    double y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED;
-    double x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED;
+
+    double y;
+    double x;
+
+    if (Constants.MotorConstants.SLOW_MODE){
+      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.5;
+      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.5;
+
+    }
+
+    else{
+      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED;
+      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED;
+    }
+   
     double turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;
     SmartDashboard.putNumber("X", x);
     SmartDashboard.putNumber("Y", y);
     SmartDashboard.putNumber("Turn", turn);
+    SmartDashboard.putBoolean("Slow Mode", Constants.MotorConstants.SLOW_MODE);
+    //Slow-Mode not tested
     //swerveSubsystem.steer();
-    swerveSubsystem.drive(x, y, turn, isFieldOriented);
+    swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
   }
 
   // Called once the command ends or is interrupted.

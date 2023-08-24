@@ -5,10 +5,13 @@
 package frc.robot;
 
 import frc.robot.commands.PadDrive;
+import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -24,9 +27,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final LogitechGamingPad pad = new LogitechGamingPad(0);
+  private final NavX navX = new NavX();
 
   // Buttons
-  // private final JoystickButton padA = new JoystickButton(pad, 1);
+  private final JoystickButton padA = new JoystickButton(pad, 1);
   // private final JoystickButton padB = new JoystickButton(pad, 2);
   // private final JoystickButton padX = new JoystickButton(pad, 3);
   // private final JoystickButton padY = new JoystickButton(pad, 4);
@@ -39,7 +43,7 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(
         new PadDrive(
-            swerveSubsystem, pad, false));
+            swerveSubsystem, pad, true));
     // Configure the trigger bindings
     configureBindings();
   }
@@ -60,7 +64,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
+    padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS.SerialDataType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,7 +19,12 @@ import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
+
 
 public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule frontLeft;
@@ -28,11 +34,15 @@ public class SwerveSubsystem extends SubsystemBase {
   private SwerveModule[] modules;
   private SwerveDriveOdometry odometry;
 
-  private final AHRS navX = new AHRS(SPI.Port.kMXP);
+  // private final AHRS navX = new AHRS(SPI.Port.kMXP);
+  // private final AHRS navX = new AHRS(SerialPort.Port.kUSB1);
+  // private final AHRS navX = new AHRS(Port.kMXP, (byte) 50);
+
+  private static double printSlow = 0; 
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
-    navX.reset();
+    // navX.reset();
 
     // frontLeft = new SwerveModule(Constants.MotorConstants.frontLeftDriveId,
     // Constants.MotorConstants.frontLeftSteerId);
@@ -74,8 +84,8 @@ public class SwerveSubsystem extends SubsystemBase {
     odometry = new SwerveDriveOdometry(
         SwerveConstants.kinematics,
         getRotation2d(),
-        getModulePositions(),
-        Constants.SwerveConstants.STARTING_POSE);
+        getModulePositions());
+        // Constants.SwerveConstants.STARTING_POSE);
 
     // new Thread(() -> {
     // try {
@@ -97,7 +107,8 @@ public class SwerveSubsystem extends SubsystemBase {
           forwardSpeed,
           leftSpeed,
           rotationSpeed,
-          Rotation2d.fromDegrees(navX.getAngle()));
+          // Rotation2d.fromDegrees(navX.getAngle()));
+          Rotation2d.fromDegrees(0));
     } else {
       speeds = new ChassisSpeeds(
           forwardSpeed,
@@ -134,23 +145,35 @@ public class SwerveSubsystem extends SubsystemBase {
     odometry.resetPosition(gyroAngle, modulePositions, newPose);
   }
 
-  public void zeroHeading() {
-    navX.reset();
-  }
+  // public void zeroHeading() {
+  //   navX.reset();
+  // }
 
-  public double getHeading() {
-    return navX.getAngle() % 360;
-  }
+  // public double getHeading() {
+  //   return navX.getAngle() % 360;
+  // }
 
   /** Gets the NavX angle as a Rotation2d. */
   public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees(getHeading());
+    // return Rotation2d.fromDegrees(getHeading());
+    return Rotation2d.fromDegrees(0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Robot Heading", getHeading());
+  
+    // SmartDashboard.putNumber("Robot Heading", getHeading());
+    
+    // if (printSlow == 100){
+    //   System.out.println("Robot Heading: " + getHeading());
+
+    //   printSlow = 0;
+    // }
+    // else {
+    //   printSlow++;
+    // }
+    
     Rotation2d gyroAngle = getRotation2d();
     odometry.update(gyroAngle, getModulePositions());
   }
@@ -174,7 +197,20 @@ public class SwerveSubsystem extends SubsystemBase {
     module.setSteerSpeed(rotationSpeed);
   }
 
-  public void steer(){
-    modules[1].setSteerPosition(2);
+  public void addRotorPositionsforModules(){
+    for(int i = 0; i < modules.length; i++){
+      modules[i].setRotorPos();
+    }
   }
 }
+
+
+
+
+
+
+
+
+
+
+// fernando was here
