@@ -36,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // private final AHRS navX = new AHRS(SPI.Port.kMXP);
   // private final AHRS navX = new AHRS(SerialPort.Port.kUSB1);
-  // private final AHRS navX = new AHRS(Port.kMXP, (byte) 50);
+  private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
 
   private static double printSlow = 0; 
 
@@ -107,8 +107,8 @@ public class SwerveSubsystem extends SubsystemBase {
           forwardSpeed,
           leftSpeed,
           rotationSpeed,
-          // Rotation2d.fromDegrees(navX.getAngle()));
-          Rotation2d.fromDegrees(0));
+          Rotation2d.fromDegrees(navX.getAngle()));
+          // Rotation2d.fromDegrees(0));
     } else {
       speeds = new ChassisSpeeds(
           forwardSpeed,
@@ -145,26 +145,35 @@ public class SwerveSubsystem extends SubsystemBase {
     odometry.resetPosition(gyroAngle, modulePositions, newPose);
   }
 
-  // public void zeroHeading() {
-  //   navX.reset();
-  // }
+  public void zeroHeading() {
+    navX.reset();
+  }
 
-  // public double getHeading() {
-  //   return navX.getAngle() % 360;
-  // }
+  public double getHeading() {
+    return navX.getAngle() % 360;
+  }
+
+  public void enableSlowMode() {
+    Constants.MotorConstants.SLOW_MODE = false;
+  }
+
+  public void disableSlowMode() {
+    Constants.MotorConstants.SLOW_MODE = true;
+  }
 
   /** Gets the NavX angle as a Rotation2d. */
   public Rotation2d getRotation2d() {
-    // return Rotation2d.fromDegrees(getHeading());
-    return Rotation2d.fromDegrees(0);
+    return Rotation2d.fromDegrees(getHeading());
+    // return Rotation2d.fromDegrees(0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   
-    // SmartDashboard.putNumber("Robot Heading", getHeading());
-    
+    SmartDashboard.putNumber("Robot Heading", getHeading());
+    SmartDashboard.putBoolean("Is Connected", navX.isConnected());
+
     // if (printSlow == 100){
     //   System.out.println("Robot Heading: " + getHeading());
 

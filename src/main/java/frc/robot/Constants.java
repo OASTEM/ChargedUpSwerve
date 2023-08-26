@@ -54,7 +54,7 @@ public final class Constants {
     public static final double WHEEL_DIAMETER = 0.1;
     public static final double SPEED_CONSTANT = 0.3; //0.3
     public static final double TURN_CONSTANT = 0.5; //0.3
-    public static final boolean SLOW_MODE = false;
+    public static boolean SLOW_MODE = false;
   }
 
   public static class SwerveConstants {
