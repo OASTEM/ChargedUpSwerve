@@ -43,6 +43,7 @@ public class SwerveModule {
   private PositionVoltage m_position;
   private PositionDutyCycle m_cycle;
   private double initialCANCoderValue;
+  private double initialPos;
 
   private final double CANCoderDriveStraightSteerSetPoint;
 
@@ -61,7 +62,7 @@ public class SwerveModule {
     canCoder = new CANcoder(canCoderID);
 
     this.CANCoderDriveStraightSteerSetPoint = CANCoderDriveStraightSteerSetPoint;
-
+    
     motorConfigs = new MotorOutputConfigs();
 
     driveConfigurator = driveMotor.getConfigurator();
@@ -95,7 +96,9 @@ public class SwerveModule {
     // initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
     // m_cycle.Position = (initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO;
     // steerMotor.setControl(m_position.withPosition((initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO));
-    // steerMotor.setRotorPosition(-(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO);
+
+    steerConfigurator.setRotorPosition(CANCoderDriveStraightSteerSetPoint);
+        // steerMotor.setRotorPosition(-(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO);
 
     // canCoder.setPositionToAbsolute();
 
