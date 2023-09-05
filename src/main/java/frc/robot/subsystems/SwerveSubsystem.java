@@ -23,9 +23,6 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
-
-
 public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule frontLeft;
   // private SwerveModule frontRight;
@@ -38,7 +35,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // private final AHRS navX = new AHRS(SerialPort.Port.kUSB1);
   private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
 
-  private static double printSlow = 0; 
+  private static double printSlow = 0;
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
@@ -85,7 +82,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveConstants.kinematics,
         getRotation2d(),
         getModulePositions());
-        // Constants.SwerveConstants.STARTING_POSE);
+    // Constants.SwerveConstants.STARTING_POSE);
 
     // new Thread(() -> {
     // try {
@@ -100,7 +97,6 @@ public class SwerveSubsystem extends SubsystemBase {
       double leftSpeed, double rotationSpeed, boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
-    // System.out.println("NavX Angle " + navX.getAngle());
 
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -108,7 +104,7 @@ public class SwerveSubsystem extends SubsystemBase {
           leftSpeed,
           rotationSpeed,
           Rotation2d.fromDegrees(navX.getAngle()));
-          // Rotation2d.fromDegrees(0));
+      // Rotation2d.fromDegrees(0));
     } else {
       speeds = new ChassisSpeeds(
           forwardSpeed,
@@ -129,7 +125,7 @@ public class SwerveSubsystem extends SubsystemBase {
       // System.out.println(states[i]);
       // System.out.println(i);
     }
-    
+
     updateAllSteerPositionSmartDashboard();
   }
 
@@ -149,16 +145,30 @@ public class SwerveSubsystem extends SubsystemBase {
     navX.reset();
   }
 
+  public void resetDriveEncoders() {
+    for (int i = 0; i < modules.length; i++) {
+      modules[i].resetEncoders();
+    }
+  }
+
   public double getHeading() {
     return navX.getAngle() % 360;
   }
 
-  public void enableSlowMode() {
-    Constants.MotorConstants.SLOW_MODE = false;
+  public double getPitch() {
+    return navX.getPitch();
   }
 
-  public void disableSlowMode() {
-    Constants.MotorConstants.SLOW_MODE = true;
+  public double getYaw() {
+    return navX.getYaw();
+  }
+
+  public double getRoll() {
+    return navX.getRoll();
+  }
+
+  public void configSlowMode() {
+    Constants.MotorConstants.SLOW_MODE = !Constants.MotorConstants.SLOW_MODE;
   }
 
   /** Gets the NavX angle as a Rotation2d. */
@@ -169,20 +179,15 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-  
+      // This method will be called once per scheduler run
+
     SmartDashboard.putNumber("Robot Heading", getHeading());
     SmartDashboard.putBoolean("Is Connected", navX.isConnected());
 
-    // if (printSlow == 100){
-    //   System.out.println("Robot Heading: " + getHeading());
+    SmartDashboard.putNumber("Yaw", getYaw());
+    SmartDashboard.putNumber("Pitch", getPitch());
+    SmartDashboard.putNumber("Roll", getRoll());
 
-    //   printSlow = 0;
-    // }
-    // else {
-    //   printSlow++;
-    // }
-    
     Rotation2d gyroAngle = getRotation2d();
     odometry.update(gyroAngle, getModulePositions());
   }
@@ -206,20 +211,18 @@ public class SwerveSubsystem extends SubsystemBase {
     module.setSteerSpeed(rotationSpeed);
   }
 
-  public void addRotorPositionsforModules(){
-    for(int i = 0; i < modules.length; i++){
+  public void addRotorPositionsforModules() {
+    for (int i = 0; i < modules.length; i++) {
       modules[i].setRotorPos();
     }
   }
+
+  public void stop() {
+    for (int i = 0; i < modules.length; i++) {
+      modules[i].stop();
+    }
+  }
+
 }
-
-
-
-
-
-
-
-
-
 
 // fernando was here

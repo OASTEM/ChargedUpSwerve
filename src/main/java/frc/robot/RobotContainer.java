@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.Balance;
 import frc.robot.commands.PadDrive;
 //import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -31,12 +32,13 @@ public class RobotContainer {
 
   // Buttons
   private final JoystickButton padA = new JoystickButton(pad, 1);
-  // private final JoystickButton padB = new JoystickButton(pad, 2);
-  // private final JoystickButton padX = new JoystickButton(pad, 3);
+  private final JoystickButton padB = new JoystickButton(pad, 2);
+  private final JoystickButton padX = new JoystickButton(pad, 3);
   // private final JoystickButton padY = new JoystickButton(pad, 4);
   private final JoystickButton rightBumper = new JoystickButton(pad, 6);
   private final JoystickButton leftBumper = new JoystickButton(pad, 5);
 
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -64,9 +66,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
-    rightBumper.onTrue(new InstantCommand(swerveSubsystem::enableSlowMode));
-    leftBumper.onTrue(new InstantCommand(swerveSubsystem::disableSlowMode));
+    padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
+    padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
+    padX.whileTrue(new Balance(swerveSubsystem));
+    rightBumper.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
+
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.

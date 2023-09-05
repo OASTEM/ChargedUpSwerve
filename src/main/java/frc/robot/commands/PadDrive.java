@@ -55,13 +55,23 @@ public class PadDrive extends CommandBase {
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED;
     }
    
+
+    if (Math.abs(pad.getLeftAnalogXAxis()) < Constants.SwerveConstants.JESSICA){
+      y = 0;
+    }
+
+    if (Math.abs(pad.getLeftAnalogYAxis()) < Constants.SwerveConstants.JESSICA){
+      x = 0;
+    }
+
     double turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;
-    SmartDashboard.putNumber("X", x);
-    SmartDashboard.putNumber("Y", y);
     SmartDashboard.putNumber("Turn", turn);
     SmartDashboard.putBoolean("Slow Mode", Constants.MotorConstants.SLOW_MODE);
     //Slow-Mode not tested
     //swerveSubsystem.steer();
+
+    SmartDashboard.putNumber("X", x);
+    SmartDashboard.putNumber("Y", y);
     swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
   }
 

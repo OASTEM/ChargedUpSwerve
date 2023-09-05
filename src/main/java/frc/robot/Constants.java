@@ -52,7 +52,7 @@ public final class Constants {
     public static final double STEER_MOTOR_GEAR_RATIO = 150.0/7; //24
     public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER = 0.1;
-    public static final double SPEED_CONSTANT = 0.3; //0.3
+    public static final double SPEED_CONSTANT = 0.4; //0.3
     public static final double TURN_CONSTANT = 0.5; //0.3
     public static boolean SLOW_MODE = false;
   }
@@ -73,13 +73,13 @@ public final class Constants {
         backRightLocation);
     public static final Pose2d 
     STARTING_POSE = new Pose2d(5.0, 13.5, new Rotation2d());
-    public static final double STATE_SPEED_THRESHOLD = 0.04;
+    public static final double STATE_SPEED_THRESHOLD = 0.05;
 
     public static final double CANCoderValue9 = 0.539794 - 0.5;
     public static final double CANCoderValue10 = 0.984863; 
     public static final double CANCoderValue11 = 0.9174805;
     public static final double CANCoderValue12 = 0.328613 + 0.5;
-
+    public static final double JESSICA = 0.05;
 
   }
 }

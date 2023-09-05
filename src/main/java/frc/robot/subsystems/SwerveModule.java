@@ -86,9 +86,9 @@ public class SwerveModule {
     driveslot0Configs.kI = 0;
     driveslot0Configs.kD = 0;
 
-    steerslot0Configs.kP = 0.06;
-    steerslot0Configs.kI = 0;
-    steerslot0Configs.kD = 0.008;
+    steerslot0Configs.kP = 0.08; //original 0.06
+    steerslot0Configs.kI = 0.0001;
+    steerslot0Configs.kD = 0.008; //Original 0.008
 
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
@@ -195,6 +195,11 @@ public class SwerveModule {
 
     // System.out.println(state.speedMetersPerSecond);
     setDriveSpeed(state.speedMetersPerSecond / MotorConstants.MAX_SPEED);
+
+    // if (Math.abs(state.speedMetersPerSecond) < SwerveConstants.STATE_SPEED_THRESHOLD){
+    //   System.out.println("Relevant state number g");
+    // }
+    
 
     if (Math.abs(state.speedMetersPerSecond) > SwerveConstants.STATE_SPEED_THRESHOLD) {
       double newRotations;
