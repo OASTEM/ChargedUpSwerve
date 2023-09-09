@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.AHRS.SerialDataType;
+import frc.robot.utils.LimelightHelpers;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -31,8 +32,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule backLeft;
   // private SwerveModule backRight;
   private SwerveModule[] modules;
-  private SwerveDriveOdometry odometry;
-  private final SwerveDrivePoseEstimator estimator;
+  private SwerveDrivePoseEstimator estimator;
   // private final AHRS navX = new AHRS(SPI.Port.kMXP);
   // private final AHRS navX = new AHRS(SerialPort.Port.kUSB1);
   private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
@@ -79,7 +79,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // Here, our starting pose is 5 meters along the long end of the field and in
     // the
     // center of the field along the short end, facing the opposing alliance wall.
-    odometry = new SwerveDriveOdometry(
+    estimator = new SwerveDrivePoseEstimator(
         SwerveConstants.kinematics,
         getRotation2d(),
         getModulePositions(),
@@ -93,7 +93,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // } catch (Exception e) {
     // }
     // }).start();
-    estimator = new SwerveDrivePoseEstimator(SwerveConstants.kinematics, getRotation2d(), getModulePositions(), SwerveConstants.STARTING_POSE);
   }
 
   public void drive(double forwardSpeed,
@@ -138,10 +137,6 @@ public class SwerveSubsystem extends SubsystemBase {
       positions[i] = modules[i].getPosition();
     }
     return positions;
-  }
-
-  public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
-    odometry.resetPosition(gyroAngle, modulePositions, newPose);
   }
 
   public void zeroHeading() {
@@ -192,7 +187,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Roll", getRoll());
 
     Rotation2d gyroAngle = getRotation2d();
-    odometry.update(gyroAngle, getModulePositions());
+    estimator.update(gyroAngle, getModulePositions());
   }
 
   public void stopModules() {
@@ -226,18 +221,12 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-  public void updateEstimator(){
-    // estimator.update(getRotation2d(), getModulePositions());
-    
-  }
-  public void addVision(){
-    // estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
+  public void addVision(Pose2d visionPose){
+    estimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+    SmartDashboard.putNumber("X field", visionPose.getX());
+    SmartDashboard.putNumber("Y field", visionPose.getY());
   }
 
-  public Pose2d getOdometry(){
-    return odometry.getPoseMeters();
-  }
-  
 }
 
 // fernando was here
