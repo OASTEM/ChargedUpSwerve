@@ -4,10 +4,12 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -16,14 +18,18 @@ public class PadDrive extends CommandBase {
   private final SwerveSubsystem swerveSubsystem;
   private final boolean isFieldOriented;
   private final LogitechGamingPad pad;
+  private final Limelight limelight;
+  private boolean vision;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
       LogitechGamingPad pad,
-      boolean isFieldOriented) {
+      boolean isFieldOriented, Limelight limelight, boolean vision) {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
+    this.limelight = limelight;
+    this.vision = vision;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.swerveSubsystem);
@@ -38,8 +44,11 @@ public class PadDrive extends CommandBase {
   @Override
   public void execute() {
     //swerveSubsystem.test(0, pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED, pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED);
-        
-    //System.out.println("Inside PadDrive");
+    
+    if (vision)
+    {
+      updatePosition();
+    }
 
     double y;
     double x;
@@ -84,5 +93,9 @@ public class PadDrive extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public void updatePosition(){
+    swerveSubsystem.addVision(limelight.getRobotPosition());
   }
 }

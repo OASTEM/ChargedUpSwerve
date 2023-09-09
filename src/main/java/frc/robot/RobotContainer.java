@@ -6,14 +6,17 @@ package frc.robot;
 
 import frc.robot.commands.Balance;
 import frc.robot.commands.PadDrive;
+import frc.robot.subsystems.Limelight;
 //import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,6 +31,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem swerveSubsystem = Robot.swerveSubsystem;
   private final LogitechGamingPad pad = new LogitechGamingPad(0);
+  private final Limelight limelight = new Limelight();
   // private final NavX navX = new NavX();
 
   // Buttons
@@ -45,7 +49,7 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(
         new PadDrive(
-            swerveSubsystem, pad, true));
+            swerveSubsystem, pad, true, limelight, Constants.SwerveConstants.vision));
     // Configure the trigger bindings
     configureBindings();
   }
