@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.AHRS.SerialDataType;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -20,6 +21,7 @@ import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -30,7 +32,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule backRight;
   private SwerveModule[] modules;
   private SwerveDriveOdometry odometry;
-
+  private final SwerveDrivePoseEstimator estimator;
   // private final AHRS navX = new AHRS(SPI.Port.kMXP);
   // private final AHRS navX = new AHRS(SerialPort.Port.kUSB1);
   private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
@@ -40,7 +42,6 @@ public class SwerveSubsystem extends SubsystemBase {
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
     // navX.reset();
-
     // frontLeft = new SwerveModule(Constants.MotorConstants.frontLeftDriveId,
     // Constants.MotorConstants.frontLeftSteerId);
     // frontRight = new SwerveModule(Constants.MotorConstants.frontRightDriveId,
@@ -81,8 +82,9 @@ public class SwerveSubsystem extends SubsystemBase {
     odometry = new SwerveDriveOdometry(
         SwerveConstants.kinematics,
         getRotation2d(),
-        getModulePositions());
-    // Constants.SwerveConstants.STARTING_POSE);
+        getModulePositions(),
+        SwerveConstants.STARTING_POSE
+        );
 
     // new Thread(() -> {
     // try {
@@ -91,6 +93,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // } catch (Exception e) {
     // }
     // }).start();
+    estimator = new SwerveDrivePoseEstimator(SwerveConstants.kinematics, getRotation2d(), getModulePositions(), SwerveConstants.STARTING_POSE);
   }
 
   public void drive(double forwardSpeed,
@@ -223,6 +226,18 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
+  public void updateEstimator(){
+    // estimator.update(getRotation2d(), getModulePositions());
+    
+  }
+  public void addVision(){
+    // estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
+  }
+
+  public Pose2d getOdometry(){
+    return odometry.getPoseMeters();
+  }
+  
 }
 
 // fernando was here
