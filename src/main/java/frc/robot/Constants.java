@@ -72,7 +72,8 @@ public final class Constants {
         frontRightLocation,
         backLeftLocation,
         backRightLocation);
-    public static final Pose2d STARTING_POSE = new Pose2d(5.0, 13.5, new Rotation2d());
+    public static final Pose2d 
+    STARTING_POSE = new Pose2d(0, 0, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
     public static final double CANCoderValue9 = 0.539794 - 0.5;
@@ -97,5 +98,22 @@ public final class Constants {
     public static final PID upPID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID downPID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID sidePID = new PID(0.05, 0.0 , 0.0, 0.0);
+    public static boolean usingVision = false;
+  }
+
+  public static class Balance{
+    public static final double P = 0.015;
+    public static final double I = 0.00015;
+    public static final double D = 0.0008;
+  }
+
+  public static class BalanceDebug{
+    public static double P;
+    public static double I;
+    public static double D;
+  }
+
+  public static class DebugMode{
+    public static boolean debugMode = false;
   }
 }

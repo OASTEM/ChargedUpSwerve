@@ -9,6 +9,16 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+import java.util.function.BooleanSupplier;
+
+import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS.SerialDataType;
+import frc.robot.utils.LimelightHelpers;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,6 +36,7 @@ import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -35,13 +46,14 @@ public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule backLeft;
   // private SwerveModule backRight;
   private SwerveModule[] modules;
-  private SwerveDriveOdometry odometry;
+  private SwerveDrivePoseEstimator estimator;
   // private final AHRS navX = new AHRS(SPI.Port.kMXP);
   // private final AHRS navX = new AHRS(SerialPort.Port.kUSB1);
   private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
 
   private static double printSlow = 0;
   private final SwerveDriveKinematics sKinematics = Constants.SwerveConstants.kinematics;
+
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
     // navX.reset();
@@ -82,7 +94,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // Here, our starting pose is 5 meters along the long end of the field and in
     // the
     // center of the field along the short end, facing the opposing alliance wall.
-    odometry = new SwerveDriveOdometry(
+    estimator = new SwerveDrivePoseEstimator(
         SwerveConstants.kinematics,
         getRotation2d(),
         getModulePositions(),
@@ -176,6 +188,10 @@ public class SwerveSubsystem extends SubsystemBase {
     Constants.MotorConstants.SLOW_MODE = !Constants.MotorConstants.SLOW_MODE;
   }
 
+  public boolean getSlowMode(){
+    return Constants.MotorConstants.SLOW_MODE;
+  }
+
   /** Gets the NavX angle as a Rotation2d. */
   public Rotation2d getRotation2d() {
     return Rotation2d.fromDegrees(getHeading());
@@ -194,7 +210,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Roll", getRoll());
 
     Rotation2d gyroAngle = getRotation2d();
-    odometry.update(gyroAngle, getModulePositions());
+    estimator.update(gyroAngle, getModulePositions());
   }
 
   public void stopModules() {
@@ -238,7 +254,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Pose2d getOdometry(){
-    return odometry.getPoseMeters();
+    return estimator.getEstimatedPosition();
   }
 
 // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
@@ -293,5 +309,13 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
 
 }
 
+
+  public void addVision(Pose2d visionPose){
+    estimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+    SmartDashboard.putNumber("X field", visionPose.getX());
+    SmartDashboard.putNumber("Y field", visionPose.getY());
+  }
+  
+}
 
 // fernando was here
