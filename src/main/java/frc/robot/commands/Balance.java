@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DebugMode;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.PID;
 import com.kauailabs.navx.frc.AHRS;
@@ -35,14 +36,16 @@ public class Balance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    p = SmartDashboard.getNumber("P", 0.015);
-    i = SmartDashboard.getNumber("I", 0.00015);
-    d = SmartDashboard.getNumber("D", 0.0008);
-    SmartDashboard.putNumber("P", p);
-    SmartDashboard.putNumber("I", i);
-    SmartDashboard.putNumber("D", d);
-                                                                              
-    balancePID = new PID(p, i, d, 0);
+    // p = SmartDashboard.getNumber("P", 0.015);
+    // i = SmartDashboard.getNumber("I", 0.00015);
+    // d = SmartDashboard.getNumber("D", 0.0008);
+    // SmartDashboard.putNumber("P", p);
+    // SmartDashboard.putNumber("I", i);
+    // SmartDashboard.putNumber("D", d);
+    if(!DebugMode.debugMode) 
+    {
+      balancePID = new PID(balancePID.p, balancePID.i, balancePID.d, 0);
+    }                 
     driveTrain.stop();
     driveTrain.zeroHeading();
   }
@@ -75,17 +78,17 @@ public class Balance extends CommandBase {
     driveTrain.drive(speed, 0, 0, true);
 
 
-    SmartDashboard.putNumber("navXYError", this.error);
-    SmartDashboard.putNumber("PID Speed", effort);
+    // SmartDashboard.putNumber("navXYError", this.error);
+    // SmartDashboard.putNumber("PID Speed", effort);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     driveTrain.stop();
-    p = SmartDashboard.getNumber("P", 0.021);
-    i = SmartDashboard.getNumber("I", 0.002);
-    d = SmartDashboard.getNumber("D", 0.002);
+    // p = SmartDashboard.getNumber("P", 0.021);
+    // i = SmartDashboard.getNumber("I", 0.002);
+    // d = SmartDashboard.getNumber("D", 0.002);
     balancePID = new PID(p, i, d,0);
   }
 

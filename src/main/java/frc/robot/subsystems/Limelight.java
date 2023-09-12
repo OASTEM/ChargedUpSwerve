@@ -4,15 +4,24 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.ToggleLimeLight;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.utils.LimelightHelpers;
+import frc.robot.utils.LimelightHelpers.LimelightResults;
 
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
@@ -21,10 +30,10 @@ public class Limelight extends SubsystemBase {
   LimelightHelpers.LimelightResults llresults;
   double tv, tx, ta;
   private Pose2d robotPose_FieldSpace;
+  private GenericEntry vision;
   
   public Limelight() {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-
     llresults = LimelightHelpers.getLatestResults("");
   }
 
@@ -33,16 +42,17 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
     // This method will be called once per scheduler run
     tv = m_limelightTable.getEntry("tv").getDouble(0);
     tx = m_limelightTable.getEntry("tx").getDouble(0);
     ta = m_limelightTable.getEntry("ta").getDouble(0);
 
-    SmartDashboard.getBoolean("On Red", true);
-    robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
-    SmartDashboard.putNumber("ta", ta);
-    SmartDashboard.putData("Toggle Lime Light", new ToggleLimeLight(this));
+    if (DriverStation.getAlliance().equals(Alliance.Red)){
+      robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
+    }
+    else{
+      robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiBlue();
+    }
   }
 
   public double getTx(){

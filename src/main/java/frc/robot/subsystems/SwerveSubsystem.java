@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.AHRS.SerialDataType;
 import frc.robot.utils.LimelightHelpers;
@@ -169,6 +171,10 @@ public class SwerveSubsystem extends SubsystemBase {
     Constants.MotorConstants.SLOW_MODE = !Constants.MotorConstants.SLOW_MODE;
   }
 
+  public boolean getSlowMode(){
+    return Constants.MotorConstants.SLOW_MODE;
+  }
+
   /** Gets the NavX angle as a Rotation2d. */
   public Rotation2d getRotation2d() {
     return Rotation2d.fromDegrees(getHeading());
@@ -226,7 +232,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("X field", visionPose.getX());
     SmartDashboard.putNumber("Y field", visionPose.getY());
   }
-
+  
 }
 
 // fernando was here

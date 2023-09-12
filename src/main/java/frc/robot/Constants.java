@@ -80,6 +80,22 @@ public final class Constants {
     public static final double CANCoderValue11 = 0.9174805;
     public static final double CANCoderValue12 = 0.328613 + 0.5;
     public static final double JESSICA = 0.05;
-    public static boolean vision = false;
+    public static boolean usingVision = false;
+  }
+
+  public static class Balance{
+    public static final double P = 0.015;
+    public static final double I = 0.00015;
+    public static final double D = 0.0008;
+  }
+
+  public static class BalanceDebug{
+    public static double P;
+    public static double I;
+    public static double D;
+  }
+
+  public static class DebugMode{
+    public static boolean debugMode = false;
   }
 }
