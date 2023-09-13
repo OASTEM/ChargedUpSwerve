@@ -27,7 +27,7 @@ public class ShuffleboardComponents extends SubsystemBase {
     private ShuffleboardTab swerve;
     private ShuffleboardTab prematch;
 
-    private SimpleWidget entry;
+    private SimpleWidget usingVision;
 
     /**
      * Creates a new ShuffleboardComponents.
@@ -40,7 +40,7 @@ public class ShuffleboardComponents extends SubsystemBase {
         prematch = Shuffleboard.getTab("Prematch");
 
         // Create components
-        entry = vision.add("Using Vision", false);
+        usingVision = vision.add("Using Vision", false);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ShuffleboardComponents extends SubsystemBase {
      * Updates the values displayed on the Vision tab.
      */
     private void updateVision() {
-        entry.getEntry().setBoolean(SwerveConstants.usingVision);
+        SwerveConstants.usingVision = usingVision.getEntry().getBoolean(false);
     }
 
     // Add other update methods for different tabs if needed

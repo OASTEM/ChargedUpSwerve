@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.Balance;
+import frc.robot.commands.BalanceFront;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.StartIntake;
@@ -107,7 +107,7 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
-    padX.whileTrue(new Balance(swerveSubsystem));
+    padX.whileTrue(new BalanceFront(swerveSubsystem));
     
     leftBumper.whileTrue(new StartIntake(intake));
     rightBumper.whileTrue(new ReverseIntake(intake));

@@ -12,7 +12,7 @@ import frc.robot.utils.PID;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
-public class Balance extends CommandBase {
+public class BalanceFront extends CommandBase {
   // private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
 
   /** Creates a new balance. */
@@ -26,7 +26,7 @@ public class Balance extends CommandBase {
   //PID balancePID = new PID(0.023, 0.002, 0.002);
   PID balancePID;
 
-  public Balance(SwerveSubsystem swerve) {
+  public BalanceFront(SwerveSubsystem swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
 
