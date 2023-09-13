@@ -52,14 +52,14 @@ public class ShuffleboardComponents extends SubsystemBase {
         // updateSwerve();
         // updatePrematch();
 
-        System.out.println(SwerveConstants.usingVision);
+        // System.out.println(SwerveConstants.usingVision);
     }
 
     /**
      * Updates the values displayed on the Vision tab.
      */
     private void updateVision() {
-        SwerveConstants.usingVision = usingVision.getEntry().getBoolean(false);
+        SwerveConstants.usingVision = usingVision.getEntry().get().getBoolean();
     }
 
     // Add other update methods for different tabs if needed
