@@ -81,7 +81,7 @@ public final class Constants {
     public static final double CANCoderValue11 = 0.9174805;
     public static final double CANCoderValue12 = 0.328613 + 0.5;
     public static final double JESSICA = 0.05;
-
+    public static final boolean usingVision = false;
   }
 
   public static class AutoConstants{

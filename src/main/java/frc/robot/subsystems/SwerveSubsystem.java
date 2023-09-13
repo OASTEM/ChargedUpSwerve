@@ -155,7 +155,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
-    odometry.resetPosition(gyroAngle, modulePositions, newPose);
+    estimator.resetPosition(gyroAngle, modulePositions, newPose);
   }
 
   public void zeroHeading() {
@@ -279,36 +279,6 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
        )
    );
 }
-  
-
-  // public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath, SwerveSubsystem states) {
-
-        
-  //   return new SequentialCommandGroup(
-  //       new InstantCommand(() -> {
-  //         // Reset odometry for the first path you run during auto
-  //         if (isFirstPath) {
-  //           // this.resetOdometry(traj.getInitialHolonomicPose());
-  //         }
-  //       }),
-  //       new PPSwerveControllerCommand(
-  //           traj,
-  //           this::getOdometry, // Pose supplier
-  //           SwerveConstants.kinematics, // SwerveDriveKinematics
-  //           new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-  //           new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
-  //           new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-  //           states::setState, // Module states consumer
-  //           true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-  //           this // Requires this drive subsystem
-  //       )
-  //   );
-  
- 
-
-
-}
-
 
   public void addVision(Pose2d visionPose){
     estimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());

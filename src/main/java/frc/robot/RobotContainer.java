@@ -48,34 +48,47 @@ import frc.robot.Constants;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem swerveSubsystem = Robot.swerveSubsystem;
-  private final Intake intake = new Intake();
-  private final LogitechGamingPad pad = new LogitechGamingPad(0);
-  private final Limelight limelight = new Limelight();
-  private final ShuffleboardComponents components = new ShuffleboardComponents();
-  // private final NavX navX = new NavX();
-
-  // Buttons
-  private final JoystickButton padA = new JoystickButton(pad, 1);
-  private final JoystickButton padB = new JoystickButton(pad, 2);
-  private final JoystickButton padX = new JoystickButton(pad, 3);
-  private final JoystickButton padY = new JoystickButton(pad, 4);
-  private final JoystickButton rightBumper = new JoystickButton(pad, 6);
-  private final JoystickButton leftBumper = new JoystickButton(pad, 5);
-
-  PathPlannerTrajectory examplePath = PathPlanner.loadPath("Test Path", new PathConstraints(4, 3)); // in m/s
+  private final SwerveSubsystem swerveSubsystem;
+  private final Intake intake;
+  private final LogitechGamingPad pad;
+  private final Limelight limelight;
+  private final ShuffleboardComponents components;
+  
+  private final JoystickButton padA;
+  private final JoystickButton padB;
+  private final JoystickButton padX;
+  private final JoystickButton padY;
+  private final JoystickButton rightBumper;
+  private final JoystickButton leftBumper;
+  
+  private final PathPlannerTrajectory examplePath;
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    swerveSubsystem = Robot.swerveSubsystem;
+    intake = new Intake();
+    pad = new LogitechGamingPad(0);
+    limelight = new Limelight();
+    components = new ShuffleboardComponents();
+    
+    padA = new JoystickButton(pad, 1);
+    padB = new JoystickButton(pad, 2);
+    padX = new JoystickButton(pad, 3);
+    padY = new JoystickButton(pad, 4);
+    rightBumper = new JoystickButton(pad, 6);
+    leftBumper = new JoystickButton(pad, 5);
+    
+    examplePath = PathPlanner.loadPath("Test Path", new PathConstraints(4, 3)); // in m/s
+    
     swerveSubsystem.setDefaultCommand(
         new PadDrive(
             swerveSubsystem, pad, true, limelight, Constants.SwerveConstants.usingVision));
-    // Configure the trigger bindings
+    
     configureBindings();
   }
-
+  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
    * created via the
@@ -91,8 +104,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
@@ -100,32 +111,22 @@ public class RobotContainer {
     
     leftBumper.whileTrue(new StartIntake(intake));
     rightBumper.whileTrue(new ReverseIntake(intake));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
   }
-
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-
-  private void configureAutoCommands(){
-    PathPlannerTrajectory examplePath = PathPlanner.loadPath("Test Path", new PathConstraints(4, 3)); // in m/s
-  }
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     Consumer<SwerveModuleState[]> outputModuleStates = moduleStates -> {
-      // Iterate through the SwerveModuleState array and print each module's state
       for (int i = 0; i < moduleStates.length; i++) {
           SwerveModuleState moduleState = moduleStates[i];
           System.out.println("Module " + i + " - Angle: " + moduleState.angle + ", Speed: " + moduleState.speedMetersPerSecond);
-          // Add more print statements or processing as needed
       }
     };
     return swerveSubsystem.followTrajectoryCommand(examplePath, false, outputModuleStates);
   }
 }
+
 
