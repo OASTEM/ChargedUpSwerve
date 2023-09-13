@@ -119,13 +119,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    Consumer<SwerveModuleState[]> outputModuleStates = moduleStates -> {
-      for (int i = 0; i < moduleStates.length; i++) {
-          SwerveModuleState moduleState = moduleStates[i];
-          System.out.println("Module " + i + " - Angle: " + moduleState.angle + ", Speed: " + moduleState.speedMetersPerSecond);
-      }
-    };
-    return swerveSubsystem.followTrajectoryCommand(examplePath, false, outputModuleStates);
+    return swerveSubsystem.followTrajectoryCommand(examplePath, false);
   }
 }
 
