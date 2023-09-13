@@ -16,21 +16,21 @@ public class Balance extends CommandBase {
   // private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
 
   /** Creates a new balance. */
-  SwerveSubsystem driveTrain;
+  SwerveSubsystem swerve;
   private double error;                                                                 
   private final double goal = 0;
   private final double maxEffort = 1;
   private double p, i, d;
   //PID Values need to be tuned
-  //Might need to create two pid values for both sides of the drivetrain
+  //Might need to create two pid values for both sides of the swerve
   //PID balancePID = new PID(0.023, 0.002, 0.002);
   PID balancePID;
 
-  public Balance(SwerveSubsystem driveTrain) {
+  public Balance(SwerveSubsystem swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(driveTrain);
+    addRequirements(swerve);
 
-    this.driveTrain = driveTrain;
+    this.swerve = swerve;
   }
 
   // Called when the command is initially scheduled.
@@ -42,22 +42,22 @@ public class Balance extends CommandBase {
     // SmartDashboard.putNumber("P", p);
     // SmartDashboard.putNumber("I", i);
     // SmartDashboard.putNumber("D", d);
-    if(!DebugMode.debugMode) 
+    if(DebugMode.debugMode) 
     {
       balancePID = new PID(balancePID.p, balancePID.i, balancePID.d, 0);
     }                 
-    driveTrain.stop();
-    driveTrain.zeroHeading();
+    swerve.stop();
+    swerve.zeroHeading();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //Error is equal to the NavX getYaw (using getRoll)
-    // driveTrain.setLeftSpeed(0.3);
-    // driveTrain.setBackLeftSpeed();
-    // driveTrain.setRightSpeed(0.3);
-    error = driveTrain.getRoll() + 4.5;
+    // swerve.setLeftSpeed(0.3);
+    // swerve.setBackLeftSpeed();
+    // swerve.setRightSpeed(0.3);
+    error = swerve.getRoll() + 4.5;
 
     double effort = balancePID.calculate(goal, error);
     if (effort < -maxEffort) {
@@ -66,26 +66,15 @@ public class Balance extends CommandBase {
       effort = maxEffort;
     }
 
-    // pitch = driveTrain.getPitch();
-
-    //     for(int i = 0; i<3; i++){
-    //         if(pitch < 0){
-    //             new DriveAmount(driveTrain, distance, speed, true);
-    //         }
-    //     }
-
     double speed = effort * -5;
-    driveTrain.drive(speed, 0, 0, true);
+    swerve.drive(speed, 0, 0, true);
 
-
-    // SmartDashboard.putNumber("navXYError", this.error);
-    // SmartDashboard.putNumber("PID Speed", effort);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.stop();
+    swerve.stop();
     // p = SmartDashboard.getNumber("P", 0.021);
     // i = SmartDashboard.getNumber("I", 0.002);
     // d = SmartDashboard.getNumber("D", 0.002);
