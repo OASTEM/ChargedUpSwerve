@@ -122,11 +122,10 @@ public class RobotContainer {
     Consumer<SwerveModuleState[]> outputModuleStates = moduleStates -> {
       for (int i = 0; i < moduleStates.length; i++) {
           SwerveModuleState moduleState = moduleStates[i];
-          // System.out.println("Module " + i + " - Angle: " + moduleState.angle + ", Speed: " + moduleState.speedMetersPerSecond);
-          System.out.println("Test 2 ***********************************");
+          System.out.println("Module " + i + " - Angle: " + moduleState.angle + ", Speed: " + moduleState.speedMetersPerSecond);
       }
     };
-    return swerveSubsystem.followTrajectoryCommand(examplePath, false);
+    return swerveSubsystem.followTrajectoryCommand(examplePath, false, outputModuleStates);
   }
 }
 
