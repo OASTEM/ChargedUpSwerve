@@ -98,7 +98,7 @@ public final class Constants {
     public static final PID upPID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID downPID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID sidePID = new PID(0.05, 0.0 , 0.0, 0.0);
-    public static boolean usingVision = false;
+    public static final PID pivotPID = new PID(0.05, 0.0 , 0.0, 0.0);
   }
 
   public static class Balance{

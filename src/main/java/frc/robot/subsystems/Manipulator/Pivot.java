@@ -19,6 +19,7 @@ public class Pivot extends SubsystemBase {
   private CANSparkMax pivotMotor;
   private SparkMaxPIDController pivotPIDController;
   private RelativeEncoder pivotEncoder;
+  private PID pivotPID;
 
   public Pivot() {
   
