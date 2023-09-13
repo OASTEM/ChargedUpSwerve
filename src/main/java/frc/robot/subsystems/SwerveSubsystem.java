@@ -258,7 +258,9 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
 // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath, Consumer<SwerveModuleState[]> outputModuleStates) {
+public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+  System.out.println("Test 3 ***********************************");
+      
   return new SequentialCommandGroup(
        new InstantCommand(() -> {
          // Reset odometry for the first path you run during auto
@@ -270,10 +272,10 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
            traj, 
            this::getOdometry, // Pose supplier
            this.sKinematics, // SwerveDriveKinematics
-           new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-           new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
-           new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-           outputModuleStates, // Module states consumer
+           new PIDController(0.2, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+           new PIDController(0.2, 0, 0), // Y controller (usually the same values as X controller)
+           new PIDController(0.2, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+           this::outputModuleStates, // Module states consumer
            true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
            this // Requires this drive subsystem
        )
@@ -284,6 +286,18 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
     estimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
     SmartDashboard.putNumber("X field", visionPose.getX());
     SmartDashboard.putNumber("Y field", visionPose.getY());
+  }
+
+  public void outputModuleStates(SwerveModuleState[] states){
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        states, Constants.MotorConstants.MAX_SPEED);
+
+    for (int i = 0; i < modules.length; i++) {
+      modules[i].setState(states[i]);
+
+      // System.out.println(states[i]);
+      // System.out.println(i);
+    }
   }
   
 }
