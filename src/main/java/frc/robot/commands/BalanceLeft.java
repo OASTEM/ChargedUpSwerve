@@ -12,7 +12,7 @@ import frc.robot.utils.PID;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
-public class BalanceFront extends CommandBase {
+public class BalanceLeft extends CommandBase {
   // private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
 
   /** Creates a new balance. */
@@ -21,12 +21,12 @@ public class BalanceFront extends CommandBase {
   private final double goal = 0;
   private final double maxEffort = 1;
   private double p, i, d;
-  //PID Values need to be tuned
-  //Might need to create two pid values for both sides of the swerve
-  //PID balancePID = new PID(0.023, 0.002, 0.002);
+  // PID Values need to be tuned
+  // Might need to create two pid values for both sides of the swerve
+  // PID balancePID = new PID(0.023, 0.002, 0.002);
   PID balancePID;
 
-  public BalanceFront(SwerveSubsystem swerve) {
+  public BalanceLeft(SwerveSubsystem swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
 
@@ -66,8 +66,10 @@ public class BalanceFront extends CommandBase {
       effort = maxEffort;
     }
 
+
+
     double speed = effort * -5;
-    swerve.drive(speed, 0, 0, true);
+    swerve.drive(0, speed, 0, true);
   }
 
   // Called once the command ends or is interrupted.

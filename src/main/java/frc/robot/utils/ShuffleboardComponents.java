@@ -41,6 +41,7 @@ public class ShuffleboardComponents extends SubsystemBase {
 
         // Create components
         usingVision = vision.add("Using Vision", false);
+        
     }
 
     @Override

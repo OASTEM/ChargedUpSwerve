@@ -99,6 +99,8 @@ public final class Constants {
     public static final PID downPID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID sidePID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID pivotPID = new PID(0.05, 0.0 , 0.0, 0.0);
+ 
+    public static final int TELESCOPING_MOTOR_ID = 15;
   }
 
   public static class Balance{
