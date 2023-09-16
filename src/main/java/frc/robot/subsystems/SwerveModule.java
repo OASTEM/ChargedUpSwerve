@@ -312,14 +312,25 @@ public class SwerveModule {
     }
   }
 
-    public void setDebugPID (){
-      steerslot0Configs.kP = DebugPIDS.debugSteer.p;
-      steerslot0Configs.kI = DebugPIDS.debugSteer.i;
-      steerslot0Configs.kD = DebugPIDS.debugSteer.d;
+    public void setDebugPID (boolean debugPID){
+      if (debugPID){
+        steerslot0Configs.kP = DebugPIDS.debugSteer.p;
+        steerslot0Configs.kI = DebugPIDS.debugSteer.i;
+        steerslot0Configs.kD = DebugPIDS.debugSteer.d;
+  
+        driveslot0Configs.kP = DebugPIDS.debugDrive.p;
+        driveslot0Configs.kI = DebugPIDS.debugDrive.i;
+        driveslot0Configs.kD = DebugPIDS.debugDrive.d;
+      }
+      else{
+        driveslot0Configs.kP = SwerveConstants.PIDConstants.DrivePID.p;
+        driveslot0Configs.kI = SwerveConstants.PIDConstants.DrivePID.i;
+        driveslot0Configs.kD = SwerveConstants.PIDConstants.DrivePID.d;
 
-      driveslot0Configs.kP = DebugPIDS.debugDrive.p;
-      driveslot0Configs.kI = DebugPIDS.debugDrive.i;
-      driveslot0Configs.kD = DebugPIDS.debugDrive.d;
+        steerslot0Configs.kP = SwerveConstants.PIDConstants.SteerPID.p; //original 0.06
+        steerslot0Configs.kI = SwerveConstants.PIDConstants.SteerPID.i;
+        steerslot0Configs.kD = SwerveConstants.PIDConstants.SteerPID.d;
+      }
     }
 
 }

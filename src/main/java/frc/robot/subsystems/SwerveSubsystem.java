@@ -211,6 +211,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     Rotation2d gyroAngle = getRotation2d();
     estimator.update(gyroAngle, getModulePositions());
+
+    for (int i = 0; i < modules.length; i++) {
+      modules[i].setDebugPID(Constants.DebugMode.debugMode);
+    }
   }
 
   public void stopModules() {
