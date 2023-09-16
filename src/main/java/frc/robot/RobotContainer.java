@@ -119,7 +119,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return swerveSubsystem.followTrajectoryCommand(examplePath, false);
+    return swerveSubsystem.followTrajectoryCommand(examplePath, true);
   }
 }
 

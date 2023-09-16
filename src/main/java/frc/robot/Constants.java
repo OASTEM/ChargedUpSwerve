@@ -82,6 +82,11 @@ public final class Constants {
     public static final double CANCoderValue12 = 0.328613 + 0.5;
     public static final double JESSICA = 0.05;
     public static boolean usingVision = false;
+
+    public static class PIDConstants{
+      public static PID SteerPID = new PID(0.08, 0.0001, 0.008,0);
+      public static PID DrivePID = new PID(0.01, 0.0, 0.0, 0);
+    }
   }
 
   public static class AutoConstants{
@@ -99,6 +104,7 @@ public final class Constants {
     public static final PID downPID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID sidePID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID pivotPID = new PID(0.05, 0.0 , 0.0, 0.0);
+  
  
     public static final int TELESCOPING_MOTOR_ID = 15;
   }
@@ -117,5 +123,10 @@ public final class Constants {
 
   public static class DebugMode{
     public static boolean debugMode = false;
+
+    public static class DebugPIDS{
+      public static PID debugDrive = new PID(0.0, 0.0, 0.0, 0.0);
+      public static PID debugSteer = new PID(0.0, 0.0, 0.0, 0.0);
+    }
   }
 }
