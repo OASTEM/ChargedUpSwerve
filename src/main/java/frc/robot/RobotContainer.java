@@ -6,8 +6,8 @@ package frc.robot;
 
 import frc.robot.commands.BalanceFront;
 import frc.robot.commands.PadDrive;
-import frc.robot.commands.ReverseIntake;
-import frc.robot.commands.StartIntake;
+import frc.robot.commands.ManipulatorCommands.ReverseIntake;
+import frc.robot.commands.ManipulatorCommands.StartIntake;
 //import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Manipulator.Intake;

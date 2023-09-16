@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -47,6 +48,7 @@ public class ShuffleboardComponents extends SubsystemBase {
 
     //Driver Widgets
     private SimpleWidget slowMode;
+    private final SendableChooser<String> m_chooser;
 
     //Swerve Widgets
     private SimpleWidget steerP;
@@ -69,6 +71,7 @@ public class ShuffleboardComponents extends SubsystemBase {
         prematch = Shuffleboard.getTab("Prematch");
 
         // Create components
+        m_chooser = new SendableChooser<>();
 
         //Vision
         usingVision = vision.add("Using Vision", false);
@@ -78,6 +81,10 @@ public class ShuffleboardComponents extends SubsystemBase {
 
         //Driver
         slowMode = driver.add("Slow Mode", false);
+        m_chooser.setDefaultOption("Scoring Level", "Low");
+        m_chooser.addOption("Scoring Level", "Middle");
+        m_chooser.addOption("Scoring Level", "High");
+        driver.add("Scoring Level", m_chooser);
 
         //Debug
         debugMode = debug.add("Debug Mode", false);
@@ -138,4 +145,8 @@ public class ShuffleboardComponents extends SubsystemBase {
     }
 
     // Add other update methods for different tabs if needed
+
+    public String getScoringLevel(){
+        return m_chooser.getSelected();
+    }
 }

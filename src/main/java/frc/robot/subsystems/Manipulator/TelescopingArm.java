@@ -15,6 +15,14 @@ public class TelescopingArm extends SubsystemBase {
     motor = new CANSparkMax(Constants.ManipulatorConstants.TELESCOPING_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
   }
 
+  public void setSpeed(double speed){
+    motor.set(speed);
+  }
+
+  public void stop(){
+    motor.stopMotor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

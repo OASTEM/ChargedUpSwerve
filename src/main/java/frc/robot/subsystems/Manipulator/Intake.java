@@ -26,6 +26,10 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(speed);
   }
 
+  public void spinIntake() {
+    intakeMotor.set(Constants.ManipulatorConstants.INTAKE_SPEED);
+  }
+  
   public void stopIntake() {
     intakeMotor.stopMotor();
   }

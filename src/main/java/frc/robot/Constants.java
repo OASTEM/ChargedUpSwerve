@@ -96,8 +96,8 @@ public final class Constants {
 
   public static class ManipulatorConstants {
     public static final int INTAKE_MOTOR_ID = 13;
-    public static final double intakeSpeed = 1.0;
-    public static final double reverseIntakeSpeed = -1.0;
+    public static final double INTAKE_SPEED = 1.0;
+    public static final double REVERSE_INTAKE_SPEED = -1.0;
 
     public static final int PIVOT_MOTOR_ID = 14;
     public static final PID upPID = new PID(0.05, 0.0 , 0.0, 0.0);
@@ -107,6 +107,17 @@ public final class Constants {
   
  
     public static final int TELESCOPING_MOTOR_ID = 15;
+    public static final double telescopingSpeed = 1.0;
+    public static final double reverseTelescopingSpeed = -1.0;
+
+    // Intaking Constants
+    public static final double PIVOT_CONE_INTAKE_POSITION = 0.0;
+    public static final double PIVOT_CUBE_INTAKE_POSITION = 0.0;
+    
+    // Scoring Constants
+    public static final double PIVOT_LOW_POSITION = 0.0;
+    public static final double PIVOT_MID_POSITION = 0.0;
+    public static final double PIVOT_HIGH_POSITION = 0.0;
   }
 
   public static class Balance{
@@ -129,4 +140,5 @@ public final class Constants {
       public static PID debugSteer = new PID(0.0, 0.0, 0.0, 0.0);
     }
   }
+  
 }

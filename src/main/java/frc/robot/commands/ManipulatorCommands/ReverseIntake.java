@@ -2,19 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.ManipulatorCommands;
 
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Manipulator.Intake;
 
-public class StartIntake extends CommandBase {
-  /** Creates a new startIntake. */
+public class ReverseIntake extends CommandBase {
+  
 
   private Intake intake;
 
-  public StartIntake(Intake intake) {
+  public ReverseIntake(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies
     addRequirements(intake);
     this.intake = intake;
@@ -24,7 +24,7 @@ public class StartIntake extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.spinIntake(Constants.ManipulatorConstants.intakeSpeed);
+    intake.spinIntake(Constants.ManipulatorConstants.REVERSE_INTAKE_SPEED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

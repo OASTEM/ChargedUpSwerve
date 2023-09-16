@@ -6,6 +6,7 @@ package frc.robot.subsystems.Manipulator;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
@@ -35,7 +36,9 @@ public class Pivot extends SubsystemBase {
   }
 
   public void initPIDController(PID pid){
-
+    pivotPIDController.setP(pid.p);
+    pivotPIDController.setI(pid.i);
+    pivotPIDController.setD(pid.d);
   }
 
 
@@ -44,5 +47,8 @@ public class Pivot extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-
+  
+  public void setPosition(double position){
+    pivotEncoder.setPosition(position);
+  }
 }
