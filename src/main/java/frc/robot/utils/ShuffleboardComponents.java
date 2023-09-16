@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.BalanceDebug;
+import frc.robot.Constants.DebugMode;
 import frc.robot.Constants.SwerveConstants;
 
 public class ShuffleboardComponents extends SubsystemBase {
@@ -28,6 +29,7 @@ public class ShuffleboardComponents extends SubsystemBase {
     private ShuffleboardTab prematch;
 
     private SimpleWidget usingVision;
+    private SimpleWidget debugMode;
 
     /**
      * Creates a new ShuffleboardComponents.
@@ -40,8 +42,18 @@ public class ShuffleboardComponents extends SubsystemBase {
         prematch = Shuffleboard.getTab("Prematch");
 
         // Create components
+
+        //Vision
         usingVision = vision.add("Using Vision", false);
-        
+
+        //Driver
+
+        //Debug
+        debugMode = debug.add("Debug Mode", false);
+
+        //Swerve
+
+        //Prematch
     }
 
     @Override
@@ -49,7 +61,7 @@ public class ShuffleboardComponents extends SubsystemBase {
         // This method will be called once per scheduler run
         updateVision();
         // updateDriver();
-        // updateDebug();
+        updateDebug();
         // updateSwerve();
         // updatePrematch();
 
@@ -61,6 +73,22 @@ public class ShuffleboardComponents extends SubsystemBase {
      */
     private void updateVision() {
         SwerveConstants.usingVision = usingVision.getEntry().get().getBoolean();
+    }
+
+    private void updateDriver(){
+
+    }
+
+    private void updateDebug(){
+
+    }
+
+    private void updateSwerve(){
+
+    }
+
+    private void updatePrematch(){
+        DebugMode.debugMode = debugMode.getEntry().get().getBoolean();
     }
 
     // Add other update methods for different tabs if needed
