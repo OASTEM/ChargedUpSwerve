@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.DebugMode.DebugPIDS;
 
 public class SwerveModule {
   private TalonFX driveMotor;
@@ -82,13 +83,13 @@ public class SwerveModule {
     driveConfigurator.apply(motorConfigs);
     steerConfigurator.apply(motorConfigs);
 
-    driveslot0Configs.kP = 0.01;
-    driveslot0Configs.kI = 0;
-    driveslot0Configs.kD = 0;
+    driveslot0Configs.kP = SwerveConstants.PIDConstants.DrivePID.p;
+    driveslot0Configs.kI = SwerveConstants.PIDConstants.DrivePID.i;
+    driveslot0Configs.kD = SwerveConstants.PIDConstants.DrivePID.d;
 
-    steerslot0Configs.kP = 0.08; //original 0.06
-    steerslot0Configs.kI = 0.0001;
-    steerslot0Configs.kD = 0.008; //Original 0.008
+    steerslot0Configs.kP = SwerveConstants.PIDConstants.SteerPID.p; //original 0.06
+    steerslot0Configs.kI = SwerveConstants.PIDConstants.SteerPID.i;
+    steerslot0Configs.kD = SwerveConstants.PIDConstants.SteerPID.d; //Original 0.008
 
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
@@ -258,7 +259,6 @@ public class SwerveModule {
       desiredDegrees = desiredDegrees - 360;
     }
 
-    
 
 
     // if (printSlower == 100) {
@@ -311,5 +311,15 @@ public class SwerveModule {
       return new SwerveModuleState(desiredState.speedMetersPerSecond, Rotation2d.fromDegrees(desiredDegrees));
     }
   }
+
+    public void setDebugPID (){
+      steerslot0Configs.kP = DebugPIDS.debugSteer.p;
+      steerslot0Configs.kI = DebugPIDS.debugSteer.i;
+      steerslot0Configs.kD = DebugPIDS.debugSteer.d;
+
+      driveslot0Configs.kP = DebugPIDS.debugDrive.p;
+      driveslot0Configs.kI = DebugPIDS.debugDrive.i;
+      driveslot0Configs.kD = DebugPIDS.debugDrive.d;
+    }
 
 }
