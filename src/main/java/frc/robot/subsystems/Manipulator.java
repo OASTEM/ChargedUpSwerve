@@ -22,11 +22,9 @@ public class Manipulator extends SubsystemBase {
 
   private SparkMaxPIDController pivotPIDController;
   private RelativeEncoder pivotEncoder;
-  private PID pivotPID;
   
   private SparkMaxPIDController telescopingPIDController;
   private RelativeEncoder telescopingEncoder;
-  private PID telescopingPID;
 
   private DigitalInput sensor;
 
@@ -38,9 +36,16 @@ public class Manipulator extends SubsystemBase {
     pivotPIDController = pivotMotor.getPIDController();
     pivotEncoder = pivotMotor.getEncoder();
 
+    telescopingPIDController = telescopingMotor.getPIDController();
+    telescopingEncoder = telescopingMotor.getEncoder();
+
     pivotPIDController.setP(ManipulatorConstants.pivotPID.p);
     pivotPIDController.setI(ManipulatorConstants.pivotPID.i);
     pivotPIDController.setD(ManipulatorConstants.pivotPID.d);
+
+    telescopingPIDController.setP(ManipulatorConstants.telescopingPID.p);
+    telescopingPIDController.setI(ManipulatorConstants.telescopingPID.i);
+    telescopingPIDController.setD(ManipulatorConstants.telescopingPID.d);
 
     sensor = new DigitalInput(ManipulatorConstants.SENSOR_1_ID);
   }
