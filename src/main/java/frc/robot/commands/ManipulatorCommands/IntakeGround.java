@@ -4,37 +4,32 @@
 
 package frc.robot.commands.ManipulatorCommands;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Manipulator.Intake;
+import frc.robot.subsystems.Manipulator;
 
-public class StartIntake extends CommandBase {
-  /** Creates a new startIntake. */
+public class IntakeGround extends CommandBase {
+  /** Creates a new IntakeGround. */
+  private Manipulator manipulator;
 
-  private Intake intake;
-
-  public StartIntake(Intake intake) {
-    // Use addRequirements() here to declare subsystem dependencies
-    addRequirements(intake);
-    this.intake = intake;
-
+  public IntakeGround(Manipulator manipulator) {
+    addRequirements(manipulator);
+    this.manipulator = manipulator;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    intake.spinIntake(Constants.ManipulatorConstants.INTAKE_SPEED);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+      manipulator.extendGround();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopIntake();
+    manipulator.retract();
   }
 
   // Returns true when the command should end.

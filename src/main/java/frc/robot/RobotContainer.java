@@ -6,11 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.BalanceFront;
 import frc.robot.commands.PadDrive;
-import frc.robot.commands.ManipulatorCommands.ReverseIntake;
-import frc.robot.commands.ManipulatorCommands.StartIntake;
-//import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.Manipulator.Intake;
 import frc.robot.utils.LogitechGamingPad;
 
 import java.util.HashMap;
@@ -26,6 +22,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Manipulator;
 //import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
@@ -49,7 +46,7 @@ import frc.robot.Constants;
  */
 public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem;
-  private final Intake intake;
+  private final Manipulator manipulator;
   private final LogitechGamingPad pad;
   private final Limelight limelight;
   private final ShuffleboardComponents components;
@@ -68,7 +65,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     swerveSubsystem = Robot.swerveSubsystem;
-    intake = new Intake();
+    manipulator = new Manipulator();
     pad = new LogitechGamingPad(0);
     limelight = new Limelight();
     components = new ShuffleboardComponents();
@@ -109,8 +106,6 @@ public class RobotContainer {
     padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
     padX.whileTrue(new BalanceFront(swerveSubsystem));
     
-    leftBumper.whileTrue(new StartIntake(intake));
-    rightBumper.whileTrue(new ReverseIntake(intake));
   }
   
   /**

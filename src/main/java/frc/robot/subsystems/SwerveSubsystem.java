@@ -56,6 +56,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
+
     // navX.reset();
     // frontLeft = new SwerveModule(Constants.MotorConstants.frontLeftDriveId,
     // Constants.MotorConstants.frontLeftSteerId);
@@ -296,9 +297,6 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
-
-      // System.out.println(states[i]);
-      // System.out.println(i);
     }
   }
 }

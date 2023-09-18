@@ -118,6 +118,15 @@ public final class Constants {
     public static final double PIVOT_LOW_POSITION = 0.0;
     public static final double PIVOT_MID_POSITION = 0.0;
     public static final double PIVOT_HIGH_POSITION = 0.0;
+
+    public static final double PIVOT_RETRACTED_POSITION = 0.0;
+    public static final double PIVOT_GROUND_EXTENDED_POSITION = 0.0;
+    
+    public static final double TELESCOPING_RETRACTED_POSITION = 0.0;
+    public static final double TELESCOPING_GROUND_EXTENDED_POSITION = 0.0;
+
+    // Sensor IDs
+    public static final int SENSOR_1_ID = 0;
   }
 
   public static class Balance{
