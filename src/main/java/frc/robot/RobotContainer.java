@@ -6,6 +6,13 @@ package frc.robot;
 
 import frc.robot.commands.BalanceFront;
 import frc.robot.commands.PadDrive;
+import frc.robot.commands.ManipulatorCommands.ExtendHigh;
+import frc.robot.commands.ManipulatorCommands.ExtendLow;
+import frc.robot.commands.ManipulatorCommands.ExtendMid;
+import frc.robot.commands.ManipulatorCommands.IntakeFeeder;
+import frc.robot.commands.ManipulatorCommands.IntakeGround;
+import frc.robot.commands.ManipulatorCommands.ScoreCone;
+import frc.robot.commands.ManipulatorCommands.ScoreCube;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -26,6 +33,7 @@ import frc.robot.subsystems.Manipulator;
 //import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
+
 import frc.robot.utils.ShuffleboardComponents;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -48,15 +56,24 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem;
   private final Manipulator manipulator;
   private final LogitechGamingPad pad;
+  private final LogitechGamingPad opPad;
   private final Limelight limelight;
   private final ShuffleboardComponents components;
   
-  private final JoystickButton padA;
-  private final JoystickButton padB;
-  private final JoystickButton padX;
-  private final JoystickButton padY;
-  private final JoystickButton rightBumper;
-  private final JoystickButton leftBumper;
+  private final JoystickButton XboxPadA;
+  private final JoystickButton XboxPadB;
+  private final JoystickButton XboxPadX;
+  private final JoystickButton XboxPadY;
+  private final JoystickButton XboxRightBumper;
+  private final JoystickButton XboxLeftBumper;
+
+  private final JoystickButton PadA;
+  private final JoystickButton PadB;
+  private final JoystickButton PadX;
+  private final JoystickButton PadY;
+  private final JoystickButton RightBumper;
+  private final JoystickButton LeftBumper;
+  private final JoystickButton StartButton;
   
   private final PathPlannerTrajectory examplePath;
   
@@ -67,15 +84,24 @@ public class RobotContainer {
     swerveSubsystem = Robot.swerveSubsystem;
     manipulator = new Manipulator();
     pad = new LogitechGamingPad(0);
+    opPad = new LogitechGamingPad(1);
     limelight = new Limelight();
     components = new ShuffleboardComponents();
     
-    padA = new JoystickButton(pad, 1);
-    padB = new JoystickButton(pad, 2);
-    padX = new JoystickButton(pad, 3);
-    padY = new JoystickButton(pad, 4);
-    rightBumper = new JoystickButton(pad, 6);
-    leftBumper = new JoystickButton(pad, 5);
+    XboxPadA = new JoystickButton(pad, 1);
+    XboxPadB = new JoystickButton(pad, 2);
+    XboxPadX = new JoystickButton(pad, 3);
+    XboxPadY = new JoystickButton(pad, 4);
+    XboxRightBumper = new JoystickButton(pad, 6);
+    XboxLeftBumper = new JoystickButton(pad, 5);
+
+    PadA = new JoystickButton(opPad, 1);
+    PadB = new JoystickButton(opPad, 2);
+    PadX = new JoystickButton(opPad, 3);
+    PadY = new JoystickButton(opPad, 4);
+    RightBumper = new JoystickButton(opPad, 6);
+    LeftBumper = new JoystickButton(opPad, 5);
+    StartButton = new JoystickButton(opPad, 8);
     
     examplePath = PathPlanner.loadPath("Test Path", new PathConstraints(4, 3)); // in m/s
     
@@ -101,10 +127,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
-    padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
-    padX.whileTrue(new BalanceFront(swerveSubsystem));
+    //Drive Commands
+    XboxPadA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
+    XboxPadB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
+    XboxPadY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
+    XboxPadX.whileTrue(new BalanceFront(swerveSubsystem));
+
+    //Manipulator Commands
+    RightBumper.whileTrue(new IntakeGround(manipulator));
+    LeftBumper.whileTrue(new ScoreCube(manipulator));
+    PadA.onTrue(new ExtendLow(manipulator));
+    PadB.onTrue(new ExtendMid(manipulator));
+    PadY.onTrue(new ExtendHigh(manipulator));
+    PadX.whileTrue(new IntakeFeeder(manipulator));
+    StartButton.whileTrue(new ScoreCone(manipulator));
+
     
   }
   

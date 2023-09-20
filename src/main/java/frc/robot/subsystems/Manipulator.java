@@ -56,14 +56,14 @@ public class Manipulator extends SubsystemBase {
   }
 
   // Intake Functions
-  public void spinIntake(double speed) {
-    intakeMotor.set(speed);
-  }
-
   public void spinIntake() {
     intakeMotor.set(ManipulatorConstants.INTAKE_SPEED);
   }
   
+  public void reverseIntake() {
+    intakeMotor.set(ManipulatorConstants.REVERSE_INTAKE_SPEED);
+  }
+
   public void stopIntake() {
     intakeMotor.stopMotor();
   }
@@ -97,9 +97,31 @@ public class Manipulator extends SubsystemBase {
 
   public void extendGround(){
     setPivotPosition(ManipulatorConstants.PIVOT_GROUND_EXTENDED_POSITION);
-    setTelescopingPosition(ManipulatorConstants.TELESCOPING_GROUND_EXTENDED_POSITION);
+    setTelescopingPosition(ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
     spinIntake();
   }
+
+  public void extendLow(){
+    setPivotPosition(ManipulatorConstants.PIVOT_LOW_POSITION);
+    setTelescopingPosition(ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
+  }
+
+  public void extendHigh(){
+    setPivotPosition(ManipulatorConstants.PIVOT_HIGH_POSITION);
+    setTelescopingPosition((ManipulatorConstants.TELESCOPING_EXTENDED_POSITION));
+  }
+
+  public void extendMid(){
+    setPivotPosition(ManipulatorConstants.PIVOT_MID_POSITION);
+    setTelescopingPosition(ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
+  }
+
+  public void intakeFeederStation(){
+    setPivotPosition(ManipulatorConstants.PIVOT_FEEDER_STATION);
+    setTelescopingPosition(ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
+    reverseIntake();
+  }
+
 
   // Retraction Functions
 

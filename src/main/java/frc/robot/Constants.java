@@ -98,6 +98,7 @@ public final class Constants {
     public static final int INTAKE_MOTOR_ID = 13;
     public static final double INTAKE_SPEED = 1.0;
     public static final double REVERSE_INTAKE_SPEED = -1.0;
+    
 
     public static final int PIVOT_MOTOR_ID = 14;
     public static final PID upPID = new PID(0.05, 0.0 , 0.0, 0.0);
@@ -113,6 +114,7 @@ public final class Constants {
     // Intaking Constants
     public static final double PIVOT_CONE_INTAKE_POSITION = 0.0;
     public static final double PIVOT_CUBE_INTAKE_POSITION = 0.0;
+    public static final double PIVOT_FEEDER_STATION = 0.0;
     
     // Scoring Constants
     public static final double PIVOT_LOW_POSITION = 0.0;
@@ -123,7 +125,8 @@ public final class Constants {
     public static final double PIVOT_GROUND_EXTENDED_POSITION = 0.0;
     
     public static final double TELESCOPING_RETRACTED_POSITION = 0.0;
-    public static final double TELESCOPING_GROUND_EXTENDED_POSITION = 0.0;
+    public static final double TELESCOPING_EXTENDED_POSITION = 0.0;
+
 
     // Sensor IDs
     public static final int SENSOR_1_ID = 0;
