@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -13,13 +11,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.SwerveConstants;
 import frc.robot.utils.LimelightHelpers;
 import frc.robot.utils.LimelightHelpers.LimelightResults;
 
@@ -31,14 +24,14 @@ public class Limelight extends SubsystemBase {
   double tv, tx, ta;
   private Pose2d robotPose_FieldSpace;
   private GenericEntry vision;
-  
+
   public Limelight() {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     llresults = LimelightHelpers.getLatestResults("");
+
   }
 
 
-  
 
   @Override
   public void periodic() {
@@ -89,6 +82,14 @@ public class Limelight extends SubsystemBase {
 
   public void setAdvanced(double mode){
     m_limelightTable.getEntry("advanced_mode").setNumber(mode);
+  }
+
+  public double getLatency(){
+    return llresults.targetingResults.latency_capture;
+  }
+
+  public double getTag(){
+    return LimelightHelpers.getFiducialID("");
   }
 
   public Pose2d getRobotPosition(){

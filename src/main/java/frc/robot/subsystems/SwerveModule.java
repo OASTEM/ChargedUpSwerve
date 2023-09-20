@@ -83,13 +83,13 @@ public class SwerveModule {
     driveConfigurator.apply(motorConfigs);
     steerConfigurator.apply(motorConfigs);
 
-    driveslot0Configs.kP = SwerveConstants.PIDConstants.DrivePID.p;
-    driveslot0Configs.kI = SwerveConstants.PIDConstants.DrivePID.i;
-    driveslot0Configs.kD = SwerveConstants.PIDConstants.DrivePID.d;
+    driveslot0Configs.kP = SwerveConstants.PIDConstants.DRIVE_PID.p;
+    driveslot0Configs.kI = SwerveConstants.PIDConstants.DRIVE_PID.i;
+    driveslot0Configs.kD = SwerveConstants.PIDConstants.DRIVE_PID.d;
 
-    steerslot0Configs.kP = SwerveConstants.PIDConstants.SteerPID.p; //original 0.06
-    steerslot0Configs.kI = SwerveConstants.PIDConstants.SteerPID.i;
-    steerslot0Configs.kD = SwerveConstants.PIDConstants.SteerPID.d; //Original 0.008
+    steerslot0Configs.kP = SwerveConstants.PIDConstants.STEER_PID.p; //original 0.06
+    steerslot0Configs.kI = SwerveConstants.PIDConstants.STEER_PID.i;
+    steerslot0Configs.kD = SwerveConstants.PIDConstants.STEER_PID.d; //Original 0.008
 
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
@@ -273,11 +273,6 @@ public class SwerveModule {
     // else{
     //     printSlower++;
     // }
-
-    SmartDashboard.putNumber("Desired: " , desiredState.angle.getDegrees());
-    SmartDashboard.putNumber("Current: " , currentAngle.getDegrees());
-  
-
     var delta = desiredState.angle.minus(currentAngle);
     
     // if (delta.getDegrees() > 90) {
@@ -290,8 +285,7 @@ public class SwerveModule {
 
     
     if (delta.getDegrees() > 90.0) {
-      // System.out.println(delta.getDegrees());
-      // System.exit(0);
+
       return new SwerveModuleState(
 
           
@@ -323,13 +317,13 @@ public class SwerveModule {
         driveslot0Configs.kD = DebugPIDS.debugDrive.d;
       }
       else{
-        driveslot0Configs.kP = SwerveConstants.PIDConstants.DrivePID.p;
-        driveslot0Configs.kI = SwerveConstants.PIDConstants.DrivePID.i;
-        driveslot0Configs.kD = SwerveConstants.PIDConstants.DrivePID.d;
+        driveslot0Configs.kP = SwerveConstants.PIDConstants.DRIVE_PID.p;
+        driveslot0Configs.kI = SwerveConstants.PIDConstants.DRIVE_PID.i;
+        driveslot0Configs.kD = SwerveConstants.PIDConstants.DRIVE_PID.d;
 
-        steerslot0Configs.kP = SwerveConstants.PIDConstants.SteerPID.p; //original 0.06
-        steerslot0Configs.kI = SwerveConstants.PIDConstants.SteerPID.i;
-        steerslot0Configs.kD = SwerveConstants.PIDConstants.SteerPID.d;
+        steerslot0Configs.kP = SwerveConstants.PIDConstants.STEER_PID.p; //original 0.06
+        steerslot0Configs.kI = SwerveConstants.PIDConstants.STEER_PID.i;
+        steerslot0Configs.kD = SwerveConstants.PIDConstants.STEER_PID.d;
       }
     }
 

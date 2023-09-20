@@ -18,10 +18,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.BalanceDebug;
 import frc.robot.Constants.DebugMode;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.DebugMode.DebugPIDS;
+import frc.robot.Constants.SwerveConstants.PIDConstants;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class ShuffleboardComponents extends SubsystemBase {
     // Create tabs
@@ -36,6 +38,10 @@ public class ShuffleboardComponents extends SubsystemBase {
     private SimpleWidget visionTx;
     private SimpleWidget visionTa;
     private SimpleWidget visionTv;
+    private SimpleWidget visionRobotPoseX;
+    private SimpleWidget visionRobotPoseY;
+    private SimpleWidget visionFiducialID;
+    private SimpleWidget visionLatency;
 
     //Debug Widgets
     private SimpleWidget debugMode;
@@ -45,25 +51,28 @@ public class ShuffleboardComponents extends SubsystemBase {
     private SimpleWidget debugSteerP;
     private SimpleWidget debugSteerI;
     private SimpleWidget debugSteerD;
+    private SimpleWidget debugBalanceP;
+    private SimpleWidget debugBalanceI;
+    private SimpleWidget debugBalanceD;
 
     //Driver Widgets
     private SimpleWidget slowMode;
     private final SendableChooser<String> m_chooser;
-
-    //Swerve Widgets
-    private SimpleWidget steerP;
-    private SimpleWidget driveP;
-    private SimpleWidget steerI;
-    private SimpleWidget driveI;
-    private SimpleWidget steerD;
-    private SimpleWidget driveD;
+    private SimpleWidget navXConnected;
+    private SimpleWidget navXAngle;
 
     // Create Subsytems
     private Limelight limelight;
+    private SwerveSubsystem swerveSubsystem;
     /**
      * Creates a new ShuffleboardComponents.
      */
     public ShuffleboardComponents() {
+        // Create subsystems
+        limelight = new Limelight();
+        swerveSubsystem = new SwerveSubsystem();
+
+        //Create tabs
         vision = Shuffleboard.getTab("Vision");
         driver = Shuffleboard.getTab("Driver");
         debug = Shuffleboard.getTab("Debug");
@@ -78,38 +87,40 @@ public class ShuffleboardComponents extends SubsystemBase {
         visionTa = vision.add("Vision Ta", 0);
         visionTx = vision.add("Vision Tx", 0);
         visionTv = vision.add("Vision Tv", 0);
+        visionRobotPoseX = vision.add("Vision Robot Pose", 0);
+        visionRobotPoseY = vision.add("Vision Robot Pose", 0);
+        visionFiducialID = vision.add("Vision Fiducial ID", 0);
+        visionLatency = vision.add("Vision Latency", 0);
 
         //Driver
         slowMode = driver.add("Slow Mode", false);
-        m_chooser.setDefaultOption("Scoring Level", "Low");
-        m_chooser.addOption("Scoring Level", "Middle");
-        m_chooser.addOption("Scoring Level", "High");
+        m_chooser.setDefaultOption("Low", "low");
+        m_chooser.addOption("Middle", "middle");
+        m_chooser.addOption("High", "high");
         driver.add("Scoring Level", m_chooser);
+        navXConnected = swerve.add("NavX Connected", false);
+        navXAngle = swerve.add("NavX Angle", 0);
 
         //Debug
         debugMode = debug.add("Debug Mode", false);
-        debugDriveP = debug.add("Drive P", 0);
-        debugDriveI = debug.add("Drive I", 0);
-        debugDriveD = debug.add("Drive D", 0);
-        debugSteerP = debug.add("Steer P", 0);
-        debugSteerI = debug.add("Steer I", 0);
-        debugSteerD = debug.add("Steer D", 0);
-        
-        //Swerve
+        debugDriveP = debug.add("Drive P", PIDConstants.DRIVE_PID.p);
+        debugDriveI = debug.add("Drive I", PIDConstants.DRIVE_PID.i);
+        debugDriveD = debug.add("Drive D", PIDConstants.DRIVE_PID.d);
+        debugSteerP = debug.add("Steer P", PIDConstants.STEER_PID.p);
+        debugSteerI = debug.add("Steer I", PIDConstants.STEER_PID.i);
+        debugSteerD = debug.add("Steer D", PIDConstants.STEER_PID.d);
+        debugBalanceP = debug.add("Balance P", PIDConstants.BALANCE_PID.p);
+        debugBalanceI = debug.add("Balance I", PIDConstants.BALANCE_PID.i);
+        debugBalanceD = debug.add("Balance D", PIDConstants.BALANCE_PID.d);
 
-        //Prematch
     }
-
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         updateVision();
         updateDriver();
         updateDebug();
-        updateSwerve();
-        updatePrematch();
 
-        // System.out.println(SwerveConstants.usingVision);
     }
 
     /**
@@ -120,10 +131,17 @@ public class ShuffleboardComponents extends SubsystemBase {
         visionTa.getEntry().setDouble(limelight.getTa());
         visionTx.getEntry().setDouble(limelight.getTx());
         visionTv.getEntry().setDouble(limelight.getTv());
+        visionRobotPoseX.getEntry().setDouble(limelight.getRobotPosition().getX());
+        visionRobotPoseY.getEntry().setDouble(limelight.getRobotPosition().getY());
+        visionFiducialID.getEntry().setDouble(limelight.getTag());
+        visionLatency.getEntry().setDouble(limelight.getLatency());
     }
 
     private void updateDriver(){
         slowMode.getEntry().setBoolean(Constants.MotorConstants.SLOW_MODE);
+        navXConnected.getEntry().setBoolean(swerveSubsystem.navXConnected());
+        navXAngle.getEntry().setDouble(swerveSubsystem.getHeading());
+
     }
 
     private void updateDebug(){
@@ -134,14 +152,9 @@ public class ShuffleboardComponents extends SubsystemBase {
         DebugMode.DebugPIDS.debugSteer.p = debugSteerP.getEntry().getDouble(0);
         DebugMode.DebugPIDS.debugSteer.i = debugSteerI.getEntry().getDouble(0);
         DebugMode.DebugPIDS.debugSteer.d = debugSteerD.getEntry().getDouble(0);
-    }
-
-    private void updateSwerve(){
-
-    }
-
-    private void updatePrematch(){
-        
+        DebugMode.DebugPIDS.debugBalance.p = debugBalanceP.getEntry().getDouble(0);
+        DebugMode.DebugPIDS.debugBalance.i = debugBalanceI.getEntry().getDouble(0);
+        DebugMode.DebugPIDS.debugBalance.d = debugBalanceD.getEntry().getDouble(0);
     }
 
     // Add other update methods for different tabs if needed
