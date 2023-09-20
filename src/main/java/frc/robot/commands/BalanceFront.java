@@ -7,6 +7,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DebugMode;
+import frc.robot.Constants.DebugMode.DebugPIDS;
+import frc.robot.Constants.SwerveConstants.PIDConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.PID;
 import com.kauailabs.navx.frc.AHRS;
@@ -29,22 +31,16 @@ public class BalanceFront extends CommandBase {
   public BalanceFront(SwerveSubsystem swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
-
+    balancePID = PIDConstants.BALANCE_PID;
     this.swerve = swerve;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // p = SmartDashboard.getNumber("P", 0.015);
-    // i = SmartDashboard.getNumber("I", 0.00015);
-    // d = SmartDashboard.getNumber("D", 0.0008);
-    // SmartDashboard.putNumber("P", p);
-    // SmartDashboard.putNumber("I", i);
-    // SmartDashboard.putNumber("D", d);
     if(DebugMode.debugMode) 
     {
-      balancePID = new PID(balancePID.p, balancePID.i, balancePID.d, 0);
+      balancePID = DebugPIDS.debugBalance;
     }                 
     swerve.stop();
     swerve.zeroHeading();

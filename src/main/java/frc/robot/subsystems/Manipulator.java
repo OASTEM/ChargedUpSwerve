@@ -9,7 +9,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.utils.PID;
@@ -47,7 +46,7 @@ public class Manipulator extends SubsystemBase {
     telescopingPIDController.setI(ManipulatorConstants.telescopingPID.i);
     telescopingPIDController.setD(ManipulatorConstants.telescopingPID.d);
 
-    sensor = new DigitalInput(ManipulatorConstants.SENSOR_1_ID);
+    sensor = new DigitalInput(ManipulatorConstants.INTAKE_SENSOR_ID);
   }
 
   @Override

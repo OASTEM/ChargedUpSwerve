@@ -84,8 +84,9 @@ public final class Constants {
     public static boolean usingVision = false;
 
     public static class PIDConstants{
-      public static PID SteerPID = new PID(0.08, 0.0001, 0.008,0);
-      public static PID DrivePID = new PID(0.01, 0.0, 0.0, 0);
+      public static final PID STEER_PID = new PID(0.08, 0.0001, 0.008,0);
+      public static final PID DRIVE_PID = new PID(0.01, 0.0, 0.0, 0);
+      public static final PID BALANCE_PID = new PID(0.015, 0.00015, 0.0008, 0);
     }
   }
 
@@ -111,8 +112,12 @@ public final class Constants {
     public static final double reverseTelescopingSpeed = -1.0;
 
     // Intaking Constants
-    public static final double PIVOT_CONE_INTAKE_POSITION = 0.0;
-    public static final double PIVOT_CUBE_INTAKE_POSITION = 0.0;
+    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.0;
+    public static final double PIVOT_FEEDER_INTAKE_POSITION = 0.0;
+
+    public static final double TELESCOPING_GROUND_INTAKE_POSITION = 0.0;
+    public static final double TELESCOPING_FEEDER_INTAKE_POSITION = 0.0;
+
     
     // Scoring Constants
     public static final double PIVOT_LOW_POSITION = 0.0;
@@ -126,19 +131,7 @@ public final class Constants {
     public static final double TELESCOPING_GROUND_EXTENDED_POSITION = 0.0;
 
     // Sensor IDs
-    public static final int SENSOR_1_ID = 0;
-  }
-
-  public static class Balance{
-    public static final double P = 0.015;
-    public static final double I = 0.00015;
-    public static final double D = 0.0008;
-  }
-
-  public static class BalanceDebug{
-    public static double P;
-    public static double I;
-    public static double D;
+    public static final int INTAKE_SENSOR_ID = 0;
   }
 
   public static class DebugMode{
@@ -147,6 +140,7 @@ public final class Constants {
     public static class DebugPIDS{
       public static PID debugDrive = new PID(0.0, 0.0, 0.0, 0.0);
       public static PID debugSteer = new PID(0.0, 0.0, 0.0, 0.0);
+      public static PID debugBalance = new PID(0, 0, 0, 0.0);
     }
   }
   

@@ -203,9 +203,6 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
       // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Robot Heading", getHeading());
-    SmartDashboard.putBoolean("Is Connected", navX.isConnected());
-
     SmartDashboard.putNumber("Yaw", getYaw());
     SmartDashboard.putNumber("Pitch", getPitch());
     SmartDashboard.putNumber("Roll", getRoll());
@@ -299,4 +296,9 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
       modules[i].setState(states[i]);
     }
   }
+
+  public boolean navXConnected(){
+    return navX.isConnected();
+  }
+
 }
