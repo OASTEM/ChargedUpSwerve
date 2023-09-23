@@ -11,14 +11,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DebugMode;
+import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.DebugMode.DebugPIDS;
 import frc.robot.Constants.SwerveConstants.PIDConstants;
@@ -42,6 +37,8 @@ public class ShuffleboardComponents extends SubsystemBase {
     private SimpleWidget visionRobotPoseY;
     private SimpleWidget visionFiducialID;
     private SimpleWidget visionLatency;
+    private SimpleWidget visionTargetPoseX;
+    private SimpleWidget visionTargetPoseY;
 
     //Debug Widgets
     private SimpleWidget debugMode;
@@ -54,12 +51,19 @@ public class ShuffleboardComponents extends SubsystemBase {
     private SimpleWidget debugBalanceP;
     private SimpleWidget debugBalanceI;
     private SimpleWidget debugBalanceD;
+    private SimpleWidget canCoder9;
+    private SimpleWidget canCoder10;
+    private SimpleWidget canCoder11;
+    private SimpleWidget canCoder12;
 
     //Driver Widgets
     private SimpleWidget slowMode;
+    private SimpleWidget aacornMode;
     private final SendableChooser<String> m_chooser;
     private SimpleWidget navXConnected;
-    private SimpleWidget navXAngle;
+    private SimpleWidget pitch;
+    private SimpleWidget roll;
+    private SimpleWidget yaw;
 
     // Create Subsytems
     private Limelight limelight;
@@ -91,15 +95,24 @@ public class ShuffleboardComponents extends SubsystemBase {
         visionRobotPoseY = vision.add("Vision Robot Pose", 0);
         visionFiducialID = vision.add("Vision Fiducial ID", 0);
         visionLatency = vision.add("Vision Latency", 0);
+        canCoder9 = vision.add("CanCoder 9", 0);
+        canCoder10 = vision.add("CanCoder 10", 0);
+        canCoder11 = vision.add("CanCoder 11", 0);
+        canCoder12 = vision.add("CanCoder 12", 0);
+        visionTargetPoseX = vision.add("Vision Target Pose X", 0);
+        visionTargetPoseY = vision.add("Vision Target Pose Y", 0);
 
         //Driver
         slowMode = driver.add("Slow Mode", false);
+        aacornMode = driver.add("Aacorn Mode", false);
         m_chooser.setDefaultOption("Low", "low");
         m_chooser.addOption("Middle", "middle");
         m_chooser.addOption("High", "high");
         driver.add("Scoring Level", m_chooser);
         navXConnected = swerve.add("NavX Connected", false);
-        navXAngle = swerve.add("NavX Angle", 0);
+        pitch = swerve.add("Pitch", 0);
+        roll = swerve.add("Roll", 0);
+        yaw = swerve.add("Yaw", 0);
 
         //Debug
         debugMode = debug.add("Debug Mode", false);
@@ -139,9 +152,15 @@ public class ShuffleboardComponents extends SubsystemBase {
 
     private void updateDriver(){
         slowMode.getEntry().setBoolean(Constants.MotorConstants.SLOW_MODE);
+        aacornMode.getEntry().setBoolean(Constants.MotorConstants.AACORN_MODE);
         navXConnected.getEntry().setBoolean(swerveSubsystem.navXConnected());
-        navXAngle.getEntry().setDouble(swerveSubsystem.getHeading());
-
+        pitch.getEntry().setDouble(swerveSubsystem.getHeading());
+        roll.getEntry().setDouble(swerveSubsystem.getRoll());
+        yaw.getEntry().setDouble(swerveSubsystem.getYaw());
+        canCoder9.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.FRONT_LEFT_CAN_CODER_ID));
+        canCoder10.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.FRONT_RIGHT_CAN_CODER_ID));
+        canCoder11.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.BACK_LEFT_CAN_CODER_ID));
+        canCoder12.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.BACK_RIGHT_CAN_CODER_ID));
     }
 
     private void updateDebug(){
@@ -163,3 +182,5 @@ public class ShuffleboardComponents extends SubsystemBase {
         return m_chooser.getSelected();
     }
 }
+
+

@@ -35,7 +35,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
 import frc.robot.utils.ShuffleboardComponents;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -128,10 +127,13 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //Drive Commands
-    XboxPadA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
+    XboxPadY.onTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
     XboxPadB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    XboxPadY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
+    XboxRightBumper.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
     XboxPadX.whileTrue(new BalanceFront(swerveSubsystem));
+
+    // XboxRightBumper.onTrue(new IntakeGround(manipulator));
+    // XboxLeftBumper.onTrue(new IntakeFeeder(manipulator));
 
     //Manipulator Commands
     RightBumper.whileTrue(new IntakeGround(manipulator));

@@ -682,7 +682,15 @@ public class LimelightHelpers {
         setLimelightNTDouble(limelightName, "camMode", 1);
     }
 
+    public double getXField(){
+        Pose2d pose = getBotPose2d("limelight");
+        return pose.getX();
+    }
 
+    public double getYField(){
+        Pose2d pose = getBotPose2d("limelight");
+        return pose.getY();
+    }
     /**
      * Sets the crop window. The crop window in the UI must be completely open for
      * dynamic cropping to work.

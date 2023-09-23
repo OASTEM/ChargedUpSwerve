@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
@@ -59,6 +58,12 @@ public class PadDrive extends CommandBase {
 
     }
 
+    else if (Constants.MotorConstants.AACORN_MODE){
+      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.85;
+      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.85;
+
+    }
+
     else{
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED;
@@ -74,21 +79,16 @@ public class PadDrive extends CommandBase {
     }
 
     double turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;
-    SmartDashboard.putNumber("Turn", turn);
-    SmartDashboard.putBoolean("Slow Mode", Constants.MotorConstants.SLOW_MODE);
-    //Slow-Mode not tested
-    //swerveSubsystem.steer();
 
-    SmartDashboard.putNumber("X", x);
-    SmartDashboard.putNumber("Y", y);
-    // SmartDashboard.putNumber("Turn", turn);
-    // SmartDashboard.putBoolean("Slow Mode", Constants.MotorConstants.SLOW_MODE);
-    //Slow-Mode not tested
-    //swerveSubsystem.steer();
+    if (Constants.MotorConstants.AACORN_MODE){
+      swerveSubsystem.drive(x * Constants.MotorConstants.AACORN_SPEED, y * Constants.MotorConstants.AACORN_SPEED, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
+    }
 
-    // SmartDashboard.putNumber("X", x);
-    // SmartDashboard.putNumber("Y", y);
-    swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
+    else {
+      swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
+    }
+    
+
   }
 
   // Called once the command ends or is interrupted.

@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DebugMode;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -36,12 +35,6 @@ public class BalanceLeft extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // p = SmartDashboard.getNumber("P", 0.015);
-    // i = SmartDashboard.getNumber("I", 0.00015);
-    // d = SmartDashboard.getNumber("D", 0.0008);
-    // SmartDashboard.putNumber("P", p);
-    // SmartDashboard.putNumber("I", i);
-    // SmartDashboard.putNumber("D", d);
     if(DebugMode.debugMode) 
     {
       balancePID = new PID(balancePID.p, balancePID.i, balancePID.d, 0);
@@ -76,9 +69,6 @@ public class BalanceLeft extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     swerve.stop();
-    // p = SmartDashboard.getNumber("P", 0.021);
-    // i = SmartDashboard.getNumber("I", 0.002);
-    // d = SmartDashboard.getNumber("D", 0.002);
     balancePID = new PID(p, i, d,0);
   }
 

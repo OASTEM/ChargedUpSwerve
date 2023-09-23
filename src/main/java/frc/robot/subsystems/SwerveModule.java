@@ -204,7 +204,6 @@ public class SwerveModule {
 
     if (Math.abs(state.speedMetersPerSecond) > SwerveConstants.STATE_SPEED_THRESHOLD) {
       double newRotations;
-      // SmartDashboard.putNumber("Set Falcon " + this.steerMotor.getDeviceID(), newRotations);
       var delta = state.angle.minus(currentAngle);
 
       double change = delta.getDegrees();
@@ -230,10 +229,10 @@ public class SwerveModule {
   
 
 
-  public void updateSteerPositionSmartDashboard() {
-    SmartDashboard.putNumber("Actual Falcon " + this.steerMotor.getDeviceID(), this.steerMotor.getRotorPosition().refresh().getValue());
-    SmartDashboard.putNumber("CAN Coder Value" + canCoder.getDeviceID(), canCoder.getAbsolutePosition().getValue());
-  }
+  // public void updateSteerPositionSmartDashboard() {
+  //   SmartDashboard.putNumber("Actual Falcon " + this.steerMotor.getDeviceID(), this.steerMotor.getRotorPosition().refresh().getValue());
+  //   SmartDashboard.putNumber("CAN Coder Value" + canCoder.getDeviceID(), canCoder.getAbsolutePosition().getValue());
+  // }
 
   public void setRotorPos(){
     initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
@@ -241,16 +240,12 @@ public class SwerveModule {
   }
 
   public static SwerveModuleState optimize(
-
-    
       SwerveModuleState desiredState, Rotation2d currentAngle) {
-
-    // System.out.println(currentAngle.minus(desiredState.angle).getDegrees());   
 
     var currentDegrees = currentAngle.getDegrees();
     var desiredDegrees = desiredState.angle.getDegrees();
 
-    SmartDashboard.putNumber("Difference: " , currentAngle.minus(desiredState.angle).getDegrees()); 
+    // SmartDashboard.putNumber("Difference: " , currentAngle.minus(desiredState.angle).getDegrees()); 
     while (currentDegrees - desiredDegrees > 180.0){
       desiredDegrees = desiredDegrees + 360;
     }
@@ -259,20 +254,6 @@ public class SwerveModule {
       desiredDegrees = desiredDegrees - 360;
     }
 
-
-
-    // if (printSlower == 100) {
-    //    System.out.println("Desired: " + desiredState.angle.getDegrees());
-    //    System.out.println("Current: " + currentAngle.getDegrees());
-    //    System.out.println("Difference: " + currentAngle.minus(desiredState.angle).getDegrees());   
-
-    //   printSlower = 0;
-    
-    // }
-
-    // else{
-    //     printSlower++;
-    // }
     var delta = desiredState.angle.minus(currentAngle);
     
     // if (delta.getDegrees() > 90) {
@@ -327,4 +308,7 @@ public class SwerveModule {
       }
     }
 
+    public double getCanCoderValue(){
+      return canCoder.getAbsolutePosition().getValue();
+    }
 }

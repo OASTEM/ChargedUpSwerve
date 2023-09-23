@@ -53,9 +53,11 @@ public final class Constants {
     public static final double STEER_MOTOR_GEAR_RATIO = 150.0/7; //24
     public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER = 0.1;
-    public static final double SPEED_CONSTANT = 0.4; //0.3
+    public static final double SPEED_CONSTANT = 0.6; //0.4
+    public static final double AACORN_SPEED = 0.85;
     public static final double TURN_CONSTANT = 0.5; //0.3
     public static boolean SLOW_MODE = false;
+    public static boolean AACORN_MODE = false;
   }
 
   public static class SwerveConstants {

@@ -143,8 +143,6 @@ public class SwerveSubsystem extends SubsystemBase {
       // System.out.println(states[i]);
       // System.out.println(i);
     }
-
-    updateAllSteerPositionSmartDashboard();
   }
 
   public SwerveModulePosition[] getModulePositions() {
@@ -193,6 +191,14 @@ public class SwerveSubsystem extends SubsystemBase {
     return Constants.MotorConstants.SLOW_MODE;
   }
 
+  public void configAAcornMode() { 
+    Constants.MotorConstants.AACORN_MODE = !Constants.MotorConstants.AACORN_MODE;
+  }
+
+  public boolean getAAcornMode(){
+    return Constants.MotorConstants.AACORN_MODE;
+  }
+
   /** Gets the NavX angle as a Rotation2d. */
   public Rotation2d getRotation2d() {
     return Rotation2d.fromDegrees(getHeading());
@@ -202,10 +208,6 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
       // This method will be called once per scheduler run
-
-    SmartDashboard.putNumber("Yaw", getYaw());
-    SmartDashboard.putNumber("Pitch", getPitch());
-    SmartDashboard.putNumber("Roll", getRoll());
 
     Rotation2d gyroAngle = getRotation2d();
     estimator.update(gyroAngle, getModulePositions());
@@ -218,12 +220,6 @@ public class SwerveSubsystem extends SubsystemBase {
   public void stopModules() {
     for (SwerveModule module : modules) {
       module.stop();
-    }
-  }
-
-  public void updateAllSteerPositionSmartDashboard() {
-    for (SwerveModule currModule : modules) {
-      currModule.updateSteerPositionSmartDashboard();
     }
   }
 
@@ -284,8 +280,6 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
 
   public void addVision(Pose2d visionPose){
     estimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
-    SmartDashboard.putNumber("X field", visionPose.getX());
-    SmartDashboard.putNumber("Y field", visionPose.getY());
   }
   
   public void outputModuleStates(SwerveModuleState[] states){
@@ -301,4 +295,11 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
     return navX.isConnected();
   }
 
+  public double getCanCoderValues(int canID){
+    double[] canCoderValues = new double[modules.length];
+    for (int i = 0; i < modules.length; i++) {
+      canCoderValues[i] = modules[i].getCanCoderValue();
+    }
+    return canCoderValues[canID-9];
+  }
 }

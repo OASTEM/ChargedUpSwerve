@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DebugMode;
 import frc.robot.Constants.DebugMode.DebugPIDS;
@@ -70,9 +69,6 @@ public class BalanceFront extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     swerve.stop();
-    // p = SmartDashboard.getNumber("P", 0.021);
-    // i = SmartDashboard.getNumber("I", 0.002);
-    // d = SmartDashboard.getNumber("D", 0.002);
     balancePID = new PID(p, i, d,0);
   }
 
