@@ -235,7 +235,7 @@ public class SwerveModule {
   // }
 
   public void setRotorPos(){
-    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
+    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue() % 360;
     steerMotor.setRotorPosition(-(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * Constants.MotorConstants.STEER_MOTOR_GEAR_RATIO);
   }
 

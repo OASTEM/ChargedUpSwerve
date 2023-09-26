@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,7 +22,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  public static SwerveSubsystem swerveSubsystem;
+  //public static SwerveSubsystem swerveSubsystem;
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -32,8 +33,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    swerveSubsystem = new SwerveSubsystem();
+    //swerveSubsystem = new SwerveSubsystem();
     m_robotContainer = new RobotContainer();
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -95,7 +97,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    swerveSubsystem.addRotorPositionsforModules();
+    // swerveSubsystem.addRotorPositionsforModules();
+    m_robotContainer.addRotorPositions();
     // swerveSubsystem.zeroHeading();
   }
 

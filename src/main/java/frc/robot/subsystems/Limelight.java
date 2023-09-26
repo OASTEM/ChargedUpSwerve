@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -11,6 +13,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.LimelightHelpers;
@@ -27,11 +30,13 @@ public class Limelight extends SubsystemBase {
 
   public Limelight() {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    // HttpCamera limelightCamera = new HttpCamera("limelight", "http://limelight.local:5801/stream.mjpg");
     llresults = LimelightHelpers.getLatestResults("");
 
+
+    // CameraServer.addCamera(limelightCamera);
+    // Shuffleboard.getTab("Driver").add(limelightCamera);
   }
-
-
 
   @Override
   public void periodic() {
@@ -39,6 +44,7 @@ public class Limelight extends SubsystemBase {
     tv = m_limelightTable.getEntry("tv").getDouble(0);
     tx = m_limelightTable.getEntry("tx").getDouble(0);
     ta = m_limelightTable.getEntry("ta").getDouble(0);
+
 
     if (DriverStation.getAlliance().equals(Alliance.Red)){
       robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();

@@ -109,6 +109,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // } catch (Exception e) {
     // }
     // }).start();
+    addRotorPositionsforModules();
   }
 
   public void drive(double forwardSpeed,
@@ -168,6 +169,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public double getHeading() {
+    // System.out.println(navX.getAngle() % 360);
     return navX.getAngle() % 360;
   }
 
@@ -293,6 +295,10 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
 
   public boolean navXConnected(){
     return navX.isConnected();
+  }
+
+  public boolean navXCalibrating() {
+    return navX.isCalibrating();
   }
 
   public double getCanCoderValues(int canID){

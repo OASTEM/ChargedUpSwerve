@@ -77,8 +77,14 @@ public class PadDrive extends CommandBase {
     if (Math.abs(pad.getLeftAnalogYAxis()) < Constants.SwerveConstants.JESSICA){
       x = 0;
     }
+    
+    Constants.MotorConstants.rotation = pad.getRightAnalogXAxis();
+    
+    if (Math.abs(MotorConstants.rotation) < 0.05){
+      MotorConstants.rotation = 0;
+    }
 
-    double turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;
+    double turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
 
     if (Constants.MotorConstants.AACORN_MODE){
       swerveSubsystem.drive(x * Constants.MotorConstants.AACORN_SPEED, y * Constants.MotorConstants.AACORN_SPEED, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
@@ -87,8 +93,6 @@ public class PadDrive extends CommandBase {
     else {
       swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
     }
-    
-
   }
 
   // Called once the command ends or is interrupted.
