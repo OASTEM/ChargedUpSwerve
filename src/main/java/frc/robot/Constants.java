@@ -84,7 +84,7 @@ public final class Constants {
     public static final double CANCoderValue11 = 0.990479 - 0.5; //0.539794 - 0.5
     public static final double CANCoderValue12 = 0.543457; //0.984863
     public static final double JESSICA = 0.05;
-    public static boolean usingVision = false;
+    public static boolean usingVision = true;
 
     public static class PIDConstants{
       public static final PID STEER_PID = new PID(0.08, 0.0001, 0.008,0);
@@ -137,7 +137,7 @@ public final class Constants {
   }
 
   public static class DebugMode{
-    public static boolean debugMode = false;
+    public static boolean debugMode = true;
 
     public static class DebugPIDS{
       public static PID debugDrive = new PID(0.0, 0.0, 0.0, 0.0);

@@ -24,18 +24,15 @@ public class Limelight extends SubsystemBase {
   final NetworkTable m_limelightTable;
   private LimelightHelpers m_helpers = new LimelightHelpers();
   LimelightHelpers.LimelightResults llresults;
-  double tv, tx, ta;
+  double tv, tx, ty, ta;
   private Pose2d robotPose_FieldSpace;
   private GenericEntry vision;
 
   public Limelight() {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     // HttpCamera limelightCamera = new HttpCamera("limelight", "http://limelight.local:5801/stream.mjpg");
-    llresults = LimelightHelpers.getLatestResults("");
+    llresults = LimelightHelpers.getLatestResults("limelight");
 
-
-    // CameraServer.addCamera(limelightCamera);
-    // Shuffleboard.getTab("Driver").add(limelightCamera);
   }
 
   @Override
@@ -43,8 +40,8 @@ public class Limelight extends SubsystemBase {
     // This method will be called once per scheduler run
     tv = m_limelightTable.getEntry("tv").getDouble(0);
     tx = m_limelightTable.getEntry("tx").getDouble(0);
+    ty = m_limelightTable.getEntry("ty").getDouble(0);
     ta = m_limelightTable.getEntry("ta").getDouble(0);
-
 
     if (DriverStation.getAlliance().equals(Alliance.Red)){
       robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
@@ -64,6 +61,10 @@ public class Limelight extends SubsystemBase {
 
   public double getTv(){
     return tv;
+  }
+
+  public double getTy(){
+    return ty;
   }
 
   public void setLEDMode(double mode){

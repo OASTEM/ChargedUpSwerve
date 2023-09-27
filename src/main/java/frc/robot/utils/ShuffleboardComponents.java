@@ -25,12 +25,11 @@ public class ShuffleboardComponents extends SubsystemBase {
     private ShuffleboardTab vision;
     private ShuffleboardTab driver;
     private ShuffleboardTab debug;
-    private ShuffleboardTab swerve;
-    private ShuffleboardTab prematch;
 
     //Vision Widgets
     private SimpleWidget usingVision;
     private SimpleWidget visionTx;
+    private SimpleWidget visionTy;
     private SimpleWidget visionTa;
     private SimpleWidget visionTv;
     private SimpleWidget visionRobotPoseX;
@@ -59,7 +58,6 @@ public class ShuffleboardComponents extends SubsystemBase {
     //Driver Widgets
     private SimpleWidget slowMode;
     private SimpleWidget aacornMode;
-    private final SendableChooser<String> m_chooser;
     private SimpleWidget navXConnected;
     private SimpleWidget navXCalibrating;
     private SimpleWidget pitch;
@@ -83,16 +81,14 @@ public class ShuffleboardComponents extends SubsystemBase {
         vision = Shuffleboard.getTab("Vision");
         driver = Shuffleboard.getTab("Driver");
         debug = Shuffleboard.getTab("Debug");
-        swerve = Shuffleboard.getTab("Swerve");
-        prematch = Shuffleboard.getTab("Prematch");
 
         // Create components
-        m_chooser = new SendableChooser<>();
 
         //Vision
         usingVision = vision.add("Using Vision", false);
         visionTa = vision.add("Vision Ta", 0);
         visionTx = vision.add("Vision Tx", 0);
+        visionTy = vision.add("Vision Ty", 0);
         visionTv = vision.add("Vision Tv", 0);
         visionRobotPoseX = vision.add("Vision Robot Pose X", 0);
         visionRobotPoseY = vision.add("Vision Robot Pose Y", 0);
@@ -102,23 +98,8 @@ public class ShuffleboardComponents extends SubsystemBase {
         visionTargetPoseY = vision.add("Vision Target Pose Y", 0);
 
         //Driver
-        slowMode = driver.add("Slow Mode", false);
-        aacornMode = driver.add("Aacorn Mode", false);
-        m_chooser.setDefaultOption("Low", "low");
-        m_chooser.addOption("Middle", "middle");
-        m_chooser.addOption("High", "high");
-        driver.add("Scoring Level", m_chooser);
-        navXConnected = swerve.add("NavX Connected", false);
-        navXCalibrating = swerve.add("NavX Calibrating", false);
-        pitch = swerve.add("Pitch", 0);
-        roll = swerve.add("Roll", 0);
-        yaw = swerve.add("Yaw", 0);
         rightRotation = driver.add("Rotation", 0);
         heading = driver.add("Robot Heading", 0);
-        canCoder9 = vision.add("CanCoder 9", 0);
-        canCoder10 = vision.add("CanCoder 10", 0);
-        canCoder11 = vision.add("CanCoder 11", 0);
-        canCoder12 = vision.add("CanCoder 12", 0);
 
         //Debug
         debugMode = debug.add("Debug Mode", false);
@@ -131,8 +112,17 @@ public class ShuffleboardComponents extends SubsystemBase {
         debugBalanceP = debug.add("Balance P", PIDConstants.BALANCE_PID.p);
         debugBalanceI = debug.add("Balance I", PIDConstants.BALANCE_PID.i);
         debugBalanceD = debug.add("Balance D", PIDConstants.BALANCE_PID.d);
-        
-
+        slowMode = driver.add("Slow Mode", false);
+        aacornMode = driver.add("Aacorn Mode", false);
+        navXConnected = debug.add("NavX Connected", false);
+        navXCalibrating = debug.add("NavX Calibrating", false);
+        pitch = debug.add("Pitch", 0);
+        roll = debug.add("Roll", 0);
+        yaw = debug.add("Yaw", 0);
+        canCoder9 = debug.add("CanCoder 9", 0);
+        canCoder10 = debug.add("CanCoder 10", 0);
+        canCoder11 = debug.add("CanCoder 11", 0);
+        canCoder12 = debug.add("CanCoder 12", 0);
     }
     @Override
     public void periodic() {
@@ -140,24 +130,24 @@ public class ShuffleboardComponents extends SubsystemBase {
         updateVision();
         updateDriver();
         updateDebug();
-
     }
 
     /**
      * Updates the values displayed on the Vision tab.
      */
     private void updateVision() {
-        // SwerveConstants.usingVision = usingVision.getEntry().get().getBoolean();
-        // visionFiducialID.getEntry().setDouble(limelight.getTag());
-        // if(limelight.getTag() != 0){
-        // visionTa.getEntry().setDouble(limelight.getTa());
-        // visionTx.getEntry().setDouble(limelight.getTx());
-        // visionTv.getEntry().setDouble(limelight.getTv());
-        // visionRobotPoseX.getEntry().setDouble(limelight.getRobotPosition().getX());
-        // visionRobotPoseY.getEntry().setDouble(limelight.getRobotPosition().getY());
-        // visionFiducialID.getEntry().setDouble(limelight.getTag());
-        // visionLatency.getEntry().setDouble(limelight.getLatency());
-        // }
+        SwerveConstants.usingVision = usingVision.getEntry().get().getBoolean();
+        if (limelight.getTx() > 0){
+            visionFiducialID.getEntry().setDouble(limelight.getTag());
+            visionTa.getEntry().setDouble(limelight.getTa());
+            visionTx.getEntry().setDouble(limelight.getTx());
+            visionTy.getEntry().setDouble(limelight.getTy());
+            visionTv.getEntry().setDouble(limelight.getTv());
+            visionRobotPoseX.getEntry().setDouble(limelight.getRobotPosition().getX());
+            visionRobotPoseY.getEntry().setDouble(limelight.getRobotPosition().getY());
+            visionFiducialID.getEntry().setDouble(limelight.getTag());
+            visionLatency.getEntry().setDouble(limelight.getLatency());
+        }
     }
 
     private void updateDriver(){
@@ -190,10 +180,6 @@ public class ShuffleboardComponents extends SubsystemBase {
     }
 
     // Add other update methods for different tabs if needed
-
-    public String getScoringLevel(){
-        return m_chooser.getSelected();
-    }
 }
 
 

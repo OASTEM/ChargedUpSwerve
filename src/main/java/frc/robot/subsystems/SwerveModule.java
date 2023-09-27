@@ -226,13 +226,6 @@ public class SwerveModule {
     setDriveSpeed(0);
     setSteerSpeed(0);
   }
-  
-
-
-  // public void updateSteerPositionSmartDashboard() {
-  //   SmartDashboard.putNumber("Actual Falcon " + this.steerMotor.getDeviceID(), this.steerMotor.getRotorPosition().refresh().getValue());
-  //   SmartDashboard.putNumber("CAN Coder Value" + canCoder.getDeviceID(), canCoder.getAbsolutePosition().getValue());
-  // }
 
   public void setRotorPos(){
     initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue() % 360;
@@ -245,7 +238,6 @@ public class SwerveModule {
     var currentDegrees = currentAngle.getDegrees();
     var desiredDegrees = desiredState.angle.getDegrees();
 
-    // SmartDashboard.putNumber("Difference: " , currentAngle.minus(desiredState.angle).getDegrees()); 
     while (currentDegrees - desiredDegrees > 180.0){
       desiredDegrees = desiredDegrees + 360;
     }
