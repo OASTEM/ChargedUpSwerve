@@ -56,7 +56,7 @@ public final class Constants {
     public static final double SPEED_CONSTANT = 0.6; //0.4
     public static final double AACORN_SPEED = 0.85;
     public static final double TURN_CONSTANT = 0.5; //0.3
-    public static double rotation = 0.0;
+    public static double HEADING = 0;
     public static boolean SLOW_MODE = false;
     public static boolean AACORN_MODE = false;
   }
@@ -66,10 +66,10 @@ public final class Constants {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static final Translation2d frontLeftLocation = new Translation2d(0.24, -0.24); // +, -
-    public static final Translation2d frontRightLocation = new Translation2d(0.24, 0.24); // + , +
-    public static final Translation2d backLeftLocation = new Translation2d(-0.24, -0.24); // - , -
-    public static final Translation2d backRightLocation = new Translation2d(-0.24, 0.24); // - , +
+    public static final Translation2d frontLeftLocation = new Translation2d(0.24, -0.24);
+    public static final Translation2d frontRightLocation = new Translation2d(0.24, 0.24);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.24, 0.24);
+    public static final Translation2d backRightLocation = new Translation2d(-0.24, -0.24);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         frontLeftLocation,
         frontRightLocation,
@@ -79,18 +79,22 @@ public final class Constants {
     STARTING_POSE = new Pose2d(0, 0, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
-    public static final double CANCoderValue9 = 0.9174805 + 0.5; //0.9174805
-    public static final double CANCoderValue10 = 0.325684; //0.328613 + 0.5 add 0.5 
-    public static final double CANCoderValue11 = 0.990479 - 0.5; //0.539794 - 0.5
-    public static final double CANCoderValue12 = 0.543457; //0.984863
+    public static final double CANCoderValue9 = 0.539794 - 0.5;
+    public static final double CANCoderValue10 = 0.984863; 
+    public static final double CANCoderValue11 = 0.9174805;
+    public static final double CANCoderValue12 = 0.328613 + 0.5;
     public static final double JESSICA = 0.05;
-    public static boolean usingVision = true;
+    public static boolean usingVision = false;
 
     public static class PIDConstants{
       public static final PID STEER_PID = new PID(0.08, 0.0001, 0.008,0);
       public static final PID DRIVE_PID = new PID(0.01, 0.0, 0.0, 0);
       public static final PID BALANCE_PID = new PID(0.015, 0.00015, 0.0008, 0);
     }
+
+    
+    public static final double offBalanceAngleThreshold = 10;
+    public static final double onBalanceAngleThreshold = 5;
   }
 
   public static class AutoConstants{
@@ -134,10 +138,11 @@ public final class Constants {
 
     // Sensor IDs
     public static final int INTAKE_SENSOR_ID = 0;
+    public static final int INTAKE_SENSOR_ID_2 = 1;
   }
 
   public static class DebugMode{
-    public static boolean debugMode = true;
+    public static boolean debugMode = false;
 
     public static class DebugPIDS{
       public static PID debugDrive = new PID(0.0, 0.0, 0.0, 0.0);

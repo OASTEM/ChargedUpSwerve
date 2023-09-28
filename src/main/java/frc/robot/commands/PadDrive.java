@@ -19,6 +19,9 @@ public class PadDrive extends CommandBase {
   private final LogitechGamingPad pad;
   private final Limelight limelight;
   private boolean vision;
+  private double turn;
+  private double heading_deadband = 0.2;
+  private double controller_deadband = 0.1;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
@@ -77,14 +80,20 @@ public class PadDrive extends CommandBase {
     if (Math.abs(pad.getLeftAnalogYAxis()) < Constants.SwerveConstants.JESSICA){
       x = 0;
     }
-    
-    Constants.MotorConstants.rotation = pad.getRightAnalogXAxis();
-    
-    if (Math.abs(MotorConstants.rotation) < 0.05){
-      MotorConstants.rotation = 0;
-    }
 
-    double turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
+    // If the right joystick is within the deadband, don't turn
+    if (Math.abs(pad.getRightAnalogXAxis()) <= controller_deadband) {
+      if (MotorConstants.HEADING > (swerveSubsystem.getHeading() + heading_deadband)) {
+        turn = -MotorConstants.MAX_ANGULAR_SPEED * 0.5;
+      } else if (MotorConstants.HEADING < (swerveSubsystem.getHeading() - heading_deadband)) {
+        turn = MotorConstants.MAX_ANGULAR_SPEED * 0.5;
+      } else {
+        turn = 0;
+      }
+    } else {
+      turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;
+      MotorConstants.HEADING = swerveSubsystem.getHeading();
+    }
 
     if (Constants.MotorConstants.AACORN_MODE){
       swerveSubsystem.drive(x * Constants.MotorConstants.AACORN_SPEED, y * Constants.MotorConstants.AACORN_SPEED, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
@@ -93,6 +102,8 @@ public class PadDrive extends CommandBase {
     else {
       swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
     }
+    
+
   }
 
   // Called once the command ends or is interrupted.
