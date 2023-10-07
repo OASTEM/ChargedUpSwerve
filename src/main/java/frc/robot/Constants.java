@@ -71,10 +71,10 @@ public final class Constants {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static final Translation2d frontLeftLocation = new Translation2d(0.24, -0.24); // +, -
-    public static final Translation2d frontRightLocation = new Translation2d(0.24, 0.24); // + , +
-    public static final Translation2d backLeftLocation = new Translation2d(-0.24, -0.24); // - , -
-    public static final Translation2d backRightLocation = new Translation2d(-0.24, 0.24); // - , +
+    public static final Translation2d frontLeftLocation = new Translation2d(0.24, -0.24);
+    public static final Translation2d frontRightLocation = new Translation2d(0.24, 0.24);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.24, 0.24);
+    public static final Translation2d backRightLocation = new Translation2d(-0.24, -0.24);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         frontLeftLocation,
         frontRightLocation,
@@ -100,6 +100,10 @@ public final class Constants {
       public static PID AUTO_Y = new PID(0.001, 0, 0);
       public static PID AUTO_ROTATION = new PID(0.0001, 0, 0);
     }
+
+    
+    public static final double offBalanceAngleThreshold = 10;
+    public static final double onBalanceAngleThreshold = 5;
   }
 
   public static class AutoConstants{
@@ -143,10 +147,11 @@ public final class Constants {
 
     // Sensor IDs
     public static final int INTAKE_SENSOR_ID = 0;
+    public static final int INTAKE_SENSOR_ID_2 = 1;
   }
 
   public static class DebugMode{
-    public static boolean debugMode = true;
+    public static boolean debugMode = false;
 
     public static class DebugPIDS{
       public static PID debugDrive = new PID(0.0, 0.0, 0.0, 0.0);

@@ -205,7 +205,6 @@ public class ShuffleboardComponents extends SubsystemBase {
         canCoder10.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.FRONT_RIGHT_CAN_CODER_ID));
         canCoder11.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.BACK_LEFT_CAN_CODER_ID));
         canCoder12.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.BACK_RIGHT_CAN_CODER_ID));
-        rightRotation.getEntry().setDouble(Constants.MotorConstants.rotation);
         heading.getEntry().setDouble(swerveSubsystem.getHeading());
         desiredAngle.getEntry().setDouble(MotorConstants.desiredAngle);
         desiredAngleSpeed.getEntry().setDouble(MotorConstants.desiredAngleSpeed);

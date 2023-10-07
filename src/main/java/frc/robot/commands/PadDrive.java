@@ -20,8 +20,10 @@ public class PadDrive extends CommandBase {
   private final LogitechGamingPad pad;
   private final PID fixDaDriftPID = new PID(0.05, 0, 0);
   private boolean vision;
-  private double change;
   private double turn;
+  private double heading_deadband = 0.2;
+  private double controller_deadband = 0.1;
+  private double change;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
@@ -82,7 +84,7 @@ public class PadDrive extends CommandBase {
       MotorConstants.rotation = 0;
     }
 
-    turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
+    double turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
 
     if (Constants.MotorConstants.AACORN_MODE) {
       swerveSubsystem.drive(x * Constants.MotorConstants.AACORN_SPEED, y * Constants.MotorConstants.AACORN_SPEED, turn,
@@ -93,6 +95,8 @@ public class PadDrive extends CommandBase {
       swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT,
           turn, isFieldOriented);
     }
+    
+
   }
 
   // Called once the command ends or is interrupted.
