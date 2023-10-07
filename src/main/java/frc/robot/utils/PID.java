@@ -7,6 +7,12 @@ public class PID {
     public double f;
     public int s;
 
+    public PID(double p, double i, double d){
+        this.p = p;
+        this.i = i;
+        this.d = d;
+    }
+
     public PID(double p, double i, double d, double f, int s) {
         this.p = p;
         this.i = i;

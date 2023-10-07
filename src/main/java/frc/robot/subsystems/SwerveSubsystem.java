@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.deser.impl.SetterlessProperty;
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.AHRS.SerialDataType;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -38,6 +39,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule frontLeft;
@@ -46,15 +48,20 @@ public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule backRight;
   private SwerveModule[] modules;
   private SwerveDrivePoseEstimator estimator;
+  private double delta;
+  private final Limelight limelight;
+  private Rotation2d gyroAngle;
   // private final AHRS navX = new AHRS(SPI.Port.kMXP);
   // private final AHRS navX = new AHRS(SerialPort.Port.kUSB1);
   private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
 
+  private boolean vision;
   private static double printSlow = 0;
   private final SwerveDriveKinematics sKinematics = Constants.SwerveConstants.kinematics;
-
+  private double JaydenSun = 0;
+  private Timer timer;
   /** Creates a new DriveTrain. */
-  public SwerveSubsystem() {
+  public SwerveSubsystem(boolean vision, Limelight limelight) {
 
     // navX.reset();
     // frontLeft = new SwerveModule(Constants.MotorConstants.frontLeftDriveId,
@@ -65,7 +72,8 @@ public class SwerveSubsystem extends SubsystemBase {
     // Constants.MotorConstants.backLeftSteerId);
     // backRight = new SwerveModule(Constants.MotorConstants.backRightDriveId,
     // Constants.MotorConstants.backRightSteerId);
-
+    this.vision = vision;
+    this.limelight = limelight;
     modules = new SwerveModule[] {
         new SwerveModule(
             MotorConstants.FRONT_LEFT_DRIVE_ID,
@@ -87,6 +95,7 @@ public class SwerveSubsystem extends SubsystemBase {
             MotorConstants.BACK_RIGHT_STEER_ID,
             MotorConstants.BACK_RIGHT_CAN_CODER_ID,
             Constants.SwerveConstants.CANCoderValue12)
+            
     };
 
     // Creating my odometry object from the kinematics object and the initial wheel
@@ -109,39 +118,40 @@ public class SwerveSubsystem extends SubsystemBase {
     // }
     // }).start();
     addRotorPositionsforModules();
+    navX.calibrate();
+    MotorConstants.desiredAngle = getHeading();
   }
 
-  public void drive(double forwardSpeed,
-      double leftSpeed, double rotationSpeed, boolean isFieldOriented) {
+  public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
+    MotorConstants.desiredAngleSpeed = joyStickInput * Constants.MotorConstants.TURN_CONSTANT;
+    MotorConstants.desiredAngle += MotorConstants.desiredAngleSpeed / 50;
+    // MotorConstants.computedAngleSpeed = MotorConstants.desiredAngleSpeed - (Math.toRadians(getHeading()) - MotorConstants.desiredAngle);
+    delta = MotorConstants.desiredAngle - Math.toRadians(getHeading());
+    MotorConstants.computedAngleSpeed = delta * -0.02;
+    
+    JaydenSun = joyStickInput * Constants.MotorConstants.TURN_CONSTANT;
 
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           forwardSpeed,
           leftSpeed,
-          rotationSpeed,
-          Rotation2d.fromDegrees(navX.getAngle()));
-      // Rotation2d.fromDegrees(0));
+          JaydenSun,
+          getRotation2d());
     } else {
       speeds = new ChassisSpeeds(
           forwardSpeed,
           leftSpeed,
-          rotationSpeed);
+          joyStickInput);
     }
 
-    // System.out.println(speeds);
-
     SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(speeds);
-    // System.out.println(states);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorConstants.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
-
-      // System.out.println(states[i]);
-      // System.out.println(i);
     }
   }
 
@@ -155,6 +165,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
     estimator.resetPosition(gyroAngle, modulePositions, newPose);
+    navX.getRotation2d();
   }
 
   public void zeroHeading() {
@@ -169,7 +180,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public double getHeading() {
     // System.out.println(navX.getAngle() % 360);
-    return navX.getAngle() % 360;
+    return navX.getFusedHeading() % 360;
   }
 
   public double getPitch() {
@@ -184,6 +195,13 @@ public class SwerveSubsystem extends SubsystemBase {
     return navX.getRoll();
   }
 
+  public double getCompassHeading(){
+    return navX.getCompassHeading();
+  }
+
+  public double findCompassYaw(){
+    return navX.getAngle()-navX.getCompassHeading();
+  }
   public void configSlowMode() {
     Constants.MotorConstants.SLOW_MODE = !Constants.MotorConstants.SLOW_MODE;
   }
@@ -202,20 +220,29 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Gets the NavX angle as a Rotation2d. */
   public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees(getHeading());
+    return Rotation2d.fromDegrees(getYaw());
     // return Rotation2d.fromDegrees(0);
+  }
+
+  public void updatePosition(){
+    this.addVision(limelight.getRobotPosition());
   }
 
   @Override
   public void periodic() {
       // This method will be called once per scheduler run
 
-    Rotation2d gyroAngle = getRotation2d();
+      if (vision)
+      {
+        updatePosition();
+      }
+
+    gyroAngle = Rotation2d.fromDegrees(getYaw());
     estimator.update(gyroAngle, getModulePositions());
 
-    for (int i = 0; i < modules.length; i++) {
-      modules[i].setDebugPID(Constants.DebugMode.debugMode);
-    }
+    // for (int i = 0; i < modules.length; i++) {
+    //   modules[i].setDebugPID(Constants.DebugMode.debugMode);
+    // }
   }
 
   public void stopModules() {
@@ -245,11 +272,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
   public void updateEstimator(){
-    // estimator.update(getRotation2d(), getModulePositions());
+    estimator.update(getRotation2d(), getModulePositions());
     
   }
   public void addVision(){
-    // estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
+    estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
   }
 
   public Pose2d getOdometry(){
@@ -266,15 +293,15 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
          }
        }),
        new PPSwerveControllerCommand(
-           traj, 
+           traj,
            this::getOdometry, // Pose supplier
            this.sKinematics, // SwerveDriveKinematics
-           new PIDController(0.2, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-           new PIDController(0.2, 0, 0), // Y controller (usually the same values as X controller)
-           new PIDController(0.2, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+           new PIDController(SwerveConstants.PIDConstants.AUTO_X.p, SwerveConstants.PIDConstants.AUTO_X.i, SwerveConstants.PIDConstants.AUTO_X.d), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+           new PIDController(SwerveConstants.PIDConstants.AUTO_Y.p, SwerveConstants.PIDConstants.AUTO_Y.i, SwerveConstants.PIDConstants.AUTO_Y.d), // Y controller (usually the same values as X controller)
+           new PIDController(SwerveConstants.PIDConstants.AUTO_ROTATION.p, SwerveConstants.PIDConstants.AUTO_ROTATION.i, SwerveConstants.PIDConstants.AUTO_ROTATION.d), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
            this::outputModuleStates, // Module states consumer
            true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-           this // Requires this drive subsystem
+           this // Requires this drive subsqystem
        )
    );
 }
@@ -292,6 +319,12 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
     }
   }
 
+  public double getRotorPositions(int moduleNum){
+    return modules[moduleNum].steerMotor.getRotorPosition().getValue();
+  }
+
+  
+
   public boolean navXConnected(){
     return navX.isConnected();
   }
@@ -307,4 +340,15 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
     }
     return canCoderValues[canID-9];
   }
+
+  public double getX(){
+    return estimator.getEstimatedPosition().getTranslation().getX();
+  }
+
+  public double getY(){
+    return estimator.getEstimatedPosition().getTranslation().getY();
+  }
+
 }
+
+

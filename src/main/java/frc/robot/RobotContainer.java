@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -64,11 +65,11 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    swerveSubsystem = new SwerveSubsystem();
+    
     // manipulator = new Manipulator();
     pad = new LogitechGamingPad(0);
     limelight = new Limelight();
-    components = new ShuffleboardComponents(swerveSubsystem, limelight);
+   
     
     padA = new JoystickButton(pad, 1);
     padB = new JoystickButton(pad, 2);
@@ -77,11 +78,13 @@ public class RobotContainer {
     rightBumper = new JoystickButton(pad, 6);
     leftBumper = new JoystickButton(pad, 5);
     
-    examplePath = PathPlanner.loadPath("Test Path", new PathConstraints(4, 3)); // in m/s
+    examplePath = PathPlanner.loadPath("Straight Path", new PathConstraints(10, 3)); // in m/s
     
+    swerveSubsystem = new SwerveSubsystem(SwerveConstants.usingVision, limelight);
+    components = new ShuffleboardComponents(swerveSubsystem, limelight);
     swerveSubsystem.setDefaultCommand(
         new PadDrive(
-            swerveSubsystem, pad, true, limelight, Constants.SwerveConstants.usingVision));
+            swerveSubsystem, pad, true));
     
     configureBindings();
   }

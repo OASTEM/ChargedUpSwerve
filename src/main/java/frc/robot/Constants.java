@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -48,7 +49,7 @@ public final class Constants {
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
 
     public static final double MAX_SPEED = 4.96824;  
-    public static final double MAX_ANGULAR_SPEED = 4.24547626559;
+    public static final double MAX_ANGULAR_SPEED = (4 * Math.PI) / 3;
     public static final double ENCODER_COUNTS_PER_ROTATION = 1; //2048 for v5, 1 for v6 (rotations)
     public static final double STEER_MOTOR_GEAR_RATIO = 150.0/7; //24
     public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
@@ -56,6 +57,10 @@ public final class Constants {
     public static final double SPEED_CONSTANT = 0.6; //0.4
     public static final double AACORN_SPEED = 0.85;
     public static final double TURN_CONSTANT = 0.5; //0.3
+
+    public static double desiredAngle = 0.0;
+    public static double desiredAngleSpeed = 0.0;
+    public static double computedAngleSpeed = 0.0;
     public static double rotation = 0.0;
     public static boolean SLOW_MODE = false;
     public static boolean AACORN_MODE = false;
@@ -76,26 +81,30 @@ public final class Constants {
         backLeftLocation,
         backRightLocation);
     public static final Pose2d 
-    STARTING_POSE = new Pose2d(0, 0, new Rotation2d());
+    STARTING_POSE = new Pose2d(14.5, 4.95, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
-    public static final double CANCoderValue9 = 0.9174805 + 0.5; //0.9174805
-    public static final double CANCoderValue10 = 0.325684; //0.328613 + 0.5 add 0.5 
-    public static final double CANCoderValue11 = 0.990479 - 0.5; //0.539794 - 0.5
-    public static final double CANCoderValue12 = 0.543457; //0.984863
+    public static final double CANCoderValue9 = 0.915283 + 0.5; //0.9174805
+    public static final double CANCoderValue10 = 0.333252; //0.328613 + 0.5 add 0.5 
+    public static final double CANCoderValue11 = 0.979736 - 0.5; //0.539794 - 0.5
+    public static final double CANCoderValue12 = 0.536133; //0.984863
     public static final double JESSICA = 0.05;
-    public static boolean usingVision = true;
+    public static final boolean usingVision = false;
 
     public static class PIDConstants{
       public static final PID STEER_PID = new PID(0.08, 0.0001, 0.008,0);
       public static final PID DRIVE_PID = new PID(0.01, 0.0, 0.0, 0);
       public static final PID BALANCE_PID = new PID(0.015, 0.00015, 0.0008, 0);
+
+      public static PID AUTO_X = new PID(0.001, 0, 0);
+      public static PID AUTO_Y = new PID(0.001, 0, 0);
+      public static PID AUTO_ROTATION = new PID(0.0001, 0, 0);
     }
   }
 
   public static class AutoConstants{
     public static final double AUTO_MAX_SPEED = 1;
-    public static final double AUTP_MAX_ACCELERATION = 1;
+    public static final double AUTO_MAX_ACCELERATION = 1;
   }
 
   public static class ManipulatorConstants {

@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import edu.wpi.first.hal.SimEnum;
+import edu.wpi.first.math.ComputerVisionUtil;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -54,6 +56,22 @@ public class ShuffleboardComponents extends SubsystemBase {
     private SimpleWidget canCoder10;
     private SimpleWidget canCoder11;
     private SimpleWidget canCoder12;
+    private SimpleWidget xpos;
+    private SimpleWidget ypos;
+    private SimpleWidget autoXP;
+    private SimpleWidget autoXI;
+    private SimpleWidget autoXD;
+    private SimpleWidget autoYP;
+    private SimpleWidget autoYI;
+    private SimpleWidget autoYD;
+    private SimpleWidget autoRotationP;
+    private SimpleWidget autoRotationI;
+    private SimpleWidget autoRotationD;
+    private SimpleWidget rotorOnePosition;
+    private SimpleWidget rotorTwoPosition;
+    private SimpleWidget rotorThreePosition;
+    private SimpleWidget rotorFourPosition;
+    private SimpleWidget fusedHeading;
 
     //Driver Widgets
     private SimpleWidget slowMode;
@@ -63,9 +81,13 @@ public class ShuffleboardComponents extends SubsystemBase {
     private SimpleWidget pitch;
     private SimpleWidget roll;
     private SimpleWidget yaw;
+    private SimpleWidget compassHeading;
     private SimpleWidget rightRotation;
     private SimpleWidget heading;
-
+    private SimpleWidget desiredAngle;
+    private SimpleWidget desiredAngleSpeed;
+    private SimpleWidget computedAngleSpeed;
+    
     /**
      * Creates a new ShuffleboardComponents.
      */
@@ -100,7 +122,11 @@ public class ShuffleboardComponents extends SubsystemBase {
         //Driver
         rightRotation = driver.add("Rotation", 0);
         heading = driver.add("Robot Heading", 0);
-
+        slowMode = driver.add("Slow Mode", false);
+        aacornMode = driver.add("Aacorn Mode", false);
+        desiredAngle = driver.add("Desired Angle", 0);
+        desiredAngleSpeed = driver.add("Desired Angle Speed", 0);
+        computedAngleSpeed = driver.add("Computed Speed", MotorConstants.computedAngleSpeed);
         //Debug
         debugMode = debug.add("Debug Mode", false);
         debugDriveP = debug.add("Drive P", PIDConstants.DRIVE_PID.p);
@@ -112,17 +138,32 @@ public class ShuffleboardComponents extends SubsystemBase {
         debugBalanceP = debug.add("Balance P", PIDConstants.BALANCE_PID.p);
         debugBalanceI = debug.add("Balance I", PIDConstants.BALANCE_PID.i);
         debugBalanceD = debug.add("Balance D", PIDConstants.BALANCE_PID.d);
-        slowMode = driver.add("Slow Mode", false);
-        aacornMode = driver.add("Aacorn Mode", false);
         navXConnected = debug.add("NavX Connected", false);
         navXCalibrating = debug.add("NavX Calibrating", false);
         pitch = debug.add("Pitch", 0);
         roll = debug.add("Roll", 0);
         yaw = debug.add("Yaw", 0);
+        fusedHeading = debug.add("Fused Heading", 0);
+        compassHeading = debug.add("Compass Heading", 0);
         canCoder9 = debug.add("CanCoder 9", 0);
         canCoder10 = debug.add("CanCoder 10", 0);
         canCoder11 = debug.add("CanCoder 11", 0);
         canCoder12 = debug.add("CanCoder 12", 0);
+        xpos = debug.add("X position", 0);
+        ypos = debug.add("Y position", 0);
+        autoXP = debug.add("AutoX P", PIDConstants.AUTO_X.p);
+        autoXI = debug.add("AutoX I", PIDConstants.AUTO_X.i);
+        autoXD = debug.add("AutoX D", PIDConstants.AUTO_X.d);
+        autoYP = debug.add("AutoY P", PIDConstants.AUTO_Y.p);
+        autoYI = debug.add("AutoY I", PIDConstants.AUTO_Y.i);
+        autoYD = debug.add("AutoY D", PIDConstants.AUTO_Y.d);
+        autoRotationP = debug.add("AutoRotation P", PIDConstants.AUTO_ROTATION.p);
+        autoRotationI = debug.add("AutoRotation I", PIDConstants.AUTO_ROTATION.i);
+        autoRotationD = debug.add("AutoRotation D", PIDConstants.AUTO_ROTATION.d);
+        rotorOnePosition = debug.add("Rotor One Position", swerveSubsystem.getRotorPositions(0));
+        rotorTwoPosition = debug.add("Rotor Two Position", swerveSubsystem.getRotorPositions(1));
+        rotorThreePosition = debug.add("Rotor Three Position", swerveSubsystem.getRotorPositions(2));
+        rotorFourPosition = debug.add("Rotor Four Position", swerveSubsystem.getRotorPositions(3));
     }
     @Override
     public void periodic() {
@@ -136,7 +177,6 @@ public class ShuffleboardComponents extends SubsystemBase {
      * Updates the values displayed on the Vision tab.
      */
     private void updateVision() {
-        SwerveConstants.usingVision = usingVision.getEntry().get().getBoolean();
         if (limelight.getTx() > 0){
             visionFiducialID.getEntry().setDouble(limelight.getTag());
             visionTa.getEntry().setDouble(limelight.getTa());
@@ -147,6 +187,7 @@ public class ShuffleboardComponents extends SubsystemBase {
             visionRobotPoseY.getEntry().setDouble(limelight.getRobotPosition().getY());
             visionFiducialID.getEntry().setDouble(limelight.getTag());
             visionLatency.getEntry().setDouble(limelight.getLatency());
+            usingVision.getEntry().setBoolean(SwerveConstants.usingVision);
         }
     }
 
@@ -158,12 +199,17 @@ public class ShuffleboardComponents extends SubsystemBase {
         pitch.getEntry().setDouble(swerveSubsystem.getHeading());
         roll.getEntry().setDouble(swerveSubsystem.getRoll());
         yaw.getEntry().setDouble(swerveSubsystem.getYaw());
+        fusedHeading.getEntry().setDouble(swerveSubsystem.getHeading());
+        compassHeading.getEntry().setDouble(swerveSubsystem.getCompassHeading());
         canCoder9.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.FRONT_LEFT_CAN_CODER_ID));
         canCoder10.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.FRONT_RIGHT_CAN_CODER_ID));
         canCoder11.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.BACK_LEFT_CAN_CODER_ID));
         canCoder12.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.BACK_RIGHT_CAN_CODER_ID));
         rightRotation.getEntry().setDouble(Constants.MotorConstants.rotation);
         heading.getEntry().setDouble(swerveSubsystem.getHeading());
+        desiredAngle.getEntry().setDouble(MotorConstants.desiredAngle);
+        desiredAngleSpeed.getEntry().setDouble(MotorConstants.desiredAngleSpeed);
+        computedAngleSpeed.getEntry().setDouble(MotorConstants.computedAngleSpeed);
     }
 
     private void updateDebug(){
@@ -177,6 +223,26 @@ public class ShuffleboardComponents extends SubsystemBase {
         DebugMode.DebugPIDS.debugBalance.p = debugBalanceP.getEntry().getDouble(0);
         DebugMode.DebugPIDS.debugBalance.i = debugBalanceI.getEntry().getDouble(0);
         DebugMode.DebugPIDS.debugBalance.d = debugBalanceD.getEntry().getDouble(0);
+
+        SwerveConstants.PIDConstants.AUTO_X.p = autoXP.getEntry().getDouble(0);
+        SwerveConstants.PIDConstants.AUTO_X.i = autoXI.getEntry().getDouble(0);
+        SwerveConstants.PIDConstants.AUTO_X.d = autoXD.getEntry().getDouble(0);
+
+        SwerveConstants.PIDConstants.AUTO_Y.p = autoYP.getEntry().getDouble(0);
+        SwerveConstants.PIDConstants.AUTO_Y.i = autoYI.getEntry().getDouble(0);
+        SwerveConstants.PIDConstants.AUTO_Y.d = autoYD.getEntry().getDouble(0);
+
+        SwerveConstants.PIDConstants.AUTO_ROTATION.p = autoRotationP.getEntry().getDouble(0);
+        SwerveConstants.PIDConstants.AUTO_ROTATION.i = autoRotationI.getEntry().getDouble(0);
+        SwerveConstants.PIDConstants.AUTO_ROTATION.d = autoRotationD.getEntry().getDouble(0);
+
+        rotorOnePosition.getEntry().setDouble(swerveSubsystem.getRotorPositions(0));
+        rotorTwoPosition.getEntry().setDouble(swerveSubsystem.getRotorPositions(1));
+        rotorThreePosition.getEntry().setDouble(swerveSubsystem.getRotorPositions(2));
+        rotorFourPosition.getEntry().setDouble(swerveSubsystem.getRotorPositions(3));
+
+        xpos.getEntry().setDouble(swerveSubsystem.getX());
+        ypos.getEntry().setDouble(swerveSubsystem.getY());
     }
 
     // Add other update methods for different tabs if needed

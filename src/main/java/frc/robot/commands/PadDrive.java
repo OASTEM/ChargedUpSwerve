@@ -11,24 +11,27 @@ import frc.robot.Constants.MotorConstants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
+import frc.robot.utils.PID;
 
 public class PadDrive extends CommandBase {
 
   private final SwerveSubsystem swerveSubsystem;
   private final boolean isFieldOriented;
   private final LogitechGamingPad pad;
-  private final Limelight limelight;
+  private final PID fixDaDriftPID = new PID(0.05, 0, 0);
   private boolean vision;
+  private double change;
+  private double turn;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
       LogitechGamingPad pad,
-      boolean isFieldOriented, Limelight limelight, boolean vision) {
+      boolean isFieldOriented) {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
-    this.limelight = limelight;
-    this.vision = vision;
+    
+    // this.vision = vision;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.swerveSubsystem);
@@ -42,56 +45,53 @@ public class PadDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //swerveSubsystem.test(0, pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED, pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED);
-    
-    if (vision)
-    {
-      updatePosition();
-    }
+    // swerveSubsystem.test(0, pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED,
+    // pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED);
 
     double y;
     double x;
 
-    if (Constants.MotorConstants.SLOW_MODE){
+    if (Constants.MotorConstants.SLOW_MODE) {
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.5;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.5;
 
     }
 
-    else if (Constants.MotorConstants.AACORN_MODE){
+    else if (Constants.MotorConstants.AACORN_MODE) {
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.85;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.85;
 
     }
 
-    else{
+    else {
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED;
     }
-   
 
-    if (Math.abs(pad.getLeftAnalogXAxis()) < Constants.SwerveConstants.JESSICA){
+    if (Math.abs(pad.getLeftAnalogXAxis()) < Constants.SwerveConstants.JESSICA) {
       y = 0;
     }
 
-    if (Math.abs(pad.getLeftAnalogYAxis()) < Constants.SwerveConstants.JESSICA){
+    if (Math.abs(pad.getLeftAnalogYAxis()) < Constants.SwerveConstants.JESSICA) {
       x = 0;
     }
-    
+
     Constants.MotorConstants.rotation = pad.getRightAnalogXAxis();
-    
-    if (Math.abs(MotorConstants.rotation) < 0.05){
+
+    if (Math.abs(MotorConstants.rotation) < 0.05) {
       MotorConstants.rotation = 0;
     }
 
-    double turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
+    turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
 
-    if (Constants.MotorConstants.AACORN_MODE){
-      swerveSubsystem.drive(x * Constants.MotorConstants.AACORN_SPEED, y * Constants.MotorConstants.AACORN_SPEED, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
+    if (Constants.MotorConstants.AACORN_MODE) {
+      swerveSubsystem.drive(x * Constants.MotorConstants.AACORN_SPEED, y * Constants.MotorConstants.AACORN_SPEED, turn,
+          isFieldOriented);
     }
 
     else {
-      swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT, turn * Constants.MotorConstants.TURN_CONSTANT, isFieldOriented);
+      swerveSubsystem.drive(x * Constants.MotorConstants.SPEED_CONSTANT, y * Constants.MotorConstants.SPEED_CONSTANT,
+          turn, isFieldOriented);
     }
   }
 
@@ -104,10 +104,6 @@ public class PadDrive extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
-  }
-
-  public void updatePosition(){
-    swerveSubsystem.addVision(limelight.getRobotPosition());
   }
 
 }

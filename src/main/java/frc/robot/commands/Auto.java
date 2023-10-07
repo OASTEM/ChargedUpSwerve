@@ -31,9 +31,6 @@ public class Auto extends CommandBase {
 
 
   PathPlannerTrajectory examplePath = PathPlanner.loadPath("Test Path", new PathConstraints(4, 3));
-  
-
-
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

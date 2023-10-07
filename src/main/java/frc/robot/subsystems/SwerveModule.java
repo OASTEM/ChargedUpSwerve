@@ -18,6 +18,7 @@ import com.ctre.phoenixpro.hardware.TalonFX;
 import com.ctre.phoenixpro.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,11 +26,12 @@ import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.DebugMode.DebugPIDS;
+import frc.robot.utils.PID;
 
 public class SwerveModule {
-  private TalonFX driveMotor;
-  private TalonFX steerMotor;
-  private CANcoder canCoder;
+  public TalonFX driveMotor;
+  public TalonFX steerMotor;
+  public CANcoder canCoder;
   
   private MotorOutputConfigs motorConfigs;
 
@@ -303,4 +305,25 @@ public class SwerveModule {
     public double getCanCoderValue(){
       return canCoder.getAbsolutePosition().getValue();
     }
+
+  // PID driftCorrectionPID = new PID(0.07, 0.00, 0.004, 0.0);
+  // double desiredHeading;
+  // double pXY = 0;
+
+  // public void driftCorrection(ChassisSpeeds speeds){
+
+  // double xy = Math.abs(speeds.vxMetersPerSecond) + Math.abs(speeds.vyMetersPerSecond);
+
+  //  if(Math.abs(speeds.omegaRadiansPerSecond) > 0.0 || pXY <= 0){
+  //   desiredHeading = pose.getRotation().getDegrees();
+  //  } 
+
+  // else if(xy > 0){
+  //   speeds.omegaRadiansPerSecond += driftCorrectionPID.calculate(pose.getRotation().getDegrees(), desiredHeading);
+  // } 
+
+  // pXY = xy;
+  // }
 }
+
+

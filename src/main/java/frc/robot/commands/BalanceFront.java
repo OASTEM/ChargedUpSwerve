@@ -40,10 +40,12 @@ public class BalanceFront extends CommandBase {
     if(DebugMode.debugMode) 
     {
       balancePID = DebugPIDS.debugBalance;
-    }                 
+               
     swerve.stop();
     swerve.zeroHeading();
-  }
+    }
+
+  } 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
