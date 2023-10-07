@@ -231,7 +231,7 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
       // This method will be called once per scheduler run
-
+      
       if (vision)
       {
         updatePosition();
@@ -239,7 +239,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     gyroAngle = Rotation2d.fromDegrees(getYaw());
     estimator.update(gyroAngle, getModulePositions());
-
+    System.out.print("Pitch" + getPitch() + " ");
+    System.out.print("Roll" + getRoll() + " ");
+    System.out.println("Yaw" + getYaw());
     // for (int i = 0; i < modules.length; i++) {
     //   modules[i].setDebugPID(Constants.DebugMode.debugMode);
     // }

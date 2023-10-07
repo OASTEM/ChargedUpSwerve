@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.BalanceFront;
+
 import frc.robot.commands.PadDrive;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
@@ -51,7 +52,6 @@ public class RobotContainer {
   private final LogitechGamingPad pad;
   private final Limelight limelight;
   private final ShuffleboardComponents components;
-  
   private final JoystickButton padA;
   private final JoystickButton padB;
   private final JoystickButton padX;
@@ -108,6 +108,7 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
     padX.whileTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
+    rightBumper.whileTrue(new BalanceFront(swerveSubsystem));
     
   }
   

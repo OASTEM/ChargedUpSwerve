@@ -30,7 +30,7 @@ public class AutoTest extends CommandBase {
   private List<PathPlannerTrajectory> pathGroup;
 
  public AutoTest(){
-   pathGroup = PathPlanner.loadPathGroup("FullAuto", new PathConstraints(4, 3));
+   pathGroup = PathPlanner.loadPathGroup("Straight Path", new PathConstraints(4, 3));
 
    
  }

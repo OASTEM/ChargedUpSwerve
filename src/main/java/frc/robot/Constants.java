@@ -73,8 +73,8 @@ public final class Constants {
 
     public static final Translation2d frontLeftLocation = new Translation2d(0.24, -0.24);
     public static final Translation2d frontRightLocation = new Translation2d(0.24, 0.24);
-    public static final Translation2d backLeftLocation = new Translation2d(-0.24, 0.24);
-    public static final Translation2d backRightLocation = new Translation2d(-0.24, -0.24);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.24, -0.24);
+    public static final Translation2d backRightLocation = new Translation2d(-0.24, 0.24);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         frontLeftLocation,
         frontRightLocation,
@@ -94,13 +94,12 @@ public final class Constants {
     public static class PIDConstants{
       public static final PID STEER_PID = new PID(0.08, 0.0001, 0.008,0);
       public static final PID DRIVE_PID = new PID(0.01, 0.0, 0.0, 0);
-      public static final PID BALANCE_PID = new PID(0.015, 0.00015, 0.0008, 0);
+      public static final PID BALANCE_PID = new PID(0.011, 0.0009, 0.0014, 0);//0.015, 0.00015, 0.0008
 
       public static PID AUTO_X = new PID(0.001, 0, 0);
       public static PID AUTO_Y = new PID(0.001, 0, 0);
       public static PID AUTO_ROTATION = new PID(0.0001, 0, 0);
     }
-
     
     public static final double offBalanceAngleThreshold = 10;
     public static final double onBalanceAngleThreshold = 5;
