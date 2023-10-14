@@ -239,9 +239,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     gyroAngle = Rotation2d.fromDegrees(getYaw());
     estimator.update(gyroAngle, getModulePositions());
-    System.out.print("Pitch" + getPitch() + " ");
-    System.out.print("Roll" + getRoll() + " ");
-    System.out.println("Yaw" + getYaw());
+    // System.out.print("Pitch" + getPitch() + " ");
+    // System.out.print("Roll" + getRoll() + " ");
+    // System.out.println("Yaw" + getYaw());
     // for (int i = 0; i < modules.length; i++) {
     //   modules[i].setDebugPID(Constants.DebugMode.debugMode);
     // }
@@ -302,7 +302,7 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
            new PIDController(SwerveConstants.PIDConstants.AUTO_Y.p, SwerveConstants.PIDConstants.AUTO_Y.i, SwerveConstants.PIDConstants.AUTO_Y.d), // Y controller (usually the same values as X controller)
            new PIDController(SwerveConstants.PIDConstants.AUTO_ROTATION.p, SwerveConstants.PIDConstants.AUTO_ROTATION.i, SwerveConstants.PIDConstants.AUTO_ROTATION.d), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
            this::outputModuleStates, // Module states consumer
-           true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+           false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
            this // Requires this drive subsqystem
        )
    );

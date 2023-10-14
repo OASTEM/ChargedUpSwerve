@@ -81,24 +81,25 @@ public final class Constants {
         backLeftLocation,
         backRightLocation);
     public static final Pose2d 
-    STARTING_POSE = new Pose2d(14.5, 4.95, new Rotation2d());
+    STARTING_POSE = new Pose2d(2, 3, new Rotation2d());
+    // STARTING_POSE = new Pose2d(14, 3, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
     public static final double CANCoderValue9 = 0.915283 + 0.5; //0.9174805
-    public static final double CANCoderValue10 = 0.333252; //0.328613 + 0.5 add 0.5 
+    public static final double CANCoderValue10 = 0.327881  ; //0.328613 + 0.5 add 0.5 
     public static final double CANCoderValue11 = 0.979736 - 0.5; //0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; //0.984863
     public static final double JESSICA = 0.05;
     public static final boolean usingVision = false;
 
     public static class PIDConstants{
-      public static final PID STEER_PID = new PID(0.08, 0.0001, 0.008,0);
+      public static final PID STEER_PID = new PID(0.08, 0.00001, 0.008,0);
       public static final PID DRIVE_PID = new PID(0.01, 0.0, 0.0, 0);
-      public static final PID BALANCE_PID = new PID(0.011, 0.0009, 0.0014, 0);//0.015, 0.00015, 0.0008
+      public static final PID BALANCE_PID = new PID(0.008, 0.0, 0.0, 0);//0.015, 0.00015, 0.0008
 
-      public static PID AUTO_X = new PID(0.001, 0, 0);
-      public static PID AUTO_Y = new PID(0.001, 0, 0);
-      public static PID AUTO_ROTATION = new PID(0.0001, 0, 0);
+      public static PID AUTO_X = new PID(0.001, 0, 0.001);
+      public static PID AUTO_Y = new PID(0.001, 0, 0.001);
+      public static PID AUTO_ROTATION = new PID(0.0001, 0, 0.00001);
     }
     
     public static final double offBalanceAngleThreshold = 10;

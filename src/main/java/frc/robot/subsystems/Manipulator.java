@@ -25,7 +25,8 @@ public class Manipulator extends SubsystemBase {
   private SparkMaxPIDController telescopingPIDController;
   private RelativeEncoder telescopingEncoder;
 
-  private DigitalInput sensor;
+  private DigitalInput coneSensor;
+  private DigitalInput cubeSensor;
 
   public Manipulator() {
     intakeMotor = new CANSparkMax(ManipulatorConstants.INTAKE_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
@@ -46,7 +47,7 @@ public class Manipulator extends SubsystemBase {
     telescopingPIDController.setI(ManipulatorConstants.telescopingPID.i);
     telescopingPIDController.setD(ManipulatorConstants.telescopingPID.d);
 
-    sensor = new DigitalInput(ManipulatorConstants.INTAKE_SENSOR_ID);
+    cubeSensor = new DigitalInput(ManipulatorConstants.INTAKE_SENSOR_ID);
   }
 
   @Override
@@ -132,7 +133,21 @@ public class Manipulator extends SubsystemBase {
 
   // sensor functions
 
-  public boolean getSensor(){
-    return sensor.get();
+  public boolean getCubeSensor(){
+    return cubeSensor.get();
+  }
+
+  public boolean getConeSensor(){
+    return coneSensor.get();
+  }
+
+  // Current functions
+
+  public double getPivotCurrent(){
+    return pivotMotor.getAppliedOutput();
+  }
+
+  public double getTeleArmCurrent(){
+    return telescopingMotor.getOutputCurrent();
   }
 }

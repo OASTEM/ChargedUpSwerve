@@ -2,12 +2,62 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 11.0,
+        "x": 14.0,
         "y": 3.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.00000000000482,
+        "x": 14.00000000000482,
+        "y": 3.0
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 13.915211704768957,
+        "y": 3.000849771333051
+      },
+      "prevControl": {
+        "x": 13.957605852386887,
+        "y": 3.0004248856665257
+      },
+      "nextControl": {
+        "x": 13.872817557151027,
+        "y": 3.001274656999576
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 11.0,
+        "y": 3.0
+      },
+      "prevControl": {
+        "x": 11.790374976463438,
+        "y": 3.0
+      },
+      "nextControl": {
+        "x": 10.209625023536562,
         "y": 3.0
       },
       "holonomicAngle": 0,
@@ -28,32 +78,7 @@
         "y": 3.0
       },
       "prevControl": {
-        "x": 12.193226878479503,
-        "y": 3.0
-      },
-      "nextControl": {
-        "x": 15.806773121520497,
-        "y": 3.0
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 12.554,
-        "y": 3.0
-      },
-      "prevControl": {
-        "x": 12.540010024376071,
+        "x": 14.036898629527059,
         "y": 3.0
       },
       "nextControl": null,

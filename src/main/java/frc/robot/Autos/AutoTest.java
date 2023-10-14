@@ -27,12 +27,9 @@ public class AutoTest extends CommandBase {
   private boolean initialPath;
   private boolean useAllianceColor;
   private PPSwerveControllerCommand command;
-  private List<PathPlannerTrajectory> pathGroup;
 
- public AutoTest(){
-   pathGroup = PathPlanner.loadPathGroup("Straight Path", new PathConstraints(4, 3));
-
-   
+ public AutoTest(SwerveSubsystem subsystem) {
+    this.subsystem = subsystem;
  }
 
 

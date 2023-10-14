@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.commands.BalanceFront;
 
 import frc.robot.commands.PadDrive;
+import frc.robot.commands.ManipulatorCommands.Calibrate;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.Autos.AutoBalance;
 import frc.robot.Constants.SwerveConstants;
 
 /**
@@ -59,7 +61,8 @@ public class RobotContainer {
   private final JoystickButton rightBumper;
   private final JoystickButton leftBumper;
   
-  private final PathPlannerTrajectory examplePath;
+  private final PathPlannerTrajectory redPath;
+  private final PathPlannerTrajectory bluePath;
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -77,8 +80,13 @@ public class RobotContainer {
     padY = new JoystickButton(pad, 4);
     rightBumper = new JoystickButton(pad, 6);
     leftBumper = new JoystickButton(pad, 5);
+
+
+    // NamedCommands.registerCommand("Auto Balance", new BalanceFront(swerveSubsystem));
     
-    examplePath = PathPlanner.loadPath("Straight Path", new PathConstraints(10, 3)); // in m/s
+    redPath = PathPlanner.loadPath("Straight Red Path", new PathConstraints(5, 4)); // in m/s\
+    bluePath = PathPlanner.loadPath("New Path", new PathConstraints(5, 4)); // in m/s
+    
     
     swerveSubsystem = new SwerveSubsystem(SwerveConstants.usingVision, limelight);
     components = new ShuffleboardComponents(swerveSubsystem, limelight);
@@ -118,12 +126,23 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return swerveSubsystem.followTrajectoryCommand(examplePath, true);
+    // return swerveSubsystem.followTrajectoryCommand(bluePath, true);
+    return new AutoBalance(swerveSubsystem, bluePath);
+  }
+
+  /**
+    * Gets the test command
+    *
+    * @return the command to run in test initial
+    */
+  public Command getCalibration(){
+    return new Calibrate();
   }
 
   public void addRotorPositions(){
     swerveSubsystem.addRotorPositionsforModules();
   }
+
 }
 
 
