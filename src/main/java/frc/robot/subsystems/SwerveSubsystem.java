@@ -285,6 +285,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return estimator.getEstimatedPosition();
   }
 
+  public void driveStraight(double speed){
+    this.drive(speed, 0.0, 0.0, false);
+  }
+
 // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
 public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
   return new SequentialCommandGroup(
@@ -292,6 +296,7 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
          // Reset odometry for the first path you run during auto
          if(isFirstPath){
              this.zeroHeading();
+             System.out.println(isFirstPath);
          }
        }),
        new PPSwerveControllerCommand(

@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.commands.BalanceFront;
 
 import frc.robot.commands.PadDrive;
-import frc.robot.commands.ManipulatorCommands.Calibrate;
+import frc.robot.commands.ManipulatorCommands.MoveTelescoping;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -37,6 +37,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.Autos.AutoBalance;
+import frc.robot.Autos.BalanceAuto;
+import frc.robot.Autos.FullAuto;
 import frc.robot.Constants.SwerveConstants;
 
 /**
@@ -50,7 +52,7 @@ import frc.robot.Constants.SwerveConstants;
  */
 public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem;
-  // private final Manipulator manipulator;
+  private final Manipulator manipulator;
   private final LogitechGamingPad pad;
   private final Limelight limelight;
   private final ShuffleboardComponents components;
@@ -61,6 +63,14 @@ public class RobotContainer {
   private final JoystickButton rightBumper;
   private final JoystickButton leftBumper;
   
+  private final LogitechGamingPad opPad;
+  private final JoystickButton opPadA;
+  private final JoystickButton opPadB;
+  private final JoystickButton opPadX;
+  private final JoystickButton opPadY;
+  private final JoystickButton opRightBumper;
+  private final JoystickButton opLeftBumper;
+
   private final PathPlannerTrajectory redPath;
   private final PathPlannerTrajectory bluePath;
   
@@ -71,6 +81,7 @@ public class RobotContainer {
     
     // manipulator = new Manipulator();
     pad = new LogitechGamingPad(0);
+    opPad = new LogitechGamingPad(1);
     limelight = new Limelight();
    
     
@@ -81,19 +92,26 @@ public class RobotContainer {
     rightBumper = new JoystickButton(pad, 6);
     leftBumper = new JoystickButton(pad, 5);
 
+    opPadA = new JoystickButton(opPad, 1);
+    opPadB = new JoystickButton(opPad, 2);
+    opPadX = new JoystickButton(opPad, 3);
+    opPadY = new JoystickButton(opPad, 4);
+    opRightBumper = new JoystickButton(opPad, 6);
+    opLeftBumper = new JoystickButton(opPad, 5);
+
 
     // NamedCommands.registerCommand("Auto Balance", new BalanceFront(swerveSubsystem));
     
     redPath = PathPlanner.loadPath("Straight Red Path", new PathConstraints(5, 4)); // in m/s\
-    bluePath = PathPlanner.loadPath("New Path", new PathConstraints(5, 4)); // in m/s
+    bluePath = PathPlanner.loadPath("Full Blue Path", new PathConstraints(2, 2)); // in m/s
     
     
     swerveSubsystem = new SwerveSubsystem(SwerveConstants.usingVision, limelight);
+    manipulator = new Manipulator();
     components = new ShuffleboardComponents(swerveSubsystem, limelight);
-    swerveSubsystem.setDefaultCommand(
-        new PadDrive(
-            swerveSubsystem, pad, true));
-    
+    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, opPad, true));
+    manipulator.setDefaultCommand(new MoveTelescoping(manipulator, opPad));
+
     configureBindings();
   }
   
@@ -127,17 +145,15 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return swerveSubsystem.followTrajectoryCommand(bluePath, true);
-    return new AutoBalance(swerveSubsystem, bluePath);
+    return new FullAuto(swerveSubsystem);
   }
 
   /**
     * Gets the test command
     *
     * @return the command to run in test initial
-    */
-  public Command getCalibration(){
-    return new Calibrate();
-  }
+  //   */
+
 
   public void addRotorPositions(){
     swerveSubsystem.addRotorPositionsforModules();

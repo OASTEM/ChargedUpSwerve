@@ -4,150 +4,187 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+
+import javax.swing.text.Position;
+
+import org.ejml.ops.FConvertArrays;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ManipulatorConstants;
+import edu.wpi.first.math.controller.*;
 import frc.robot.utils.PID;
 
 public class Manipulator extends SubsystemBase {
   /** Creates a new Manipulator. */
   private CANSparkMax intakeMotor;
   private CANSparkMax pivotMotor;
-  private CANSparkMax telescopingMotor;
 
+  private TalonFX telescopingMotor;
+  
   private SparkMaxPIDController pivotPIDController;
   private RelativeEncoder pivotEncoder;
-  
-  private SparkMaxPIDController telescopingPIDController;
-  private RelativeEncoder telescopingEncoder;
+
+  private SparkMaxPIDController telescopingPIDController; 
 
   private DigitalInput coneSensor;
   private DigitalInput cubeSensor;
+  private double printlol = 0;
+  private VoltageOut m_request;
+  private double telescopingPos;
+  private StatusSignal<Double> rotorPositionSignal;
+
+  private SparkMaxAbsoluteEncoder absoluteEncoder;
 
   public Manipulator() {
-    intakeMotor = new CANSparkMax(ManipulatorConstants.INTAKE_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
-    pivotMotor = new CANSparkMax(ManipulatorConstants.PIVOT_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
-    telescopingMotor = new CANSparkMax(ManipulatorConstants.TELESCOPING_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
+    // intakeMotor = new CANSparkMax(6, CANSparkMax.MotorType.kBrushless);
+
+    // coneSensor = new DigitalInput(8);
+    // cubeSensor = new DigitalInput(9);
+  
+    pivotMotor = new CANSparkMax(14, CANSparkMax.MotorType.kBrushless);
+    pivotMotor.setInverted(true);
+    pivotMotor.setOpenLoopRampRate(0.2);
+    pivotMotor.setClosedLoopRampRate(0.2);
+
+    telescopingMotor = new TalonFX(13);
+    absoluteEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    absoluteEncoder.setInverted(false);
 
     pivotPIDController = pivotMotor.getPIDController();
-    pivotEncoder = pivotMotor.getEncoder();
+    pivotPIDController.setFeedbackDevice(absoluteEncoder);
+    pivotPIDController.setP(1.2);
+    pivotPIDController.setI(0.0);
+    pivotPIDController.setD(0.08);
+    pivotPIDController.setPositionPIDWrappingEnabled(true);
+    pivotPIDController.setPositionPIDWrappingMaxInput(1);
+    pivotPIDController.setPositionPIDWrappingMinInput(0);
+    pivotPIDController.setOutputRange(-0.25, 0.25);
 
-    telescopingPIDController = telescopingMotor.getPIDController();
-    telescopingEncoder = telescopingMotor.getEncoder();
+    // TO DO add soft limits
+    telescopingMotor.setRotorPosition(0);
 
-    pivotPIDController.setP(ManipulatorConstants.pivotPID.p);
-    pivotPIDController.setI(ManipulatorConstants.pivotPID.i);
-    pivotPIDController.setD(ManipulatorConstants.pivotPID.d);
+    // Telescpoing Arm
+    Slot0Configs teleSlot0configs = new Slot0Configs();
+    m_request = new VoltageOut(0);
+    
 
-    telescopingPIDController.setP(ManipulatorConstants.telescopingPID.p);
-    telescopingPIDController.setI(ManipulatorConstants.telescopingPID.i);
-    telescopingPIDController.setD(ManipulatorConstants.telescopingPID.d);
+    teleSlot0configs.kP = 0.01;
+    teleSlot0configs.kI = 0;
+    teleSlot0configs.kD = 0;
 
-    cubeSensor = new DigitalInput(ManipulatorConstants.INTAKE_SENSOR_ID);
+
+    // telescopingMotor.configPeakOutputForward(0.5);
+    // telescopingMotor.configPeakOutputReverse(-0.5);
+
+    telescopingMotor.getConfigurator().apply(teleSlot0configs, 0.5);
+
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    rotorPositionSignal = telescopingMotor.getRotorPosition();
+    telescopingPos = rotorPositionSignal.getValue();
+    // Gear ratio of pivot 150 to 1
+    // SmartDashboard.putBoolean("Cone Sensor", coneSensor.get());
+    // SmartDashboard.putBoolean("Cube Sensor", cubeSensor.get());\
+    SmartDashboard.putNumber("Pivot Encoder", absoluteEncoder.getPosition());
+    SmartDashboard.putNumber("Telescoping Encoder", telescopingPos);
+
+    // SmartDashboard.putNumber("Telescoping Current", telescopingMotor.getStatorCurrent().getValue());
+    
   }
 
   // Intake Functions
-  public void spinIntake() {
-    intakeMotor.set(ManipulatorConstants.INTAKE_SPEED);
+  public void cubeIntake() {
+    intakeMotor.set(0.1);
   }
-  
-  public void reverseIntake() {
-    intakeMotor.set(ManipulatorConstants.REVERSE_INTAKE_SPEED);
+
+  public void coneIntake() {
+    intakeMotor.set(-0.2);
   }
 
   public void stopIntake() {
     intakeMotor.stopMotor();
   }
 
-  // Pivot Functions
+  // public void calibrateTele() {
+  //   while (Math.abs(telescopingMotor.getStatorCurrent()) < 4) {
+  //     telescopingMotor.set(ControlMode.PercentOutput, 0.15);
+  //   }
+  //   if (Math.abs(telescopingMotor.getStatorCurrent()) > 4) {
+  //     telescopingMotor.set(ControlMode.PercentOutput, 0);
+  //   }
+  // }
 
-  public void setPivotPosition(double position){
+
+  // Pivot Functions
+  public void setPivotPosition(double position) {
     pivotEncoder.setPosition(position);
   }
 
-  public void initPivotPIDController(PID pid){
+  public void setPivotSpeed(double speed){
+    pivotMotor.set(speed);
+  }
+
+  public void initPivotPIDController(PID pid) {
     pivotPIDController.setP(pid.p);
     pivotPIDController.setI(pid.i);
     pivotPIDController.setD(pid.d);
   }
 
-
-  // Telescoping Functions
-  
-  public void setTelescopingPosition(double position){
-    telescopingEncoder.setPosition(position);
+  public void calibratePivot(){
+    pivotPIDController.setReference(0.10, CANSparkMax.ControlType.kPosition);
   }
 
-  public void initTelescopingPIDController(PID pid){
+  public void holdPivot(){
+    pivotPIDController.setReference(absoluteEncoder.getPosition(), CANSparkMax.ControlType.kPosition);
+  }
+  // Telescoping Functions
+
+  public void setTelescopingSpeed(double speed){
+    telescopingMotor.setControl(m_request.withOutput(speed));
+  }
+
+  // public void setTelescopingPosition(double position) {
+  //   telescopingMotor.set(ControlMode.Position, 10);
+  // }
+
+  public void initTelescopingPIDController(PID pid) {
     telescopingPIDController.setP(pid.p);
     telescopingPIDController.setI(pid.i);
     telescopingPIDController.setD(pid.d);
   }
 
-  // Extension Functions
+  // public double getTelescopingStatorCurrent(){
+  //   return telescopingMotor.getStatorCurrent();
+  // }
 
-  public void extendGround(){
-    setPivotPosition(ManipulatorConstants.PIVOT_GROUND_EXTENDED_POSITION);
-    setTelescopingPosition(ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
-    spinIntake();
-  }
-
-  public void extendLow(){
-    setPivotPosition(ManipulatorConstants.PIVOT_LOW_POSITION);
-    setTelescopingPosition(ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
-  }
-
-  public void extendHigh(){
-    setPivotPosition(ManipulatorConstants.PIVOT_HIGH_POSITION);
-    setTelescopingPosition((ManipulatorConstants.TELESCOPING_EXTENDED_POSITION));
-  }
-
-  public void extendMid(){
-    setPivotPosition(ManipulatorConstants.PIVOT_MID_POSITION);
-    setTelescopingPosition(ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
-  }
-
-  public void intakeFeederStation(){
-    setPivotPosition(ManipulatorConstants.PIVOT_FEEDER_STATION);
-    setTelescopingPosition(ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
-    reverseIntake();
-  }
-
-
-  // Retraction Functions
-
-  public void retract(){
-    stopIntake();
-    setPivotPosition(ManipulatorConstants.PIVOT_RETRACTED_POSITION);
-    setTelescopingPosition(ManipulatorConstants.TELESCOPING_RETRACTED_POSITION);
-  }
+  // public void resetTelescopingEncoder(){
+  //   telescopingMotor.getSensorCollection().setIntegratedSensorPosition(0, 0);
+  // }
 
   // sensor functions
-
-  public boolean getCubeSensor(){
-    return cubeSensor.get();
-  }
-
-  public boolean getConeSensor(){
+  public boolean getConeSensor() {
     return coneSensor.get();
   }
 
-  // Current functions
-
-  public double getPivotCurrent(){
-    return pivotMotor.getAppliedOutput();
-  }
-
-  public double getTeleArmCurrent(){
-    return telescopingMotor.getOutputCurrent();
+  public boolean getCubeSensor() {
+    return cubeSensor.get();
   }
 }
