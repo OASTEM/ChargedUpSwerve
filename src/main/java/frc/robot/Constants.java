@@ -57,15 +57,12 @@ public final class Constants {
     public static final double SPEED_CONSTANT = 0.6; //0.4
     public static final double AACORN_SPEED = 0.85;
     public static final double TURN_CONSTANT = 0.5; //0.3
-<<<<<<< Updated upstream
 
     public static double desiredAngle = 0.0;
     public static double desiredAngleSpeed = 0.0;
     public static double computedAngleSpeed = 0.0;
     public static double rotation = 0.0;
-=======
     public static double HEADING = 0;
->>>>>>> Stashed changes
     public static boolean SLOW_MODE = false;
     public static boolean AACORN_MODE = false;
   }
@@ -105,11 +102,7 @@ public final class Constants {
       public static PID AUTO_Y = new PID(0.2, 0, 0.001); // p = 0.001
       public static PID AUTO_ROTATION = new PID(0.0001, 0, 0.00001);
     }
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
-    
     public static final double offBalanceAngleThreshold = 10;
     public static final double onBalanceAngleThreshold = 5;
   }

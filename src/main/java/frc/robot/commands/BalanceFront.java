@@ -71,10 +71,7 @@ public class BalanceFront extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     swerve.stop();
-<<<<<<< Updated upstream
     // balancePID = new PID(p, i, d,0);
-=======
->>>>>>> Stashed changes
   }
 
   // Returns true when the command should end.

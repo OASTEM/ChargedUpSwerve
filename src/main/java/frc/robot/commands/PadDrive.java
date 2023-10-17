@@ -78,9 +78,8 @@ public class PadDrive extends CommandBase {
       x = 0;
     }
 
-<<<<<<< Updated upstream
     Constants.MotorConstants.rotation = pad.getRightAnalogXAxis();
-=======
+
     double turn = 0;
     double heading_deadband = 0.2;
     double controller_deadband = 0.1;
@@ -98,13 +97,12 @@ public class PadDrive extends CommandBase {
       turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;
       MotorConstants.HEADING = swerveSubsystem.getHeading();
     }
->>>>>>> Stashed changes
 
     if (Math.abs(MotorConstants.rotation) < 0.05) {
       MotorConstants.rotation = 0;
     }
 
-    double turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
+    turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
 
     if (Constants.MotorConstants.AACORN_MODE) {
       swerveSubsystem.drive(0.5
