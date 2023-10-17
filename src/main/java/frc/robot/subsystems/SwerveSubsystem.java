@@ -179,8 +179,13 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public double getHeading() {
+<<<<<<< Updated upstream
     // System.out.println(navX.getAngle() % 360);
     return navX.getFusedHeading() % 360;
+=======
+    // return navX.getAngle() % 360;
+    return navX.getRotation2d().getDegrees() % 360;
+>>>>>>> Stashed changes
   }
 
   public double getPitch() {
@@ -277,9 +282,12 @@ public class SwerveSubsystem extends SubsystemBase {
     estimator.update(getRotation2d(), getModulePositions());
     
   }
+<<<<<<< Updated upstream
   public void addVision(){
     estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
   }
+=======
+>>>>>>> Stashed changes
 
   public Pose2d getOdometry(){
     return estimator.getEstimatedPosition();
