@@ -117,6 +117,9 @@ public final class Constants {
     public static final double INTAKE_SPEED = 1.0;
     public static final double REVERSE_INTAKE_SPEED = -1.0;
     
+    // Magic Number Constants
+    public static final float PIVOT_SOFT_LIMIT = 0;
+    public static final float ARM_SOFT_LIMIT = 100;
 
     public static final int PIVOT_MOTOR_ID = 14;
     public static final PID upPID = new PID(0.05, 0.0 , 0.0, 0.0);
@@ -130,8 +133,7 @@ public final class Constants {
     public static final double reverseTelescopingSpeed = -1.0;
 
     // Intaking Constants
-    public static final double PIVOT_CONE_INTAKE_POSITION = 0.0;
-    public static final double PIVOT_CUBE_INTAKE_POSITION = 0.0;
+    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.0;
     public static final double PIVOT_FEEDER_STATION = 0.0;
     
     // Scoring Constants

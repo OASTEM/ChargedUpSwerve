@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -18,6 +20,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import javax.swing.text.Position;
@@ -28,6 +31,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.controller.*;
+import frc.robot.Constants;
 import frc.robot.utils.PID;
 
 public class Manipulator extends SubsystemBase {
@@ -36,6 +40,8 @@ public class Manipulator extends SubsystemBase {
   private CANSparkMax pivotMotor;
 
   private TalonFX telescopingMotor;
+  private TalonFXConfiguration telescopingConfig;
+  private SoftwareLimitSwitchConfigs telescopingLimitSwitchConfigs;
   
   private SparkMaxPIDController pivotPIDController;
   private RelativeEncoder pivotEncoder;
@@ -61,6 +67,8 @@ public class Manipulator extends SubsystemBase {
     pivotMotor.setInverted(true);
     pivotMotor.setOpenLoopRampRate(0.2);
     pivotMotor.setClosedLoopRampRate(0.2);
+    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.ManipulatorConstants.PIVOT_SOFT_LIMIT);
+    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.ManipulatorConstants.ARM_SOFT_LIMIT); //shawn is doo doo
 
     telescopingMotor = new TalonFX(13);
     absoluteEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -79,8 +87,18 @@ public class Manipulator extends SubsystemBase {
     // TO DO add soft limits
     telescopingMotor.setRotorPosition(0);
 
+
     // Telescpoing Arm
     Slot0Configs teleSlot0configs = new Slot0Configs();
+    telescopingConfig = new TalonFXConfiguration();
+    telescopingLimitSwitchConfigs = new SoftwareLimitSwitchConfigs();
+    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
+    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 100;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = 0;
+
+    telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
+    telescopingMotor.getConfigurator().apply(telescopingConfig);
     m_request = new VoltageOut(0);
     
 
@@ -161,9 +179,9 @@ public class Manipulator extends SubsystemBase {
     telescopingMotor.setControl(m_request.withOutput(speed));
   }
 
-  // public void setTelescopingPosition(double position) {
-  //   telescopingMotor.set(ControlMode.Position, 10);
-  // }
+  public void setTelescopingPosition(double position, Object ControlMode) {
+    telescopingMotor.setRotorPosition(position, position); // does this work?
+  }
 
   public void initTelescopingPIDController(PID pid) {
     telescopingPIDController.setP(pid.p);

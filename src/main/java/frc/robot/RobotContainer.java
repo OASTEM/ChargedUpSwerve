@@ -40,6 +40,7 @@ import frc.robot.Autos.AutoBalance;
 import frc.robot.Autos.BalanceAuto;
 import frc.robot.Autos.FullAuto;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.ManipulatorCommands.ExtendHigh;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -135,6 +136,8 @@ public class RobotContainer {
     padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
     padX.whileTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
     rightBumper.whileTrue(new BalanceFront(swerveSubsystem));
+
+    opPadA.whileTrue(new ExtendHigh(manipulator));
     
   }
   
