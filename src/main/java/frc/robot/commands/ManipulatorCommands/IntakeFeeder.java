@@ -6,6 +6,7 @@
 package frc.robot.commands.ManipulatorCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Manipulator;
 
 public class IntakeFeeder extends CommandBase {
@@ -19,18 +20,22 @@ public class IntakeFeeder extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    manipulator.telescopingArmExtend();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //   manipulator.intakeFeederStation();
+    manipulator.setPivotPosition(Constants.ManipulatorConstants.PIVOT_FEEDER_STATION);
+    manipulator.coneIntake();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // manipulator.retract();
+    manipulator.stopIntake();
+    manipulator.telescopingArmExtend();
   }
 
   // Returns true when the command should end.

@@ -47,6 +47,12 @@ public final class Constants {
     public static final int FRONT_RIGHT_CAN_CODER_ID = 10;
     public static final int BACK_LEFT_CAN_CODER_ID = 11;
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
+    public static final int TELE_ARM_MOTOR_ID = 13;
+    public static final int PIVOT_MOTOR_ID = 14;
+    public static final int INTAKE_MOTOR_ID = 15;
+
+    public static final int CONE_SENSOR_ID = 0;
+    public static final int CUBE_SENSOR_ID = 0;
 
     public static final double MAX_SPEED = 4.96824;  
     public static final double MAX_ANGULAR_SPEED = (4 * Math.PI) / 3;
@@ -133,7 +139,9 @@ public final class Constants {
     public static final double reverseTelescopingSpeed = -1.0;
 
     // Intaking Constants
-    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.0;
+    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.097563594579697;
+    public static final double TELESCOPING_GROUND_INTAKE_POSITION = 240.0078125;
+
     public static final double PIVOT_FEEDER_STATION = 0.0;
     
     // Scoring Constants

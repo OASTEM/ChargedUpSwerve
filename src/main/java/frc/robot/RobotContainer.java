@@ -5,9 +5,8 @@
 package frc.robot;
 
 import frc.robot.commands.BalanceFront;
-
+import frc.robot.commands.MoveTelescoping;
 import frc.robot.commands.PadDrive;
-import frc.robot.commands.ManipulatorCommands.MoveTelescoping;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -110,7 +109,7 @@ public class RobotContainer {
     swerveSubsystem = new SwerveSubsystem(SwerveConstants.usingVision, limelight);
     manipulator = new Manipulator();
     components = new ShuffleboardComponents(swerveSubsystem, limelight);
-    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, opPad, true));
+    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, true));
     manipulator.setDefaultCommand(new MoveTelescoping(manipulator, opPad));
 
     configureBindings();

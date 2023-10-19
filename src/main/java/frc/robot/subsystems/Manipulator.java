@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.controller.*;
 import frc.robot.Constants;
+import frc.robot.Constants.MotorConstants;
 import frc.robot.utils.PID;
 
 public class Manipulator extends SubsystemBase {
@@ -58,21 +59,21 @@ public class Manipulator extends SubsystemBase {
   private SparkMaxAbsoluteEncoder absoluteEncoder;
 
   public Manipulator() {
-    // intakeMotor = new CANSparkMax(6, CANSparkMax.MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(MotorConstants.INTAKE_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
 
-    // coneSensor = new DigitalInput(8);
-    // cubeSensor = new DigitalInput(9);
-  
-    pivotMotor = new CANSparkMax(14, CANSparkMax.MotorType.kBrushless);
+    coneSensor = new DigitalInput(0);
+    cubeSensor = new DigitalInput(1);
+
+    pivotMotor = new CANSparkMax(MotorConstants.PIVOT_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
     pivotMotor.setInverted(true);
     pivotMotor.setOpenLoopRampRate(0.2);
     pivotMotor.setClosedLoopRampRate(0.2);
-    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.ManipulatorConstants.PIVOT_SOFT_LIMIT);
-    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.ManipulatorConstants.ARM_SOFT_LIMIT); //shawn is doo doo
+    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.29f);
+    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 0); //shawn is doo doo
 
-    telescopingMotor = new TalonFX(13);
+    telescopingMotor = new TalonFX(MotorConstants.TELE_ARM_MOTOR_ID);
     absoluteEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    absoluteEncoder.setInverted(false);
+    absoluteEncoder.setInverted(true);
 
     pivotPIDController = pivotMotor.getPIDController();
     pivotPIDController.setFeedbackDevice(absoluteEncoder);
@@ -82,7 +83,7 @@ public class Manipulator extends SubsystemBase {
     pivotPIDController.setPositionPIDWrappingEnabled(true);
     pivotPIDController.setPositionPIDWrappingMaxInput(1);
     pivotPIDController.setPositionPIDWrappingMinInput(0);
-    pivotPIDController.setOutputRange(-0.25, 0.25);
+    pivotPIDController.setOutputRange(-0.45, 0.45);
 
     // TO DO add soft limits
     telescopingMotor.setRotorPosition(0);
@@ -92,10 +93,10 @@ public class Manipulator extends SubsystemBase {
     Slot0Configs teleSlot0configs = new Slot0Configs();
     telescopingConfig = new TalonFXConfiguration();
     telescopingLimitSwitchConfigs = new SoftwareLimitSwitchConfigs();
-    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
-    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 100;
-    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
-    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = 0;
+    // telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
+    // telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 2;
+    // telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
+    // telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -240;
 
     telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
     telescopingMotor.getConfigurator().apply(telescopingConfig);
@@ -117,12 +118,12 @@ public class Manipulator extends SubsystemBase {
   @Override
   public void periodic() {
     rotorPositionSignal = telescopingMotor.getRotorPosition();
-    telescopingPos = rotorPositionSignal.getValue();
+    telescopingPos = -rotorPositionSignal.getValue();
     // Gear ratio of pivot 150 to 1
-    // SmartDashboard.putBoolean("Cone Sensor", coneSensor.get());
-    // SmartDashboard.putBoolean("Cube Sensor", cubeSensor.get());\
-    SmartDashboard.putNumber("Pivot Encoder", absoluteEncoder.getPosition());
-    SmartDashboard.putNumber("Telescoping Encoder", telescopingPos);
+    SmartDashboard.putBoolean("Cone Sensor", coneSensor.get());
+    SmartDashboard.putBoolean("Cube Sensor", cubeSensor.get());
+    SmartDashboard.putNumber("Pivot Encoderr", absoluteEncoder.getPosition());
+    SmartDashboard.putNumber("Telescoping Encoderr", telescopingPos);
 
     // SmartDashboard.putNumber("Telescoping Current", telescopingMotor.getStatorCurrent().getValue());
     
@@ -179,14 +180,22 @@ public class Manipulator extends SubsystemBase {
     telescopingMotor.setControl(m_request.withOutput(speed));
   }
 
-  public void setTelescopingPosition(double position, Object ControlMode) {
-    telescopingMotor.setRotorPosition(position, position); // does this work?
+  public void setTelescopingPosition(double position) {
+    telescopingMotor.setRotorPosition(position); // does this work?
   }
 
   public void initTelescopingPIDController(PID pid) {
     telescopingPIDController.setP(pid.p);
     telescopingPIDController.setI(pid.i);
     telescopingPIDController.setD(pid.d);
+  }
+
+  public void telescopingArmRetract(){
+    this.setTelescopingPosition(Constants.ManipulatorConstants.TELESCOPING_RETRACTED_POSITION);
+  }
+
+  public void telescopingArmExtend(){
+    this.setTelescopingPosition(Constants.ManipulatorConstants.TELESCOPING_EXTENDED_POSITION);
   }
 
   // public double getTelescopingStatorCurrent(){
@@ -197,6 +206,7 @@ public class Manipulator extends SubsystemBase {
   //   telescopingMotor.getSensorCollection().setIntegratedSensorPosition(0, 0);
   // }
 
+  
   // sensor functions
   public boolean getConeSensor() {
     return coneSensor.get();

@@ -6,45 +6,35 @@ package frc.robot.commands.ManipulatorCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Manipulator;
-import frc.robot.utils.LogitechGamingPad;
 
-public class MoveTelescoping extends CommandBase {
-  /** Creates a new MoveTelescoping. */
+import frc.robot.Constants.ManipulatorConstants;
+
+public class RetractArm extends CommandBase {
+  /** Creates a new RetractArm. */
   private Manipulator manipulator;
-  private LogitechGamingPad pad;
-  public MoveTelescoping(Manipulator manipulator, LogitechGamingPad pad) {
+
+
+  public RetractArm(Manipulator manipulator) {
+    // Use addRequirements() here to d0eclare subsystem dependencies.
     addRequirements(manipulator);
     this.manipulator = manipulator;
-    this.pad = pad;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    manipulator.stopIntake();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    manipulator.setTelescopingSpeed(4 * pad.getLeftAnalogYAxis());
-
-    if (Math.abs(-pad.getRightAnalogYAxis()) > 0.05 )
-    {
-    manipulator.setPivotSpeed(-pad.getRightAnalogYAxis());
-    }
-    else
-    {
-      manipulator.setPivotSpeed(0);
-      manipulator.holdPivot();
-    }
+    manipulator.telescopingArmRetract();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    // manipulator.setTelescopingSpeed(0);
-    manipulator.setPivotSpeed(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
