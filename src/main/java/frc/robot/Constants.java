@@ -140,21 +140,23 @@ public final class Constants {
 
     // Intaking Constants
     public static final double PIVOT_GROUND_INTAKE_POSITION = 0.097563594579697;
-    public static final double TELESCOPING_GROUND_INTAKE_POSITION = 240.0078125;
+    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -240.0078125;
 
-    public static final double PIVOT_FEEDER_STATION = 0.0;
+    public static final double PIVOT_FEEDER_STATION = 0.238092005252838;
+    public static final double TELE_FEEDER_STATION = 0.0;
     
     // Scoring Constants
-    public static final double PIVOT_LOW_POSITION = 0.0;
-    public static final double PIVOT_MID_POSITION = 0.0;
-    public static final double PIVOT_HIGH_POSITION = 0.0;
-
+    public static final double PIVOT_LOW_POSITION = 0.1;
+    public static final double PIVOT_MID_POSITION = 0.210863;
+    public static final double PIVOT_HIGH_POSITION = 0.270;
+    public static final double TELE_LOW_POSITION = -0.0;
+    public static final double TELE_MID_POSITION = -25;
+    public static final double TELE_HIGH_POSITION = -235.58
+    ;
     public static final double PIVOT_RETRACTED_POSITION = 0.0;
     public static final double PIVOT_GROUND_EXTENDED_POSITION = 0.0;
-    
-    public static final double TELESCOPING_RETRACTED_POSITION = 0.0;
-    public static final double TELESCOPING_EXTENDED_POSITION = 0.0;
 
+    public static int scoring_pos = 0;
 
     // Sensor IDs
     public static final int INTAKE_SENSOR_ID = 0;

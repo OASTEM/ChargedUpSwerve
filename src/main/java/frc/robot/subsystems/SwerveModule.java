@@ -185,10 +185,11 @@ public class SwerveModule {
   }
 
   public void setState(SwerveModuleState state) {
-    state = optimize(state,
-        Rotation2d.fromDegrees(
-            rotationsToAngle(steerMotor.getRotorPosition().getValue(),
-                MotorConstants.STEER_MOTOR_GEAR_RATIO)));
+    // state = optimize(state,
+    //     Rotation2d.fromDegrees(
+    //         rotationsToAngle(steerMotor.getRotorPosition().getValue(),
+    //             MotorConstants.STEER_MOTOR_GEAR_RATIO)));
+    state = optimize(state, Rotation2d.fromDegrees(rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorConstants.STEER_MOTOR_GEAR_RATIO)));
     
     var currentRotations = (steerMotor.getRotorPosition().getValue());
 

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.subsystems.Manipulator;
 
 public class IntakeGround extends CommandBase {
@@ -22,13 +23,13 @@ public class IntakeGround extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    manipulator.telescopingArmExtend();
+    manipulator.setPivotPosition(Constants.ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    manipulator.setPivotPosition(Constants.ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION);
+    manipulator.setTelescopingPosition(ManipulatorConstants.TELESCOPING_GROUND_INTAKE_POSITION);
     manipulator.cubeIntake();
   }
 
@@ -36,7 +37,6 @@ public class IntakeGround extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     manipulator.stopIntake();
-    manipulator.telescopingArmRetract();
   }
 
   // Returns true when the command should end.

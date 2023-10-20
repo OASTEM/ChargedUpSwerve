@@ -5,26 +5,36 @@
 package frc.robot.commands.ManipulatorCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.Constants.ManipulatorConstants;
+import frc.robot.subsystems.Manipulator;
 
 public class ScoreCone extends CommandBase {
-  /** Creates a new ScoreCOne. */
-  public ScoreCone() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  /** Creates a new IntakeGround. */
+  private Manipulator manipulator;
+
+  public ScoreCone(Manipulator manipulator) {
+    addRequirements(manipulator);
+    this.manipulator = manipulator;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    ManipulatorConstants.scoring_pos = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    manipulator.coneScore();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    
+  }
 
   // Returns true when the command should end.
   @Override

@@ -52,7 +52,8 @@ public class BalanceLeft extends CommandBase {
     // swerve.setLeftSpeed(0.3);
     // swerve.setBackLeftSpeed();
     // swerve.setRightSpeed(0.3);
-    error = swerve.getRoll() + 4.5;
+    
+    // error = swerve.getRoll() + 4.5;
 
     double effort = balancePID.calculate(goal, error);
     if (effort < -maxEffort) {

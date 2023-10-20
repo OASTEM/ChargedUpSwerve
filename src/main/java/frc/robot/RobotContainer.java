@@ -13,6 +13,8 @@ import frc.robot.utils.LogitechGamingPad;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
+import javax.management.InstanceAlreadyExistsException;
+import javax.naming.OperationNotSupportedException;
 import javax.net.ssl.SSLSocket;
 
 import com.pathplanner.lib.PathConstraints;
@@ -39,7 +41,11 @@ import frc.robot.Autos.AutoBalance;
 import frc.robot.Autos.BalanceAuto;
 import frc.robot.Autos.FullAuto;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.ManipulatorCommands.ExtendHigh;
+import frc.robot.commands.ManipulatorCommands.ScoreCube;
+import frc.robot.commands.ManipulatorCommands.ScoringPosition;
+import frc.robot.commands.ManipulatorCommands.StopIntakeMotor;
+import frc.robot.commands.ManipulatorCommands.IntakeGround;
+import frc.robot.commands.ManipulatorCommands.ScoreCone;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -136,8 +142,13 @@ public class RobotContainer {
     padX.whileTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
     rightBumper.whileTrue(new BalanceFront(swerveSubsystem));
 
-    opPadA.whileTrue(new ExtendHigh(manipulator));
+    opPadA.whileTrue(new StopIntakeMotor(manipulator));
+    opPadB.whileTrue(new IntakeGround(manipulator));
+    opPadX.whileTrue(new ScoreCube(manipulator));
+    opPadY.whileTrue(new ScoringPosition(manipulator));
     
+    opRightBumper.onTrue(new InstantCommand(manipulator::cubeIntake));
+    opLeftBumper.onTrue(new InstantCommand(manipulator::coneIntake));
   }
   
   /**

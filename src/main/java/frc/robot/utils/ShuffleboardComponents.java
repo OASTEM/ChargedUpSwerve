@@ -194,18 +194,14 @@ public class ShuffleboardComponents extends SubsystemBase {
     private void updateDriver(){
         slowMode.getEntry().setBoolean(Constants.MotorConstants.SLOW_MODE);
         aacornMode.getEntry().setBoolean(Constants.MotorConstants.AACORN_MODE);
-        navXConnected.getEntry().setBoolean(swerveSubsystem.navXConnected());
-        navXCalibrating.getEntry().setBoolean(swerveSubsystem.navXCalibrating());
-        pitch.getEntry().setDouble(swerveSubsystem.getHeading());
-        roll.getEntry().setDouble(swerveSubsystem.getRoll());
+        // pitch.getEntry().setDouble(swerveSubsystem.getHeading());
         yaw.getEntry().setDouble(swerveSubsystem.getYaw());
-        fusedHeading.getEntry().setDouble(swerveSubsystem.getHeading());
-        compassHeading.getEntry().setDouble(swerveSubsystem.getCompassHeading());
+        // fusedHeading.getEntry().setDouble(swerveSubsystem.getHeading());
         canCoder9.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.FRONT_LEFT_CAN_CODER_ID));
         canCoder10.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.FRONT_RIGHT_CAN_CODER_ID));
         canCoder11.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.BACK_LEFT_CAN_CODER_ID));
         canCoder12.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.BACK_RIGHT_CAN_CODER_ID));
-        heading.getEntry().setDouble(swerveSubsystem.getHeading());
+        heading.getEntry().setDouble(swerveSubsystem.pgetHeading());
         desiredAngle.getEntry().setDouble(MotorConstants.desiredAngle);
         desiredAngleSpeed.getEntry().setDouble(MotorConstants.desiredAngleSpeed);
         computedAngleSpeed.getEntry().setDouble(MotorConstants.computedAngleSpeed);

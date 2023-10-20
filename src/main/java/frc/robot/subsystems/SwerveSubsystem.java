@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.function.Consumer;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.fasterxml.jackson.databind.deser.impl.SetterlessProperty;
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.AHRS.SerialDataType;
@@ -53,7 +54,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private Rotation2d gyroAngle;
   // private final AHRS navX = new AHRS(SPI.Port.kMXP);
   // private final AHRS navX = new AHRS(SerialPort.Port.kUSB1);
-  private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
+  // private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
+  private Pigeon2 pidggy;
 
   private boolean vision;
   private static double printSlow = 0;
@@ -98,6 +100,7 @@ public class SwerveSubsystem extends SubsystemBase {
             
     };
 
+    pidggy = new Pigeon2(16);
     // Creating my odometry object from the kinematics object and the initial wheel
     // positions.
     // Here, our starting pose is 5 meters along the long end of the field and in
@@ -105,7 +108,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // center of the field along the short end, facing the opposing alliance wall.
     estimator = new SwerveDrivePoseEstimator(
         SwerveConstants.kinematics,
-        getRotation2d(),
+        getRotationPidggy(),
         getModulePositions(),
         SwerveConstants.STARTING_POSE
         );
@@ -118,8 +121,9 @@ public class SwerveSubsystem extends SubsystemBase {
     // }
     // }).start();
     addRotorPositionsforModules();
-    navX.calibrate();
-    MotorConstants.desiredAngle = getHeading();
+    // navX.calibrate();
+    // navX.reset();
+    MotorConstants.desiredAngle = pgetHeading();
   }
 
   public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
@@ -127,8 +131,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     MotorConstants.desiredAngleSpeed = joyStickInput * Constants.MotorConstants.TURN_CONSTANT;
     MotorConstants.desiredAngle += MotorConstants.desiredAngleSpeed / 50;
-    // MotorConstants.computedAngleSpeed = MotorConstants.desiredAngleSpeed - (Math.toRadians(getHeading()) - MotorConstants.desiredAngle);
-    delta = MotorConstants.desiredAngle - Math.toRadians(getHeading());
+    // MotorConstants.computedAngleSpeed = MotorConstants.desiredAngleSpeed - (Math.toRadians(getpheading()) - MotorConstants.desiredAngle);
+    delta = MotorConstants.desiredAngle - Math.toRadians(pgetHeading());
     MotorConstants.computedAngleSpeed = delta * -0.02;
     
     JaydenSun = joyStickInput * Constants.MotorConstants.TURN_CONSTANT;
@@ -138,7 +142,7 @@ public class SwerveSubsystem extends SubsystemBase {
           forwardSpeed,
           leftSpeed,
           JaydenSun,
-          getRotation2d());
+          getRotationPidggy());
     } else {
       speeds = new ChassisSpeeds(
           forwardSpeed,
@@ -163,13 +167,18 @@ public class SwerveSubsystem extends SubsystemBase {
     return positions;
   }
 
+  public Rotation2d getRotationPidggy(){
+    SmartDashboard.putNumber("Rotation2d", pidggy.getRotation2d().getDegrees());
+    return pidggy.getRotation2d();
+  }
+
   public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
     estimator.resetPosition(gyroAngle, modulePositions, newPose);
-    navX.getRotation2d();
+    // navX.getRotation2d();
   }
 
   public void zeroHeading() {
-    navX.reset();
+    pidggy.reset();
   }
 
   public void resetDriveEncoders() {
@@ -178,30 +187,39 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-  public double getHeading() {
-    // return navX.getAngle() % 360;
-    return navX.getRotation2d().getDegrees() % 360;
+  // public double getHeading() {
+  //   // return navX.getAngle() % 360;
+  //   return navX.getRotation2d().getDegrees() % 360;
+  // }
+
+  // public double getPitch() {
+  //   return navX.getPitch();
+  // }
+
+  // public double getYaw() {
+  //   return navX.getYaw();
+  // }
+
+  // public double getRoll() {
+  //   return navX.getRoll();
+  // }
+
+  // public double getCompassHeading(){
+  //   return navX.getCompassHeading();
+  // }
+
+  // public double findCompassYaw(){
+  //   return navX.getAngle()-navX.getCompassHeading();
+  // }
+  public double getYaw(){
+    return pidggy.getYaw().getValue();
   }
 
-  public double getPitch() {
-    return navX.getPitch();
+  public double pgetHeading(){
+    SmartDashboard.putNumber("Pidggy", pidggy.getAngle());
+    return(pidggy.getAngle() % 360);
   }
 
-  public double getYaw() {
-    return navX.getYaw();
-  }
-
-  public double getRoll() {
-    return navX.getRoll();
-  }
-
-  public double getCompassHeading(){
-    return navX.getCompassHeading();
-  }
-
-  public double findCompassYaw(){
-    return navX.getAngle()-navX.getCompassHeading();
-  }
   public void configSlowMode() {
     Constants.MotorConstants.SLOW_MODE = !Constants.MotorConstants.SLOW_MODE;
   }
@@ -218,11 +236,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return Constants.MotorConstants.AACORN_MODE;
   }
 
-  /** Gets the NavX angle as a Rotation2d. */
-  public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees(getYaw());
-    // return Rotation2d.fromDegrees(0);
-  }
+  // public Rotation2d getRotation2d() {
+  //   return Rotation2d.fromDegrees(pidggy.getYaw().getValue());
+  //   // return Rotation2d.fromDegrees(0);
+  // }
 
   public void updatePosition(){
     this.addVision(limelight.getRobotPosition());
@@ -231,13 +248,13 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
       // This method will be called once per scheduler run
-      
+      pidggy.getYaw().refresh();
       if (vision)
       {
         updatePosition();
       }
 
-    gyroAngle = Rotation2d.fromDegrees(getYaw());
+    gyroAngle = getRotationPidggy();
     estimator.update(gyroAngle, getModulePositions());
     // System.out.print("Pitch" + getPitch() + " ");
     // System.out.print("Roll" + getRoll() + " ");
@@ -245,6 +262,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // for (int i = 0; i < modules.length; i++) {
     //   modules[i].setDebugPID(Constants.DebugMode.debugMode);
     // }
+    // SmartDashboard.putNumber("NavXXXX", navX.getFusedHeading());
   }
 
   public void stopModules() {
@@ -272,9 +290,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-
   public void updateEstimator(){
-    estimator.update(getRotation2d(), getModulePositions());
+    estimator.update(getRotationPidggy(), getModulePositions());
     
   }
   public void addVision(){
@@ -328,16 +345,6 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
 
   public double getRotorPositions(int moduleNum){
     return modules[moduleNum].steerMotor.getRotorPosition().getValue();
-  }
-
-  
-
-  public boolean navXConnected(){
-    return navX.isConnected();
-  }
-
-  public boolean navXCalibrating() {
-    return navX.isCalibrating();
   }
 
   public double getCanCoderValues(int canID){

@@ -23,13 +23,12 @@ public class RetractArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    manipulator.stopIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    manipulator.telescopingArmRetract();
+    manipulator.setTelescopingPosition(0.05);
   }
 
   // Called once the command ends or is interrupted.
@@ -39,6 +38,9 @@ public class RetractArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (Math.abs(manipulator.getArmEncoder()) < 0.05){
+      return true;
+    }
     return false;
   }
 }

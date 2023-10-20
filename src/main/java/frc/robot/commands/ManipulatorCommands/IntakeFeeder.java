@@ -21,7 +21,7 @@ public class IntakeFeeder extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    manipulator.telescopingArmExtend();
+    // manipulator.telescopingArmExtend();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,7 +35,6 @@ public class IntakeFeeder extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     manipulator.stopIntake();
-    manipulator.telescopingArmExtend();
   }
 
   // Returns true when the command should end.

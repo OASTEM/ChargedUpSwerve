@@ -86,16 +86,16 @@ public class PadDrive extends CommandBase {
 
     // If the right joystick is within the deadband, don't turn
     if (Math.abs(pad.getRightAnalogXAxis()) <= controller_deadband) {
-      if (MotorConstants.HEADING > (swerveSubsystem.getHeading() + heading_deadband)) {
+      if (MotorConstants.HEADING > (swerveSubsystem.pgetHeading() + heading_deadband)) {
         turn = -MotorConstants.MAX_ANGULAR_SPEED * 0.5;
-      } else if (MotorConstants.HEADING < (swerveSubsystem.getHeading() - heading_deadband)) {
+      } else if (MotorConstants.HEADING < (swerveSubsystem.pgetHeading() - heading_deadband)) {
         turn = MotorConstants.MAX_ANGULAR_SPEED * 0.5;
       } else {
         turn = 0;
       }
     } else {
       turn = pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED;
-      MotorConstants.HEADING = swerveSubsystem.getHeading();
+      MotorConstants.HEADING = swerveSubsystem.pgetHeading();
     }
 
     if (Math.abs(MotorConstants.rotation) < 0.05) {

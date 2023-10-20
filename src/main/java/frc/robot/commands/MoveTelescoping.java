@@ -32,17 +32,21 @@ public class MoveTelescoping extends CommandBase {
     {
     manipulator.setPivotSpeed(-pad.getRightAnalogYAxis());
     }
-    else
-    {
-      manipulator.setPivotSpeed(0);
-      manipulator.holdPivot();
-    }
+    // else
+    // {
+    //   manipulator.setPivotSpeed(0);
+    //   manipulator.holdPivot();
+    // }
+
+    // if (!manipulator.getConeSensor())
+    // {
+    //   manipulator.holdCone();
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // manipulator.setTelescopingSpeed(0);
     manipulator.setPivotSpeed(0);
   }
 
