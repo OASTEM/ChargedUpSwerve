@@ -30,9 +30,9 @@ public class NoBalanceAuto extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(swerveSubsystem::zeroHeading),
       new InstantCommand(swerveSubsystem::addRotorPositionsforModules),
-      new DriveStraight(swerveSubsystem, -1).withTimeout(0.35),
       new DriveStraight(swerveSubsystem, 1).withTimeout(0.35),
-      new DriveStraight(swerveSubsystem, -0.8).withTimeout(6)
+      new DriveStraight(swerveSubsystem, -1).withTimeout(0.35),
+      new DriveStraight(swerveSubsystem, 0.8).withTimeout(6)
     );
   }
 }

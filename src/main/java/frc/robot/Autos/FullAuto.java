@@ -30,10 +30,10 @@ public class FullAuto extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(swerveSubsystem::zeroHeading),
       new InstantCommand(swerveSubsystem::addRotorPositionsforModules),
-      new DriveStraight(swerveSubsystem, -1).withTimeout(0.35),
       new DriveStraight(swerveSubsystem, 1).withTimeout(0.35),
-      new DriveStraight(swerveSubsystem, -1).withTimeout(5),
-      new DriveStraight(swerveSubsystem, 1).withTimeout(3),
+      new DriveStraight(swerveSubsystem, -1).withTimeout(0.35),
+      new DriveStraight(swerveSubsystem, 1).withTimeout(5),
+      new DriveStraight(swerveSubsystem, -1).withTimeout(3),
       new BalanceFront(swerveSubsystem)
     );
   }
