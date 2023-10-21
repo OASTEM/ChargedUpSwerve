@@ -23,13 +23,13 @@ public class RetractPivot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    manipulator.setPivotPosition(0.00);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    manipulator.setPivotPosition(2.5);
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -42,9 +42,9 @@ public class RetractPivot extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    if (Math.abs(manipulator.getPivotEncoder()) < 5){
-      return true;
-    }
+    // if (Math.abs(manipulator.getPivotEncoder()) < 0.02){
+    //   return true;
+    // }
     return false;
   }
 }

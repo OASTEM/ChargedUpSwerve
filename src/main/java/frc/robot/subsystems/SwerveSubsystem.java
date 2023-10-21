@@ -57,6 +57,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
   private Pigeon2 pidggy;
 
+  private double rot;
   private boolean vision;
   private static double printSlow = 0;
   private final SwerveDriveKinematics sKinematics = Constants.SwerveConstants.kinematics;
@@ -101,6 +102,7 @@ public class SwerveSubsystem extends SubsystemBase {
     };
 
     pidggy = new Pigeon2(16);
+
     // Creating my odometry object from the kinematics object and the initial wheel
     // positions.
     // Here, our starting pose is 5 meters along the long end of the field and in
@@ -168,8 +170,10 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getRotationPidggy(){
-    SmartDashboard.putNumber("Rotation2d", pidggy.getRotation2d().getDegrees());
-    return pidggy.getRotation2d();
+    rot = -pidggy.getRotation2d().getDegrees();
+    return Rotation2d.fromDegrees(rot);
+    // SmartDashboard.putNumber("Rotation2d", pidggy.getRotation2d().getDegrees());
+    // return pidggy.getRotation2d();
   }
 
   public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
@@ -215,9 +219,12 @@ public class SwerveSubsystem extends SubsystemBase {
     return pidggy.getYaw().getValue();
   }
 
+  // public double pgetHeading(){
+  //   return(pidggy.getAngle() % 360);
+  // }
+
   public double pgetHeading(){
-    SmartDashboard.putNumber("Pidggy", pidggy.getAngle());
-    return(pidggy.getAngle() % 360);
+    return(pidggy.getYaw().getValue() % 360);
   }
 
   public void configSlowMode() {
@@ -263,6 +270,10 @@ public class SwerveSubsystem extends SubsystemBase {
     //   modules[i].setDebugPID(Constants.DebugMode.debugMode);
     // }
     // SmartDashboard.putNumber("NavXXXX", navX.getFusedHeading());
+  }
+
+  public double getPitch(){
+    return pidggy.getPitch().getValue();
   }
 
   public void stopModules() {

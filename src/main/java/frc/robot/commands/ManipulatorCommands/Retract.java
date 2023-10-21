@@ -5,21 +5,19 @@
 package frc.robot.commands.ManipulatorCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.subsystems.Manipulator;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeGround extends SequentialCommandGroup {
-  /** Creates a new IntakeGround. */
-  public IntakeGround(Manipulator manipulator) {
+public class Retract extends SequentialCommandGroup {
+  /** Creates a new Retract. */
+  public Retract(Manipulator manipulator) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION).withTimeout(2),
-      new MoveTele(manipulator, ManipulatorConstants.TELESCOPING_GROUND_INTAKE_POSITION).withTimeout(2),
-      new IntakeCube(manipulator)
+      new MoveTele(manipulator, 0).withTimeout(3),
+      new MovePivot(manipulator, 0)
     );
   }
 }

@@ -30,8 +30,8 @@ public class BalanceAuto extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(swerveSubsystem::zeroHeading),
       new InstantCommand(swerveSubsystem::addRotorPositionsforModules),
-      new DriveStraight(swerveSubsystem, 1).withTimeout(5),
-      new DriveStraight(swerveSubsystem, -1).withTimeout(3),
+      new DriveStraight(swerveSubsystem, -1).withTimeout(5),
+      new DriveStraight(swerveSubsystem, 1).withTimeout(3),
       new BalanceFront(swerveSubsystem)
     );
   }

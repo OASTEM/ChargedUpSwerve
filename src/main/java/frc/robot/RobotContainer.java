@@ -44,7 +44,12 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.ManipulatorCommands.ScoreCube;
 import frc.robot.commands.ManipulatorCommands.ScoringPosition;
 import frc.robot.commands.ManipulatorCommands.StopIntakeMotor;
+import frc.robot.commands.ManipulatorCommands.IntakeCube;
 import frc.robot.commands.ManipulatorCommands.IntakeGround;
+import frc.robot.commands.ManipulatorCommands.MoveHigh;
+import frc.robot.commands.ManipulatorCommands.MoveLow;
+import frc.robot.commands.ManipulatorCommands.MoveMid;
+import frc.robot.commands.ManipulatorCommands.Retract;
 import frc.robot.commands.ManipulatorCommands.ScoreCone;
 
 /**
@@ -104,7 +109,9 @@ public class RobotContainer {
     opPadY = new JoystickButton(opPad, 4);
     opRightBumper = new JoystickButton(opPad, 6);
     opLeftBumper = new JoystickButton(opPad, 5);
-
+    
+    
+    //Add buttons for triggers
 
     // NamedCommands.registerCommand("Auto Balance", new BalanceFront(swerveSubsystem));
     
@@ -139,16 +146,21 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
-    padX.whileTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
+    padX.onTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
     rightBumper.whileTrue(new BalanceFront(swerveSubsystem));
 
-    opPadA.whileTrue(new StopIntakeMotor(manipulator));
-    opPadB.whileTrue(new IntakeGround(manipulator));
-    opPadX.whileTrue(new ScoreCube(manipulator));
-    opPadY.whileTrue(new ScoringPosition(manipulator));
-    
-    opRightBumper.onTrue(new InstantCommand(manipulator::cubeIntake));
-    opLeftBumper.onTrue(new InstantCommand(manipulator::coneIntake));
+    // opPadA.whileTrue(new StopIntakeMotor(manipulator));
+    // opPadB.whileTrue(new IntakeGround(manipulator));
+    // opPadX.whileTrue(new ScoreCube(manipulator));
+    // opPadY.whileTrue(new ScoringPosition(manipulator));
+    opPadX.whileTrue(new Retract(manipulator));
+    opPadA.whileTrue(new MoveHigh(manipulator));
+    opPadB.whileTrue(new MoveMid(manipulator));
+    opPadY.whileTrue(new MoveLow(manipulator));
+
+    opRightBumper.whileTrue(new IntakeGround(manipulator));
+    opLeftBumper.whileTrue(new ScoreCube(manipulator));
+
   }
   
   /**

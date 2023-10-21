@@ -11,15 +11,14 @@ import frc.robot.subsystems.Manipulator;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeGround extends SequentialCommandGroup {
-  /** Creates a new IntakeGround. */
-  public IntakeGround(Manipulator manipulator) {
+public class MoveLow extends SequentialCommandGroup {
+  /** Creates a new MoveMid. */
+  public MoveLow(Manipulator manipulator) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION).withTimeout(2),
-      new MoveTele(manipulator, ManipulatorConstants.TELESCOPING_GROUND_INTAKE_POSITION).withTimeout(2),
-      new IntakeCube(manipulator)
+      new MovePivot(manipulator, ManipulatorConstants.PIVOT_LOW_POSITION).withTimeout(2),
+      new MoveTele(manipulator, ManipulatorConstants.TELE_LOW_POSITION)
     );
   }
 }

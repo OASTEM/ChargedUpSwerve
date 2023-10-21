@@ -102,7 +102,7 @@ public final class Constants {
     public static class PIDConstants{
       public static final PID STEER_PID = new PID(0.08, 0.00001, 0.008,0);
       public static final PID DRIVE_PID = new PID(0.01, 0.0, 0.0, 0);
-      public static final PID BALANCE_PID = new PID(0.008, 0.0, 0.00001, 0);//0.015, 0.00015, 0.0008
+      public static final PID BALANCE_PID = new PID(0.0047, 0.0, 0.00007, 0);//0.015, 0.00015, 0.0008
 
       public static PID AUTO_X = new PID(0.2, 0, 0.00); //p = 0.0015 d=.001
       public static PID AUTO_Y = new PID(0.2, 0, 0.001); // p = 0.001
@@ -140,7 +140,7 @@ public final class Constants {
 
     // Intaking Constants
     public static final double PIVOT_GROUND_INTAKE_POSITION = 0.097563594579697;
-    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -240.0078125;
+    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -220.851;
 
     public static final double PIVOT_FEEDER_STATION = 0.238092005252838;
     public static final double TELE_FEEDER_STATION = 0.0;

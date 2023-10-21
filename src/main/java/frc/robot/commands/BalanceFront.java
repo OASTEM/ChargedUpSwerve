@@ -55,7 +55,7 @@ public class BalanceFront extends CommandBase {
     // swerve.setBackLeftSpeed();
     // swerve.setRightSpeed(0.3);
     //ERRROR
-    // error = swerve.getPitch(); // + 2; //calibration constant
+    error = swerve.getPitch(); // + 2; //calibration constant
     // System.out.println(error);
     double effort = balancePID.calculate(goal, error);
     if (effort < -maxEffort) {
@@ -64,7 +64,7 @@ public class BalanceFront extends CommandBase {
       effort = maxEffort;
     }
     
-    double speed = effort * -5;
+    double speed = effort * 5;
     swerve.drive(speed, 0, 0, true);
   }
 

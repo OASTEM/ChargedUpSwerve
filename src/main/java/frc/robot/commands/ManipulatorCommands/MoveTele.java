@@ -5,17 +5,20 @@
 package frc.robot.commands.ManipulatorCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.subsystems.Manipulator;
 
-public class ScoreCube extends CommandBase {
-  /** Creates a new IntakeGround. */
-  private Manipulator manipulator;
+import frc.robot.Constants.ManipulatorConstants;
 
-  public ScoreCube(Manipulator manipulator) {
+public class MoveTele extends CommandBase {
+  /** Creates a new RetractArm. */
+  private Manipulator manipulator;
+  private double value;
+
+  public MoveTele(Manipulator manipulator, double value) {
+    // Use addRequirements() here to d0eclare subsystem dependencies.
     addRequirements(manipulator);
     this.manipulator = manipulator;
+    this.value = value;
   }
 
   // Called when the command is initially scheduled.
@@ -26,18 +29,19 @@ public class ScoreCube extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    manipulator.cubeScore();
+    manipulator.setTelescopingPosition(value);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    manipulator.stopIntake();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (Math.abs(manipulator.getArmEncoder()) - value < 0.013){
+      return true;
+    }
     return false;
   }
 }

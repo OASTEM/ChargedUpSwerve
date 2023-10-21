@@ -5,29 +5,26 @@
 package frc.robot.commands.ManipulatorCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.subsystems.Manipulator;
 
-public class ScoreCube extends CommandBase {
-  /** Creates a new IntakeGround. */
+public class IntakeCube extends CommandBase {
+  /** Creates a new IntakeCube. */
   private Manipulator manipulator;
-
-  public ScoreCube(Manipulator manipulator) {
-    addRequirements(manipulator);
+  public IntakeCube(Manipulator manipulator) {
     this.manipulator = manipulator;
+    addRequirements(manipulator);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    manipulator.cubeIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    manipulator.cubeScore();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

@@ -67,8 +67,8 @@ public class Manipulator extends SubsystemBase {
 
     pivotMotor = new CANSparkMax(MotorConstants.PIVOT_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
     pivotMotor.setInverted(true);
-    pivotMotor.setOpenLoopRampRate(0.2);
-    pivotMotor.setClosedLoopRampRate(0.2);
+    pivotMotor.setOpenLoopRampRate(0.4);
+    pivotMotor.setClosedLoopRampRate(0.4);
     pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.29f);
     pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 0); //shawn is doo doo
 
@@ -78,8 +78,8 @@ public class Manipulator extends SubsystemBase {
 
     pivotPIDController = pivotMotor.getPIDController();
     pivotPIDController.setFeedbackDevice(absoluteEncoder);
-    pivotPIDController.setP(1.2);
-    pivotPIDController.setI(0.0);
+    pivotPIDController.setP(2);
+    pivotPIDController.setI(0.002);
     pivotPIDController.setD(0.08);
     pivotPIDController.setFF(0.01);
     pivotPIDController.setPositionPIDWrappingEnabled(true);
@@ -106,7 +106,7 @@ public class Manipulator extends SubsystemBase {
     m_request = new VoltageOut(0);
     
 
-    teleSlot0configs.kP = 0.01;
+    teleSlot0configs.kP = 0.05;
     teleSlot0configs.kI = 0;
     teleSlot0configs.kD = 0;
 
@@ -168,6 +168,7 @@ public class Manipulator extends SubsystemBase {
       // intakeMotor.set(0);
     // }
     // else {
+    
     intakeMotor.set(-0.6);
     // }
   }
@@ -177,7 +178,6 @@ public class Manipulator extends SubsystemBase {
   }
 
   public void cubeScore() {
-
     intakeMotor.set(-0.4);
   }
 

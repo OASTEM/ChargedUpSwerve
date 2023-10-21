@@ -72,6 +72,7 @@ public class ShuffleboardComponents extends SubsystemBase {
     private SimpleWidget rotorThreePosition;
     private SimpleWidget rotorFourPosition;
     private SimpleWidget fusedHeading;
+    private SimpleWidget robotHeading;
 
     //Driver Widgets
     private SimpleWidget slowMode;
@@ -164,6 +165,7 @@ public class ShuffleboardComponents extends SubsystemBase {
         rotorTwoPosition = debug.add("Rotor Two Position", swerveSubsystem.getRotorPositions(1));
         rotorThreePosition = debug.add("Rotor Three Position", swerveSubsystem.getRotorPositions(2));
         rotorFourPosition = debug.add("Rotor Four Position", swerveSubsystem.getRotorPositions(3));
+        robotHeading = debug.add("Robot Heading", swerveSubsystem.pgetHeading());
     }
     @Override
     public void periodic() {
@@ -238,6 +240,8 @@ public class ShuffleboardComponents extends SubsystemBase {
 
         xpos.getEntry().setDouble(swerveSubsystem.getX());
         ypos.getEntry().setDouble(swerveSubsystem.getY());
+
+        robotHeading.getEntry().setDouble(swerveSubsystem.pgetHeading());
     }
 
     // Add other update methods for different tabs if needed

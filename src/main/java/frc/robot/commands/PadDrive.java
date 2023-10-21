@@ -105,9 +105,7 @@ public class PadDrive extends CommandBase {
     turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
 
     if (Constants.MotorConstants.AACORN_MODE) {
-      swerveSubsystem.drive(0.5
-      , y * Constants.MotorConstants.AACORN_SPEED, turn,
-          isFieldOriented);
+      swerveSubsystem.drive(x * Constants.MotorConstants.AACORN_SPEED, y * Constants.MotorConstants.AACORN_SPEED, turn,isFieldOriented);
     }
 
     else {
