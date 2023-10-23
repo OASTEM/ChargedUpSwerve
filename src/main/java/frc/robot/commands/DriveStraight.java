@@ -5,16 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Manipulator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class DriveStraight extends CommandBase {
   /** Creates a new DriveStraight. */
   private SwerveSubsystem swerveSubsystem;
   private double speed;
-  public DriveStraight(SwerveSubsystem swerveSubsystem, double speed) {
+  private Manipulator manipulator;
+
+  public DriveStraight(SwerveSubsystem swerveSubsystem, double speed, Manipulator manipulator) {
     this.swerveSubsystem = swerveSubsystem;
     this.speed = speed;
-    addRequirements(swerveSubsystem);
+    this.manipulator = manipulator;
+    addRequirements(swerveSubsystem, manipulator);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -29,6 +33,7 @@ public class DriveStraight extends CommandBase {
   @Override
   public void execute() {
     swerveSubsystem.driveStraight(speed);
+    manipulator.holdPivot();
   }
 
   // Called once the command ends or is interrupted.

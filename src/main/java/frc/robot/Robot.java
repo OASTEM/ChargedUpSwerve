@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -22,6 +24,12 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  // private static final String kBalanceBackwardAuto = "Balance Auto Backward";
+  // private static final String kBalanceAuto = "Balance Auto";
+  // private static final String kFullAuto = "Full Auto";
+  // private static final String kNoBalanceAuto = "No Balance Auto";
+  // private String m_autoSelected;
+  // private final SendableChooser<String> m_chooser = new SendableChooser<>();
   //public static SwerveSubsystem swerveSubsystem;
   /**
    * This function is run when the robot is first started up and should be used
@@ -33,9 +41,14 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    //swerveSubsystem = new SwerveSubsystem();
     m_robotContainer = new RobotContainer();
-    CameraServer.startAutomaticCapture();
+    // CameraServer.startAutomaticCapture();
+    // m_chooser.setDefaultOption("Balance Auto Backward", kBalanceBackwardAuto);
+    // m_chooser.addOption("Balance Auto", kBalanceAuto);
+    // m_chooser.addOption("Full Auto", kFullAuto);
+    // m_chooser.addOption("No Balance Auto", kNoBalanceAuto);
+    // SmartDashboard.putData("Auto choices", m_chooser);
+
   }
 
   /**
@@ -76,6 +89,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    m_autonomousCommand.schedule();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

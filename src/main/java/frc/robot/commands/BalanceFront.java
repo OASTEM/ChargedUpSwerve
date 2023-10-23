@@ -10,21 +10,13 @@ import frc.robot.Constants.DebugMode.DebugPIDS;
 import frc.robot.Constants.SwerveConstants.PIDConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.PID;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
 
 public class BalanceFront extends CommandBase {
-  // private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) 50);
-
   /** Creates a new balance. */
   SwerveSubsystem swerve;
   private double error;                                                                 
   private final double goal = 0;
   private final double maxEffort = 1;
-  private double p, i, d;
-  //PID Values need to be tuned
-  //Might need to create two pid values for both sides of the swerve
-  //PID balancePID = new PID(0.023, 0.002, 0.002);
   PID balancePID;
 
   public BalanceFront(SwerveSubsystem swerve) {

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DebugMode;
 import frc.robot.Constants.MotorConstants;
@@ -166,13 +167,16 @@ public class ShuffleboardComponents extends SubsystemBase {
         rotorThreePosition = debug.add("Rotor Three Position", swerveSubsystem.getRotorPositions(2));
         rotorFourPosition = debug.add("Rotor Four Position", swerveSubsystem.getRotorPositions(3));
         robotHeading = debug.add("Robot Heading", swerveSubsystem.pgetHeading());
+
+        //REMOVE ALL THIS JAYDEN SUN DID THIS
+
     }
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         updateVision();
         updateDriver();
-        updateDebug();
+        // updat 8/eDxx[['ebug();
     }
 
     /**

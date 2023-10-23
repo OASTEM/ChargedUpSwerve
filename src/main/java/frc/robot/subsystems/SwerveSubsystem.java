@@ -1,13 +1,7 @@
 package frc.robot.subsystems;
 
-import java.util.function.Consumer;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.fasterxml.jackson.databind.deser.impl.SetterlessProperty;
-import com.kauailabs.navx.frc.AHRS;
-import com.kauailabs.navx.frc.AHRS.SerialDataType;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -15,20 +9,14 @@ import edu.wpi.first.math.controller.PIDController;
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-import java.util.function.BooleanSupplier;
-
-import com.kauailabs.navx.frc.AHRS;
-import com.kauailabs.navx.frc.AHRS.SerialDataType;
-import frc.robot.utils.LimelightHelpers;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -36,11 +24,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveConstants;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule frontLeft;
@@ -59,14 +42,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private double rot;
   private boolean vision;
-  private static double printSlow = 0;
   private final SwerveDriveKinematics sKinematics = Constants.SwerveConstants.kinematics;
-  private double JaydenSun = 0;
+  private double turnSpeed = 0;
   private Timer timer;
   /** Creates a new DriveTrain. */
   public SwerveSubsystem(boolean vision, Limelight limelight) {
 
-    // navX.reset();
     // frontLeft = new SwerveModule(Constants.MotorConstants.frontLeftDriveId,
     // Constants.MotorConstants.frontLeftSteerId);
     // frontRight = new SwerveModule(Constants.MotorConstants.frontRightDriveId,
@@ -115,17 +96,9 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveConstants.STARTING_POSE
         );
 
-    // new Thread(() -> {
-    // try {
-    // Thread.sleep(1000);
-    // zeroHeading();
-    // } catch (Exception e) {
-    // }
-    // }).start();
     addRotorPositionsforModules();
-    // navX.calibrate();
-    // navX.reset();
     MotorConstants.desiredAngle = pgetHeading();
+    timer = new Timer();
   }
 
   public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
@@ -137,13 +110,13 @@ public class SwerveSubsystem extends SubsystemBase {
     delta = MotorConstants.desiredAngle - Math.toRadians(pgetHeading());
     MotorConstants.computedAngleSpeed = delta * -0.02;
     
-    JaydenSun = joyStickInput * Constants.MotorConstants.TURN_CONSTANT;
+    turnSpeed = joyStickInput * Constants.MotorConstants.TURN_CONSTANT;
 
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           forwardSpeed,
           leftSpeed,
-          JaydenSun,
+          turnSpeed,
           getRotationPidggy());
     } else {
       speeds = new ChassisSpeeds(
@@ -190,38 +163,9 @@ public class SwerveSubsystem extends SubsystemBase {
       modules[i].resetEncoders();
     }
   }
-
-  // public double getHeading() {
-  //   // return navX.getAngle() % 360;
-  //   return navX.getRotation2d().getDegrees() % 360;
-  // }
-
-  // public double getPitch() {
-  //   return navX.getPitch();
-  // }
-
-  // public double getYaw() {
-  //   return navX.getYaw();
-  // }
-
-  // public double getRoll() {
-  //   return navX.getRoll();
-  // }
-
-  // public double getCompassHeading(){
-  //   return navX.getCompassHeading();
-  // }
-
-  // public double findCompassYaw(){
-  //   return navX.getAngle()-navX.getCompassHeading();
-  // }
   public double getYaw(){
     return pidggy.getYaw().getValue();
   }
-
-  // public double pgetHeading(){
-  //   return(pidggy.getAngle() % 360);
-  // }
 
   public double pgetHeading(){
     return(pidggy.getYaw().getValue() % 360);
@@ -314,7 +258,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void driveStraight(double speed){
-    this.drive(speed, 0.0, 0.0, false);
+    this.drive(speed, 0.0, 0.0, true);
   }
 
 // Assuming this method is part of a drivetrain subsystem that provides the necessary methods

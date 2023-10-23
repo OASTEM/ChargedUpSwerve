@@ -4,14 +4,11 @@
 
 package frc.robot.Autos;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Balance;
-import frc.robot.commands.BalanceFront;
 import frc.robot.commands.DriveStraight;
+import frc.robot.subsystems.Manipulator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -19,20 +16,14 @@ import frc.robot.subsystems.SwerveSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class NoBalanceAuto extends SequentialCommandGroup {
   /** Creates a new AutoBalance. */
-  private SwerveSubsystem swerveSubsystem;
 
-  public NoBalanceAuto(SwerveSubsystem swerveSubsystem) {
-    this.swerveSubsystem = swerveSubsystem;
-
+  public NoBalanceAuto(SwerveSubsystem swerveSubsystem, Manipulator manipulator) {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(swerveSubsystem::zeroHeading),
       new InstantCommand(swerveSubsystem::addRotorPositionsforModules),
-      new DriveStraight(swerveSubsystem, 1).withTimeout(0.35),
-      new DriveStraight(swerveSubsystem, -1).withTimeout(0.35),
-      new DriveStraight(swerveSubsystem, 0.8).withTimeout(6)
+      new DriveStraight(swerveSubsystem, 0.9, manipulator).withTimeout(4.5)
     );
   }
 }

@@ -61,6 +61,7 @@ public class Manipulator extends SubsystemBase {
 
   public Manipulator() {
     intakeMotor = new CANSparkMax(MotorConstants.INTAKE_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
+    intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
     cubeSensor = new DigitalInput(0);
     coneSensor = new DigitalInput(1);
@@ -78,9 +79,9 @@ public class Manipulator extends SubsystemBase {
 
     pivotPIDController = pivotMotor.getPIDController();
     pivotPIDController.setFeedbackDevice(absoluteEncoder);
-    pivotPIDController.setP(2);
-    pivotPIDController.setI(0.002);
-    pivotPIDController.setD(0.08);
+    pivotPIDController.setP(2.2);
+    pivotPIDController.setI(0.00002);
+    pivotPIDController.setD(0.008);
     pivotPIDController.setFF(0.01);
     pivotPIDController.setPositionPIDWrappingEnabled(true);
     pivotPIDController.setPositionPIDWrappingMaxInput(1);
@@ -106,7 +107,7 @@ public class Manipulator extends SubsystemBase {
     m_request = new VoltageOut(0);
     
 
-    teleSlot0configs.kP = 0.05;
+    teleSlot0configs.kP = 0.09;
     teleSlot0configs.kI = 0;
     teleSlot0configs.kD = 0;
 
@@ -133,23 +134,6 @@ public class Manipulator extends SubsystemBase {
     
   }
 
-
-  public void jessciaZero(){
-    ManipulatorConstants.scoring_pos = 0;
-  }
-
-  public void jessciaOne(){
-    ManipulatorConstants.scoring_pos = 0;
-  }
-
-  public void jessciaTwo(){
-    ManipulatorConstants.scoring_pos = 0;
-  }
-
-  public void jessiaThree(){
-
-  }
-
   public double getPivotEncoder() {
     return absoluteEncoder.getPosition();
   }
@@ -160,7 +144,21 @@ public class Manipulator extends SubsystemBase {
 
   // Intake Functions
   public void cubeIntake() {
-    intakeMotor.set(.8);
+    ManipulatorConstants.IS_JESSICA_DUMB = true;
+    intakeMotor.set(0.5);
+  }
+
+  public void enabelSoftLimit(){
+    telescopingMotor.setRotorPosition(0);
+    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
+    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 2;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -240;
+  }
+
+  public void disableSoftLimit(){
+    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = false;  
+    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = false;
   }
 
   public void coneIntake() {
@@ -178,26 +176,17 @@ public class Manipulator extends SubsystemBase {
   }
 
   public void cubeScore() {
-    intakeMotor.set(-0.4);
+    ManipulatorConstants.IS_JESSICA_DUMB = false;
+    intakeMotor.set(-0.6);
   }
 
   public void coneScore() {
-    intakeMotor.set(0.4); // 0.238092005252838
+    intakeMotor.set(ManipulatorConstants.INTAKE_MOTOR_SPEED); // 0.238092005252838
   }
 
   public void stopIntake() {
     intakeMotor.stopMotor();
   }
-
-  // public void calibrateTele() {
-  //   while (Math.abs(telescopingMotor.getStatorCurrent()) < 4) {
-  //     telescopingMotor.set(ControlMode.PercentOutput, 0.15);
-  //   }
-  //   if (Math.abs(telescopingMotor.getStatorCurrent()) > 4) {
-  //     telescopingMotor.set(ControlMode.PercentOutput, 0);
-  //   }
-  // }
-
 
   // Pivot Functions
   public void setPivotPosition(double position) {
@@ -214,12 +203,8 @@ public class Manipulator extends SubsystemBase {
     pivotPIDController.setD(pid.d);
   }
 
-  public void calibratePivot(){
-    pivotPIDController.setReference(0.10, CANSparkMax.ControlType.kPosition);
-  }
-
   public void holdPivot(){
-    pivotPIDController.setReference(absoluteEncoder.getPosition(), CANSparkMax.ControlType.kPosition);
+    pivotPIDController.setReference(ManipulatorConstants.PIVOT_RETRACTED_POSITION, CANSparkMax.ControlType.kPosition);
   }
 
   public void pivotGround(){
@@ -243,15 +228,6 @@ public class Manipulator extends SubsystemBase {
     telescopingPIDController.setD(pid.d);
   }
 
-  // public double getTelescopingStatorCurrent(){
-  //   return telescopingMotor.getStatorCurrent();
-  // }
-
-  // public void resetTelescopingEncoder(){
-  //   telescopingMotor.getSensorCollection().setIntegratedSensorPosition(0, 0);
-  // }
-
-  
   // sensor functions
   public boolean getConeSensor() {
     return coneSensor.get();

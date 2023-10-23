@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.subsystems.Manipulator;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -27,7 +28,7 @@ public class MoveTelescoping extends CommandBase {
   @Override
   public void execute() {
 
-    manipulator.setTelescopingSpeed(4 * pad.getLeftAnalogYAxis());
+    manipulator.setTelescopingSpeed(7 * pad.getLeftAnalogYAxis());
 
     if (Math.abs(-pad.getRightAnalogYAxis()) > 0.05 )
     {
@@ -48,13 +49,17 @@ public class MoveTelescoping extends CommandBase {
     //   manipulator.holdCone();
     // }
 
+    if (ManipulatorConstants.IS_JESSICA_DUMB){
+      // manipulator.holdCube();
+    }
+
     if (Math.abs(pad.getLeftTriggerValue()) > 0.3){
-      manipulator.coneScore();
+      manipulator.cubeScore();
       SmartDashboard.putBoolean("intake stopped", false);
     }
 
     if (Math.abs(pad.getRightTriggerValue()) > 0.3){
-      manipulator.coneIntake();
+      manipulator.cubeIntake();
     }
 
     if (Math.abs(pad.getRightTriggerValue()) < 0.3 && Math.abs(pad.getLeftTriggerValue()) < 0.3){
@@ -62,6 +67,10 @@ public class MoveTelescoping extends CommandBase {
       SmartDashboard.putBoolean("intake stopped", true);
     }
 
+    // if (!manipulator.getConeSensor())
+    // {
+    //   manipulator.holdCone();
+    // }
   }
 
   // Called once the command ends or is interrupted.

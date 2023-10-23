@@ -4,26 +4,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.PID;
 
 public class PadDrive extends CommandBase {
 
   private final SwerveSubsystem swerveSubsystem;
   private final boolean isFieldOriented;
   private final LogitechGamingPad pad;
-  private final PID fixDaDriftPID = new PID(0.05, 0, 0);
-  private boolean vision;
-  private double turn;
-  private double heading_deadband = 0.2;
-  private double controller_deadband = 0.1;
-  private double change;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
@@ -32,8 +23,6 @@ public class PadDrive extends CommandBase {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
-    
-    // this.vision = vision;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.swerveSubsystem);
@@ -47,22 +36,17 @@ public class PadDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // swerveSubsystem.test(0, pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED,
-    // pad.getRightAnalogXAxis() * MotorConstants.MAX_ANGULAR_SPEED);
-
     double y;
     double x;
 
     if (Constants.MotorConstants.SLOW_MODE) {
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.5;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.5;
-
     }
 
     else if (Constants.MotorConstants.AACORN_MODE) {
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.85;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.85;
-
     }
 
     else {
@@ -70,11 +54,11 @@ public class PadDrive extends CommandBase {
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED;
     }
 
-    if (Math.abs(pad.getLeftAnalogXAxis()) < Constants.SwerveConstants.JESSICA) {
+    if (Math.abs(pad.getLeftAnalogXAxis()) < Constants.SwerveConstants.JOYSTICK_DEADBAND) {
       y = 0;
     }
 
-    if (Math.abs(pad.getLeftAnalogYAxis()) < Constants.SwerveConstants.JESSICA) {
+    if (Math.abs(pad.getLeftAnalogYAxis()) < Constants.SwerveConstants.JOYSTICK_DEADBAND) {
       x = 0;
     }
 

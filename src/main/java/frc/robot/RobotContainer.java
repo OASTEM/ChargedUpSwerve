@@ -1,3 +1,5 @@
+
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -24,12 +26,14 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Manipulator;
 //import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.ShuffleboardComponents;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -37,9 +41,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.Autos.AutoBalance;
 import frc.robot.Autos.BalanceAuto;
+import frc.robot.Autos.BalanceAutoBackward;
 import frc.robot.Autos.FullAuto;
+import frc.robot.Autos.NoBalanceAuto;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.ManipulatorCommands.ScoreCube;
 import frc.robot.commands.ManipulatorCommands.ScoringPosition;
@@ -66,6 +71,7 @@ public class RobotContainer {
   private final Manipulator manipulator;
   private final LogitechGamingPad pad;
   private final Limelight limelight;
+  private final LED led;
   private final ShuffleboardComponents components;
   private final JoystickButton padA;
   private final JoystickButton padB;
@@ -85,6 +91,12 @@ public class RobotContainer {
   private final PathPlannerTrajectory redPath;
   private final PathPlannerTrajectory bluePath;
   
+  private final BalanceAuto balanceAuto;
+  private final BalanceAutoBackward balanceAutoBackward;
+  private final FullAuto fullAuto;
+  private final NoBalanceAuto noBalanceAuto;
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -94,6 +106,7 @@ public class RobotContainer {
     pad = new LogitechGamingPad(0);
     opPad = new LogitechGamingPad(1);
     limelight = new Limelight();
+    led = new LED();
    
     
     padA = new JoystickButton(pad, 1);
@@ -109,9 +122,7 @@ public class RobotContainer {
     opPadY = new JoystickButton(opPad, 4);
     opRightBumper = new JoystickButton(opPad, 6);
     opLeftBumper = new JoystickButton(opPad, 5);
-    
-    
-    //Add buttons for triggers
+  
 
     // NamedCommands.registerCommand("Auto Balance", new BalanceFront(swerveSubsystem));
     
@@ -125,6 +136,20 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, true));
     manipulator.setDefaultCommand(new MoveTelescoping(manipulator, opPad));
 
+    //Autos
+    balanceAuto = new BalanceAuto(swerveSubsystem, manipulator);
+    balanceAutoBackward = new BalanceAutoBackward(swerveSubsystem, manipulator);
+    fullAuto = new FullAuto(swerveSubsystem, manipulator);
+    noBalanceAuto = new NoBalanceAuto(swerveSubsystem, manipulator);
+
+    //Configure auto chooser
+    m_chooser.setDefaultOption("Balance Auto", balanceAuto);
+    m_chooser.addOption("Balance Auto Backward", balanceAutoBackward);
+    m_chooser.addOption("Full Auto", fullAuto);
+    m_chooser.addOption("No Balance Auto", noBalanceAuto);
+    SmartDashboard.putData("Auto Chooser", m_chooser);
+
+    // Configure the button bindings
     configureBindings();
   }
   
@@ -146,14 +171,16 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
-    padX.onTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
-    rightBumper.whileTrue(new BalanceFront(swerveSubsystem));
+    padX.onTrue(new BalanceFront(swerveSubsystem));
+    rightBumper.whileTrue(new InstantCommand(manipulator::disableSoftLimit));
+    leftBumper.onTrue(new InstantCommand(manipulator::enabelSoftLimit));
 
     // opPadA.whileTrue(new StopIntakeMotor(manipulator));
     // opPadB.whileTrue(new IntakeGround(manipulator));
-    // opPadX.whileTrue(new ScoreCube(manipulator));
+    // opPadX.whileTrue(new ScoreCube(manipulator))
+    
     // opPadY.whileTrue(new ScoringPosition(manipulator));
-    opPadX.whileTrue(new Retract(manipulator));
+    opPadX.whileTrue(new Retract(manipulator)); 
     opPadA.whileTrue(new MoveHigh(manipulator));
     opPadB.whileTrue(new MoveMid(manipulator));
     opPadY.whileTrue(new MoveLow(manipulator));
@@ -170,7 +197,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return swerveSubsystem.followTrajectoryCommand(bluePath, true);
-    return new FullAuto(swerveSubsystem);
+
+    return m_chooser.getSelected();
   }
 
   /**
@@ -183,7 +211,4 @@ public class RobotContainer {
   public void addRotorPositions(){
     swerveSubsystem.addRotorPositionsforModules();
   }
-
 }
-
-

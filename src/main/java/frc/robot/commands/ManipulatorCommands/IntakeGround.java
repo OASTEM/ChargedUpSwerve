@@ -19,6 +19,7 @@ public class IntakeGround extends SequentialCommandGroup {
     addCommands(
       new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION).withTimeout(2),
       new MoveTele(manipulator, ManipulatorConstants.TELESCOPING_GROUND_INTAKE_POSITION).withTimeout(2),
+      new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION2).withTimeout(1),
       new IntakeCube(manipulator)
     );
   }

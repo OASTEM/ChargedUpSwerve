@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -96,7 +95,7 @@ public final class Constants {
     public static final double CANCoderValue10 = 0.327881  ; //0.328613 + 0.5 add 0.5 
     public static final double CANCoderValue11 = 0.979736 - 0.5; //0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; //0.984863
-    public static final double JESSICA = 0.05;
+    public static final double JOYSTICK_DEADBAND = 0.05;
     public static final boolean usingVision = false;
 
     public static class PIDConstants{
@@ -122,12 +121,14 @@ public final class Constants {
     public static final int INTAKE_MOTOR_ID = 13;
     public static final double INTAKE_SPEED = 1.0;
     public static final double REVERSE_INTAKE_SPEED = -1.0;
+    public static boolean IS_JESSICA_DUMB = false;
     
     // Magic Number Constants
     public static final float PIVOT_SOFT_LIMIT = 0;
     public static final float ARM_SOFT_LIMIT = 100;
 
     public static final int PIVOT_MOTOR_ID = 14;
+    
     public static final PID upPID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID downPID = new PID(0.05, 0.0 , 0.0, 0.0);
     public static final PID sidePID = new PID(0.05, 0.0 , 0.0, 0.0);
@@ -137,16 +138,19 @@ public final class Constants {
     public static final int TELESCOPING_MOTOR_ID = 15;
     public static final double telescopingSpeed = 1.0;
     public static final double reverseTelescopingSpeed = -1.0;
+    public static final double INTAKE_MOTOR_SPEED = 0.4;
 
     // Intaking Constants
-    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.097563594579697;
-    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -220.851;
+    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.097;
+    public static final double PIVOT_GROUND_INTAKE_POSITION2 = 0.082;
+    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -178.92529296875;
 
     public static final double PIVOT_FEEDER_STATION = 0.238092005252838;
     public static final double TELE_FEEDER_STATION = 0.0;
     
     // Scoring Constants
     public static final double PIVOT_LOW_POSITION = 0.1;
+
     public static final double PIVOT_MID_POSITION = 0.210863;
     public static final double PIVOT_HIGH_POSITION = 0.270;
     public static final double TELE_LOW_POSITION = -0.0;
