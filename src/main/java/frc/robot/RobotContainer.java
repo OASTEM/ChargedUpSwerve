@@ -7,7 +7,6 @@
 package frc.robot;
 
 import frc.robot.commands.BalanceFront;
-import frc.robot.commands.MoveTelescoping;
 import frc.robot.commands.PadDrive;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
@@ -46,16 +45,6 @@ import frc.robot.Autos.BalanceAutoBackward;
 import frc.robot.Autos.FullAuto;
 import frc.robot.Autos.NoBalanceAuto;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.ManipulatorCommands.ScoreCube;
-import frc.robot.commands.ManipulatorCommands.ScoringPosition;
-import frc.robot.commands.ManipulatorCommands.StopIntakeMotor;
-import frc.robot.commands.ManipulatorCommands.IntakeCube;
-import frc.robot.commands.ManipulatorCommands.IntakeGround;
-import frc.robot.commands.ManipulatorCommands.MoveHigh;
-import frc.robot.commands.ManipulatorCommands.MoveLow;
-import frc.robot.commands.ManipulatorCommands.MoveMid;
-import frc.robot.commands.ManipulatorCommands.Retract;
-import frc.robot.commands.ManipulatorCommands.ScoreCone;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -134,7 +123,6 @@ public class RobotContainer {
     manipulator = new Manipulator();
     components = new ShuffleboardComponents(swerveSubsystem, limelight);
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, true));
-    manipulator.setDefaultCommand(new MoveTelescoping(manipulator, opPad));
 
     //Autos
     balanceAuto = new BalanceAuto(swerveSubsystem, manipulator);
@@ -172,21 +160,6 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
     padX.onTrue(new BalanceFront(swerveSubsystem));
-    rightBumper.whileTrue(new InstantCommand(manipulator::disableSoftLimit));
-    leftBumper.onTrue(new InstantCommand(manipulator::enabelSoftLimit));
-
-    // opPadA.whileTrue(new StopIntakeMotor(manipulator));
-    // opPadB.whileTrue(new IntakeGround(manipulator));
-    // opPadX.whileTrue(new ScoreCube(manipulator))
-    
-    // opPadY.whileTrue(new ScoringPosition(manipulator));
-    opPadX.whileTrue(new Retract(manipulator)); 
-    opPadA.whileTrue(new MoveHigh(manipulator));
-    opPadB.whileTrue(new MoveMid(manipulator));
-    opPadY.whileTrue(new MoveLow(manipulator));
-
-    opRightBumper.whileTrue(new IntakeGround(manipulator));
-    opLeftBumper.whileTrue(new ScoreCube(manipulator));
 
   }
   

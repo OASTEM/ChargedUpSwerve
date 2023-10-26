@@ -33,7 +33,6 @@ public class DriveStraight extends CommandBase {
   @Override
   public void execute() {
     swerveSubsystem.driveStraight(speed);
-    manipulator.holdPivot();
   }
 
   // Called once the command ends or is interrupted.
