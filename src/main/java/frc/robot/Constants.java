@@ -141,9 +141,9 @@ public final class Constants {
     public static final double INTAKE_MOTOR_SPEED = 0.4;
 
     // Intaking Constants
-    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.097;
-    public static final double PIVOT_GROUND_INTAKE_POSITION2 = 0.082;
-    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -178.92529296875;
+    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.106;
+    public static final double PIVOT_GROUND_INTAKE_POSITION2 = 0.086;
+    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -63;
 
     public static final double PIVOT_FEEDER_STATION = 0.238092005252838;
     public static final double TELE_FEEDER_STATION = 0.0;
@@ -151,12 +151,12 @@ public final class Constants {
     // Scoring Constants
     public static final double PIVOT_LOW_POSITION = 0.1;
 
-    public static final double PIVOT_MID_POSITION = 0.210863;
+    public static final double PIVOT_MID_POSITION = 0.22;
     public static final double PIVOT_HIGH_POSITION = 0.270;
     public static final double TELE_LOW_POSITION = -0.0;
-    public static final double TELE_MID_POSITION = -25;
-    public static final double TELE_HIGH_POSITION = -235.58
-    ;
+    public static final double TELE_MID_POSITION = 0; // -25 //5.823
+
+    public static final double TELE_HIGH_POSITION = -235.58;
     public static final double PIVOT_RETRACTED_POSITION = 0.0;
     public static final double PIVOT_GROUND_EXTENDED_POSITION = 0.0;
 

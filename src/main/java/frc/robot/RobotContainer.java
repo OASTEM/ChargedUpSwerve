@@ -170,7 +170,7 @@ public class RobotContainer {
   private void configureBindings() {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    padY.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
+    padY.onTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
     padX.onTrue(new BalanceFront(swerveSubsystem));
     rightBumper.whileTrue(new InstantCommand(manipulator::disableSoftLimit));
     leftBumper.onTrue(new InstantCommand(manipulator::enabelSoftLimit));
@@ -186,6 +186,7 @@ public class RobotContainer {
     opPadY.whileTrue(new MoveLow(manipulator));
 
     opRightBumper.whileTrue(new IntakeGround(manipulator));
+    opRightBumper.whileFalse(new InstantCommand(manipulator::stopIntake));
     opLeftBumper.whileTrue(new ScoreCube(manipulator));
 
   }

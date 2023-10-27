@@ -4,6 +4,7 @@
 
 package frc.robot.commands.ManipulatorCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Manipulator;
 
@@ -16,6 +17,7 @@ public class Retract extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new InstantCommand(manipulator::stopIntake),
       new MoveTele(manipulator, 0).withTimeout(1.7),
       new MovePivot(manipulator, 0)
     );

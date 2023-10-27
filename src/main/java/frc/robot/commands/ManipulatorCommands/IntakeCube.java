@@ -29,7 +29,6 @@ public class IntakeCube extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    manipulator.stopIntake();
   }
 
   // Returns true when the command should end.

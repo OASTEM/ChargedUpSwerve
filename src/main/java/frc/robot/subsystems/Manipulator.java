@@ -70,19 +70,20 @@ public class Manipulator extends SubsystemBase {
     pivotMotor.setInverted(true);
     pivotMotor.setOpenLoopRampRate(0.4);
     pivotMotor.setClosedLoopRampRate(0.4);
-    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.29f);
-    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 0); //shawn is doo doo
-
+    pivotMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    pivotMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 0.29f);
+    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, 0); //shawn is doo doo
     telescopingMotor = new TalonFX(MotorConstants.TELE_ARM_MOTOR_ID);
     absoluteEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
     absoluteEncoder.setInverted(true);
 
     pivotPIDController = pivotMotor.getPIDController();
     pivotPIDController.setFeedbackDevice(absoluteEncoder);
-    pivotPIDController.setP(2.2);
-    pivotPIDController.setI(0.00002);
-    pivotPIDController.setD(0.008);
-    pivotPIDController.setFF(0.01);
+    pivotPIDController.setP(7);
+    pivotPIDController.setI(0.001);
+    pivotPIDController.setD(0.0);
+    pivotPIDController.setFF(0);
     pivotPIDController.setPositionPIDWrappingEnabled(true);
     pivotPIDController.setPositionPIDWrappingMaxInput(1);
     pivotPIDController.setPositionPIDWrappingMinInput(0);
@@ -97,17 +98,18 @@ public class Manipulator extends SubsystemBase {
     telescopingConfig = new TalonFXConfiguration();
     telescopingLimitSwitchConfigs = new SoftwareLimitSwitchConfigs();
     // telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
-    // telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 2;
+    // telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 0;
     // telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
-    // telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -240;
+    // telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -94;
 
+  
 
     telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
     telescopingMotor.getConfigurator().apply(telescopingConfig);
     m_request = new VoltageOut(0);
     
 
-    teleSlot0configs.kP = 0.09;
+    teleSlot0configs.kP = 0.06;
     teleSlot0configs.kI = 0;
     teleSlot0configs.kD = 0;
 
@@ -122,7 +124,7 @@ public class Manipulator extends SubsystemBase {
   @Override
   public void periodic() {
     rotorPositionSignal = telescopingMotor.getRotorPosition();
-    telescopingPos = -rotorPositionSignal.getValue();
+    telescopingPos = rotorPositionSignal.getValue();
     // Gear ratio of pivot 150 to 1
     SmartDashboard.putBoolean("Cone Sensor", coneSensor.get());
     SmartDashboard.putBoolean("Cube Sensor", cubeSensor.get());
@@ -145,7 +147,7 @@ public class Manipulator extends SubsystemBase {
   // Intake Functions
   public void cubeIntake() {
     ManipulatorConstants.IS_JESSICA_DUMB = true;
-    intakeMotor.set(0.5);
+    intakeMotor.set(0.4);
   }
 
   public void enabelSoftLimit(){

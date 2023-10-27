@@ -44,8 +44,7 @@ public class MovePivot extends CommandBase {
   @Override
   public boolean isFinished() {
     SmartDashboard.putNumber("Jayden Sun is bronze", Math.abs(manipulator.getPivotEncoder()) - value);
-    if (Math.abs(manipulator.getPivotEncoder() - value) < 0.005){
-      System.out.println("shawn gazin sucks at valorant ******************");
+    if (Math.abs(manipulator.getPivotEncoder() - value) < 0.007){
       return true;
     }
     return false;

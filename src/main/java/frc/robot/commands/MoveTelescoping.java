@@ -14,6 +14,7 @@ public class MoveTelescoping extends CommandBase {
   /** Creates a new MoveTelescoping. */
   private Manipulator manipulator;
   private LogitechGamingPad pad;
+  private double pivotDrift;
   public MoveTelescoping(Manipulator manipulator, LogitechGamingPad pad) {
     addRequirements(manipulator);
     this.manipulator = manipulator;
@@ -28,26 +29,22 @@ public class MoveTelescoping extends CommandBase {
   @Override
   public void execute() {
 
+    if(Math.abs(pad.getLeftAnalogYAxis()) > 0.07){
     manipulator.setTelescopingSpeed(7 * pad.getLeftAnalogYAxis());
-
-    if (Math.abs(-pad.getRightAnalogYAxis()) > 0.05 )
+    }
+    else
+    {
+      manipulator.setTelescopingSpeed(0);
+    }
+    if (Math.abs(-pad.getRightAnalogYAxis()) > 0.1)
     {
     manipulator.setPivotSpeed(-pad.getRightAnalogYAxis());
     }
     else
     {
-      manipulator.setPivotSpeed(0);
+      pivotDrift = 0.044 * manipulator.getPivotEncoder();
+      manipulator.setPivotSpeed(pivotDrift);
     }
-    // else
-    // {
-    //   manipulator.setPivotSpeed(0);
-    //   manipulator.holdPivot();
-    // }
-
-    // if (!manipulator.getConeSensor())
-    // {
-    //   manipulator.holdCone();
-    // }
 
     if (ManipulatorConstants.IS_JESSICA_DUMB){
       // manipulator.holdCube();

@@ -16,11 +16,12 @@ public class IntakeGround extends SequentialCommandGroup {
   public IntakeGround(Manipulator manipulator) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
+    //Add timeout
     addCommands(
-      new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION).withTimeout(2),
-      new MoveTele(manipulator, ManipulatorConstants.TELESCOPING_GROUND_INTAKE_POSITION).withTimeout(2),
-      new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION2).withTimeout(1),
-      new IntakeCube(manipulator)
+      new IntakeCube(manipulator).withTimeout(0.1),
+      new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION),
+      new MoveTele(manipulator, ManipulatorConstants.TELESCOPING_GROUND_INTAKE_POSITION)
     );
   }
 }
