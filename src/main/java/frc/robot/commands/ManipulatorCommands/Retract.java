@@ -18,7 +18,7 @@ public class Retract extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(manipulator::stopIntake),
-      new MoveTele(manipulator, 0).withTimeout(1.7),
+      new MoveTele(manipulator, 0).withTimeout(1.1),
       new MovePivot(manipulator, 0)
     );
   }

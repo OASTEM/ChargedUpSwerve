@@ -44,7 +44,9 @@ import frc.robot.Constants;
 import frc.robot.Autos.BalanceAuto;
 import frc.robot.Autos.BalanceAutoBackward;
 import frc.robot.Autos.FullAuto;
+import frc.robot.Autos.HighScoreBalance;
 import frc.robot.Autos.NoBalanceAuto;
+import frc.robot.Autos.ScoreHigh;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.ManipulatorCommands.ScoreCube;
 import frc.robot.commands.ManipulatorCommands.ScoringPosition;
@@ -55,7 +57,6 @@ import frc.robot.commands.ManipulatorCommands.MoveHigh;
 import frc.robot.commands.ManipulatorCommands.MoveLow;
 import frc.robot.commands.ManipulatorCommands.MoveMid;
 import frc.robot.commands.ManipulatorCommands.Retract;
-import frc.robot.commands.ManipulatorCommands.ScoreCone;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -87,6 +88,8 @@ public class RobotContainer {
   private final JoystickButton opPadY;
   private final JoystickButton opRightBumper;
   private final JoystickButton opLeftBumper;
+  private final JoystickButton opPad3line;
+  private final JoystickButton opBox;
 
   private final PathPlannerTrajectory redPath;
   private final PathPlannerTrajectory bluePath;
@@ -95,6 +98,8 @@ public class RobotContainer {
   private final BalanceAutoBackward balanceAutoBackward;
   private final FullAuto fullAuto;
   private final NoBalanceAuto noBalanceAuto;
+  private final ScoreHigh scoreHigh;
+  private final HighScoreBalance highScoreBalance;
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   /**
@@ -116,13 +121,15 @@ public class RobotContainer {
     rightBumper = new JoystickButton(pad, 6);
     leftBumper = new JoystickButton(pad, 5);
 
+
     opPadA = new JoystickButton(opPad, 1);
     opPadB = new JoystickButton(opPad, 2);
     opPadX = new JoystickButton(opPad, 3);
     opPadY = new JoystickButton(opPad, 4);
     opRightBumper = new JoystickButton(opPad, 6);
     opLeftBumper = new JoystickButton(opPad, 5);
-  
+    opPad3line = new JoystickButton(opPad, 8);
+    opBox = new JoystickButton(opPad, 7);  
 
     // NamedCommands.registerCommand("Auto Balance", new BalanceFront(swerveSubsystem));
     
@@ -141,12 +148,16 @@ public class RobotContainer {
     balanceAutoBackward = new BalanceAutoBackward(swerveSubsystem, manipulator);
     fullAuto = new FullAuto(swerveSubsystem, manipulator);
     noBalanceAuto = new NoBalanceAuto(swerveSubsystem, manipulator);
+    scoreHigh = new ScoreHigh(swerveSubsystem, manipulator);
+    highScoreBalance = new HighScoreBalance(swerveSubsystem, manipulator);
 
     //Configure auto chooser
     m_chooser.setDefaultOption("Balance Auto", balanceAuto);
     m_chooser.addOption("Balance Auto Backward", balanceAutoBackward);
     m_chooser.addOption("Full Auto", fullAuto);
     m_chooser.addOption("No Balance Auto", noBalanceAuto);
+    m_chooser.addOption("Score High", scoreHigh);
+    m_chooser.addOption("High Score Balance", highScoreBalance);
     SmartDashboard.putData("Auto Chooser", m_chooser);
 
     // Configure the button bindings

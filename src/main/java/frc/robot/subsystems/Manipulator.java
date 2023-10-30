@@ -5,13 +5,16 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.DeviceIdentifier;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.AbsoluteEncoder;
@@ -43,12 +46,12 @@ public class Manipulator extends SubsystemBase {
 
   private TalonFX telescopingMotor;
   private TalonFXConfiguration telescopingConfig;
+  private TalonFXConfigurator teleConfigurator;
+  private MotorOutputConfigs motorOutputConfigs;
   private SoftwareLimitSwitchConfigs telescopingLimitSwitchConfigs;
   
   private SparkMaxPIDController pivotPIDController;
-  // private RelativeEncoder pivotEncoder;
 
-  private SparkMaxPIDController telescopingPIDController; 
 
   private DigitalInput cubeSensor;
   private DigitalInput coneSensor;
@@ -67,16 +70,17 @@ public class Manipulator extends SubsystemBase {
     coneSensor = new DigitalInput(1);
 
     pivotMotor = new CANSparkMax(MotorConstants.PIVOT_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
+    absoluteEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    absoluteEncoder.setInverted(true);
+    absoluteEncoder.setZeroOffset(0.67);
     pivotMotor.setInverted(true);
     pivotMotor.setOpenLoopRampRate(0.4);
     pivotMotor.setClosedLoopRampRate(0.4);
     pivotMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     pivotMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 0.29f);
-    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, 0); //shawn is doo doo
+    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 0.40f);
+    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.1f); //shawn is doo doo
     telescopingMotor = new TalonFX(MotorConstants.TELE_ARM_MOTOR_ID);
-    absoluteEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    absoluteEncoder.setInverted(true);
 
     pivotPIDController = pivotMotor.getPIDController();
     pivotPIDController.setFeedbackDevice(absoluteEncoder);
@@ -96,21 +100,24 @@ public class Manipulator extends SubsystemBase {
     // Telescpoing Arm
     Slot0Configs teleSlot0configs = new Slot0Configs();
     telescopingConfig = new TalonFXConfiguration();
+    motorOutputConfigs = new MotorOutputConfigs();
+    motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+
     telescopingLimitSwitchConfigs = new SoftwareLimitSwitchConfigs();
-    // telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
-    // telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 0;
-    // telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
-    // telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -94;
-
+    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
+    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_FORWARD;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_REVERSE;
   
-
+    
     telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
     telescopingMotor.getConfigurator().apply(telescopingConfig);
+    telescopingMotor.getConfigurator().apply(motorOutputConfigs);
     m_request = new VoltageOut(0);
     
 
     teleSlot0configs.kP = 0.06;
-    teleSlot0configs.kI = 0;
+    teleSlot0configs.kI = 0.00001;
     teleSlot0configs.kD = 0;
 
 
@@ -125,13 +132,13 @@ public class Manipulator extends SubsystemBase {
   public void periodic() {
     rotorPositionSignal = telescopingMotor.getRotorPosition();
     telescopingPos = rotorPositionSignal.getValue();
-    // Gear ratio of pivot 150 to 1
+
     SmartDashboard.putBoolean("Cone Sensor", coneSensor.get());
     SmartDashboard.putBoolean("Cube Sensor", cubeSensor.get());
     SmartDashboard.putNumber("Pivot Encoderr", absoluteEncoder.getPosition());
     SmartDashboard.putNumber("Telescoping Encoderr", telescopingPos);
     SmartDashboard.putNumber("ScorePos", Constants.ManipulatorConstants.scoring_pos);
-
+    SmartDashboard.putNumber("JESSICA IS SUPER SMART", pivotMotor.getEncoder().getPosition());
     // SmartDashboard.putNumber("Telescoping Current", telescopingMotor.getStatorCurrent().getValue());
     
   }
@@ -147,7 +154,7 @@ public class Manipulator extends SubsystemBase {
   // Intake Functions
   public void cubeIntake() {
     ManipulatorConstants.IS_JESSICA_DUMB = true;
-    intakeMotor.set(0.4);
+    intakeMotor.set(ManipulatorConstants.CUBE_INTAKE_SPEED);
   }
 
   public void enabelSoftLimit(){
@@ -163,23 +170,9 @@ public class Manipulator extends SubsystemBase {
     telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = false;
   }
 
-  public void coneIntake() {
-    // if (coneSensor.get()){
-      // intakeMotor.set(0);
-    // }
-    // else {
-    
-    intakeMotor.set(-0.6);
-    // }
-  }
-
-  public void holdCone(){
-    intakeMotor.set(-0.1);
-  }
-
   public void cubeScore() {
     ManipulatorConstants.IS_JESSICA_DUMB = false;
-    intakeMotor.set(-0.6);
+    intakeMotor.set(ManipulatorConstants.CUBE_SCORE_SPEED);
   }
 
   public void coneScore() {
@@ -222,12 +215,6 @@ public class Manipulator extends SubsystemBase {
   public void setTelescopingPosition(double position) {
     // telescopingMotor.setRotorPosition(position); // does this work?
     telescopingMotor.setControl(new PositionDutyCycle(position));
-  }
-
-  public void initTelescopingPIDController(PID pid) {
-    telescopingPIDController.setP(pid.p);
-    telescopingPIDController.setI(pid.i);
-    telescopingPIDController.setD(pid.d);
   }
 
   // sensor functions

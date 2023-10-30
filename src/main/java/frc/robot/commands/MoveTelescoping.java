@@ -29,7 +29,7 @@ public class MoveTelescoping extends CommandBase {
   @Override
   public void execute() {
 
-    if(Math.abs(pad.getLeftAnalogYAxis()) > 0.07){
+    if(Math.abs(pad.getLeftAnalogYAxis()) > 0.1){
     manipulator.setTelescopingSpeed(7 * pad.getLeftAnalogYAxis());
     }
     else
@@ -38,7 +38,7 @@ public class MoveTelescoping extends CommandBase {
     }
     if (Math.abs(-pad.getRightAnalogYAxis()) > 0.1)
     {
-    manipulator.setPivotSpeed(-pad.getRightAnalogYAxis());
+    manipulator.setPivotSpeed(-pad.getRightAnalogYAxis() * 2);
     }
     else
     {

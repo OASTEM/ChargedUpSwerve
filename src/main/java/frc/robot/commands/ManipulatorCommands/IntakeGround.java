@@ -20,8 +20,10 @@ public class IntakeGround extends SequentialCommandGroup {
     //Add timeout
     addCommands(
       new IntakeCube(manipulator).withTimeout(0.1),
+      new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION2).withTimeout(0.9),
+      new MoveTele(manipulator, ManipulatorConstants.TELESCOPING_GROUND_INTAKE_POSITION).withTimeout(0.5),
       new MovePivot(manipulator, ManipulatorConstants.PIVOT_GROUND_INTAKE_POSITION),
-      new MoveTele(manipulator, ManipulatorConstants.TELESCOPING_GROUND_INTAKE_POSITION)
+      new IntakeCube(manipulator)
     );
   }
 }

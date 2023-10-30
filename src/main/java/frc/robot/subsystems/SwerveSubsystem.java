@@ -158,6 +158,10 @@ public class SwerveSubsystem extends SubsystemBase {
     pidggy.reset();
   }
 
+  public void heading180() {
+    pidggy.setYaw(180);
+  }
+
   public void resetDriveEncoders() {
     for (int i = 0; i < modules.length; i++) {
       modules[i].resetEncoders();

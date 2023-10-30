@@ -39,19 +39,19 @@ public class PadDrive extends CommandBase {
     double y;
     double x;
 
-    if (Constants.MotorConstants.SLOW_MODE) {
-      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.5;
-      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.5;
-    }
+    // if (Constants.MotorConstants.SLOW_MODE) {
+    //   y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.5;
+    //   x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.5;
+    // }
 
-    else if (Constants.MotorConstants.AACORN_MODE) {
-      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.85;
-      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.85;
+    if (Constants.MotorConstants.AACORN_MODE) {
+      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * MotorConstants.AACORN_SPEED;
+      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * MotorConstants.AACORN_SPEED;
     }
 
     else {
-      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED;
-      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED;
+      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.6;
+      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.6;
     }
 
     if (Math.abs(pad.getLeftAnalogXAxis()) < Constants.SwerveConstants.JOYSTICK_DEADBAND) {
@@ -71,9 +71,9 @@ public class PadDrive extends CommandBase {
     // If the right joystick is within the deadband, don't turn
     if (Math.abs(pad.getRightAnalogXAxis()) <= controller_deadband) {
       if (MotorConstants.HEADING > (swerveSubsystem.pgetHeading() + heading_deadband)) {
-        turn = -MotorConstants.MAX_ANGULAR_SPEED * 0.5;
+        turn = -MotorConstants.MAX_ANGULAR_SPEED;
       } else if (MotorConstants.HEADING < (swerveSubsystem.pgetHeading() - heading_deadband)) {
-        turn = MotorConstants.MAX_ANGULAR_SPEED * 0.5;
+        turn = MotorConstants.MAX_ANGULAR_SPEED;
       } else {
         turn = 0;
       }
@@ -86,7 +86,7 @@ public class PadDrive extends CommandBase {
       MotorConstants.rotation = 0;
     }
 
-    turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED;
+    turn = Constants.MotorConstants.rotation * MotorConstants.MAX_ANGULAR_SPEED * 2;
 
     if (Constants.MotorConstants.AACORN_MODE) {
       swerveSubsystem.drive(x * Constants.MotorConstants.AACORN_SPEED, y * Constants.MotorConstants.AACORN_SPEED, turn,isFieldOriented);

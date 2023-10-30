@@ -60,7 +60,7 @@ public final class Constants {
     public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER = 0.1;
     public static final double SPEED_CONSTANT = 0.6; //0.4
-    public static final double AACORN_SPEED = 0.85;
+    public static final double AACORN_SPEED = 0.95;
     public static final double TURN_CONSTANT = 0.5; //0.3
 
     public static double desiredAngle = 0.0;
@@ -69,7 +69,7 @@ public final class Constants {
     public static double rotation = 0.0;
     public static double HEADING = 0;
     public static boolean SLOW_MODE = false;
-    public static boolean AACORN_MODE = false;
+    public static boolean AACORN_MODE = true;
   }
 
   public static class SwerveConstants {
@@ -119,8 +119,8 @@ public final class Constants {
 
   public static class ManipulatorConstants {
     public static final int INTAKE_MOTOR_ID = 13;
-    public static final double INTAKE_SPEED = 1.0;
-    public static final double REVERSE_INTAKE_SPEED = -1.0;
+    public static final double CUBE_INTAKE_SPEED = 0.5;
+    public static final double CUBE_SCORE_SPEED = -0.8;
     public static boolean IS_JESSICA_DUMB = false;
     
     // Magic Number Constants
@@ -141,22 +141,22 @@ public final class Constants {
     public static final double INTAKE_MOTOR_SPEED = 0.4;
 
     // Intaking Constants
-    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.106;
-    public static final double PIVOT_GROUND_INTAKE_POSITION2 = 0.086;
-    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -63;
+    public static final double PIVOT_GROUND_INTAKE_POSITION = 0.17;
+    public static final double PIVOT_GROUND_INTAKE_POSITION2 = 0.22;
+    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -52;
 
-    public static final double PIVOT_FEEDER_STATION = 0.238092005252838;
+    public static final double PIVOT_FEEDER_STATION = 0.338092005252838;
     public static final double TELE_FEEDER_STATION = 0.0;
     
     // Scoring Constants
-    public static final double PIVOT_LOW_POSITION = 0.1;
+    public static final double PIVOT_LOW_POSITION = 0.2;
 
-    public static final double PIVOT_MID_POSITION = 0.22;
-    public static final double PIVOT_HIGH_POSITION = 0.270;
+    public static final double PIVOT_MID_POSITION = 0.31;
+    public static final double PIVOT_HIGH_POSITION = 0.39;
     public static final double TELE_LOW_POSITION = -0.0;
     public static final double TELE_MID_POSITION = 0; // -25 //5.823
 
-    public static final double TELE_HIGH_POSITION = -235.58;
+    public static final double TELE_HIGH_POSITION = -30;
     public static final double PIVOT_RETRACTED_POSITION = 0.0;
     public static final double PIVOT_GROUND_EXTENDED_POSITION = 0.0;
 
@@ -165,6 +165,9 @@ public final class Constants {
     // Sensor IDs
     public static final int INTAKE_SENSOR_ID = 0;
     public static final int INTAKE_SENSOR_ID_2 = 1;
+
+    public static final double TELESCOPING_SOFT_LIMIT_FORWARD = 0;
+    public static final double TELESCOPING_SOFT_LIMIT_REVERSE = -94;
   }
 
   public static class DebugMode{
