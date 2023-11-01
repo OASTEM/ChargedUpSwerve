@@ -182,9 +182,11 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
-    padX.onTrue(new BalanceFront(swerveSubsystem));
-    rightBumper.whileTrue(new InstantCommand(manipulator::disableSoftLimit));
-    leftBumper.onTrue(new InstantCommand(manipulator::enabelSoftLimit));
+    // padX.onTrue(new BalanceFront(swerveSubsystem));
+    padX.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
+
+    // rightBumper.whileTrue(new InstantCommand(manipulator::disableSoftLimit));
+    // leftBumper.onTrue(new InstantCommand(manipulator::enabelSoftLimit));
 
     // opPadA.whileTrue(new StopIntakeMotor(manipulator));
     // opPadB.whileTrue(new IntakeGround(manipulator));
@@ -200,6 +202,8 @@ public class RobotContainer {
     opRightBumper.whileFalse(new InstantCommand(manipulator::stopIntake));
     opLeftBumper.whileTrue(new ScoreCube(manipulator));
 
+    opPad3line.onTrue(new InstantCommand(manipulator::enabelSoftLimit));
+    opBox.onTrue(new InstantCommand(manipulator::disableSoftLimit));
   }
   
   /**

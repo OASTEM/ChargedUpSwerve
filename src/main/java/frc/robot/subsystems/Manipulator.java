@@ -160,16 +160,17 @@ public class Manipulator extends SubsystemBase {
   public void enabelSoftLimit(){
     telescopingMotor.setRotorPosition(0);
     telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
-    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 2;
+    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 0;
     telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
-    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -240;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -94;
+    telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
   }
 
   public void disableSoftLimit(){
     telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = false;  
     telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = false;
+    telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
   }
-
   public void cubeScore() {
     ManipulatorConstants.IS_JESSICA_DUMB = false;
     intakeMotor.set(ManipulatorConstants.CUBE_SCORE_SPEED);
