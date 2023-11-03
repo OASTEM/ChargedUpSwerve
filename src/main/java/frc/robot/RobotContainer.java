@@ -26,6 +26,7 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.subsystems.Jevois;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Manipulator;
@@ -45,6 +46,7 @@ import frc.robot.Autos.BalanceAuto;
 import frc.robot.Autos.BalanceAutoBackward;
 import frc.robot.Autos.FullAuto;
 import frc.robot.Autos.HighScoreBalance;
+import frc.robot.Autos.HighScoreDriveOut;
 import frc.robot.Autos.NoBalanceAuto;
 import frc.robot.Autos.ScoreHigh;
 import frc.robot.Constants.SwerveConstants;
@@ -100,6 +102,8 @@ public class RobotContainer {
   private final NoBalanceAuto noBalanceAuto;
   private final ScoreHigh scoreHigh;
   private final HighScoreBalance highScoreBalance;
+  private final HighScoreDriveOut highScoreDriveOut;
+  private final Jevois jevois = new Jevois();
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   /**
@@ -150,7 +154,7 @@ public class RobotContainer {
     noBalanceAuto = new NoBalanceAuto(swerveSubsystem, manipulator);
     scoreHigh = new ScoreHigh(swerveSubsystem, manipulator);
     highScoreBalance = new HighScoreBalance(swerveSubsystem, manipulator);
-
+    highScoreDriveOut = new HighScoreDriveOut(swerveSubsystem, manipulator);
     //Configure auto chooser
     m_chooser.setDefaultOption("Balance Auto", balanceAuto);
     m_chooser.addOption("Balance Auto Backward", balanceAutoBackward);
@@ -158,6 +162,7 @@ public class RobotContainer {
     m_chooser.addOption("No Balance Auto", noBalanceAuto);
     m_chooser.addOption("Score High", scoreHigh);
     m_chooser.addOption("High Score Balance", highScoreBalance);
+    m_chooser.addOption("High Score Drive out", highScoreDriveOut);
     SmartDashboard.putData("Auto Chooser", m_chooser);
 
     // Configure the button bindings

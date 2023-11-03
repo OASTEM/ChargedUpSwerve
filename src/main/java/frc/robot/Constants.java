@@ -143,7 +143,7 @@ public final class Constants {
     // Intaking Constants
     public static final double PIVOT_GROUND_INTAKE_POSITION = 0.17;
     public static final double PIVOT_GROUND_INTAKE_POSITION2 = 0.22;
-    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -52;
+    public static final double TELESCOPING_GROUND_INTAKE_POSITION = -58; //-52
 
     public static final double PIVOT_FEEDER_STATION = 0.338092005252838;
     public static final double TELE_FEEDER_STATION = 0.0;

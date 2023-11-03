@@ -4,7 +4,15 @@
 
 package frc.robot;
 
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +32,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  Thread visionThread;
   // private static final String kBalanceBackwardAuto = "Balance Auto Backward";
   // private static final String kBalanceAuto = "Balance Auto";
   // private static final String kFullAuto = "Full Auto";
@@ -42,6 +51,25 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    // visionThread = new Thread(
+    //   () -> {
+    //     UsbCamera camera = CameraServer.startAutomaticCapture();
+    //     camera.setResolution(640, 480);
+    //     CvSink cvSink = CameraServer.getVideo();
+    //     CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+    //     Mat mat = new Mat();
+    //     while (!Thread.interrupted()) {
+    //       if (cvSink.grabFrame(mat) == 0){
+    //         outputStream.notifyError(cvSink.getError());
+    //         continue;
+    //       }
+    //       Imgproc.rectangle(mat, new Point(100, 100), new Point(400,400), new Scalar(255,255,255), 5);
+    //       outputStream.putFrame(mat);
+    //     }
+    //   }
+    // );
+    // visionThread.setDaemon(true);
+    // visionThread.start();
     // CameraServer.startAutomaticCapture();
     // m_chooser.setDefaultOption("Balance Auto Backward", kBalanceBackwardAuto);
     // m_chooser.addOption("Balance Auto", kBalanceAuto);

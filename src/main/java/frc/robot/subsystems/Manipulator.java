@@ -108,14 +108,12 @@ public class Manipulator extends SubsystemBase {
     telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_FORWARD;
     telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
     telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_REVERSE;
-  
-    
+
     telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
     telescopingMotor.getConfigurator().apply(telescopingConfig);
     telescopingMotor.getConfigurator().apply(motorOutputConfigs);
     m_request = new VoltageOut(0);
     
-
     teleSlot0configs.kP = 0.06;
     teleSlot0configs.kI = 0.00001;
     teleSlot0configs.kD = 0;
@@ -158,18 +156,36 @@ public class Manipulator extends SubsystemBase {
   }
 
   public void enabelSoftLimit(){
-    telescopingMotor.setRotorPosition(0);
-    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
-    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 0;
-    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
-    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -94;
-    telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
+    // telescopingConfig = new TalonFXConfiguration();
+    // motorOutputConfigs = new MotorOutputConfigs();
+
+    // motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+    
+  
+    // telescopingMotor.setRotorPosition(0);
+    // telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
+    // telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = 0;
+    // telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
+    // telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = -94;
+
+    // telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
+    // telescopingMotor.getConfigurator().apply(telescopingConfig);
+    // telescopingMotor.getConfigurator().apply(motorOutputConfigs);
+    
   }
 
   public void disableSoftLimit(){
-    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = false;  
-    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = false;
-    telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
+    // telescopingConfig = new TalonFXConfiguration();
+    // motorOutputConfigs = new MotorOutputConfigs();
+
+    // motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+
+    // telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = false;  
+    // telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = false;
+
+    // telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
+    // telescopingMotor.getConfigurator().apply(telescopingConfig);
+    // telescopingMotor.getConfigurator().apply(motorOutputConfigs);
   }
   public void cubeScore() {
     ManipulatorConstants.IS_JESSICA_DUMB = false;
