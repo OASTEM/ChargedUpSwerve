@@ -140,8 +140,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    // swerveSubsystem.addRotorPositionsforModules();
     m_robotContainer.addRotorPositions();
+    // m_robotContainer.turnRobotHeading();
     // swerveSubsystem.zeroHeading();
   }
 

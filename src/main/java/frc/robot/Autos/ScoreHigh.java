@@ -27,8 +27,7 @@ public class ScoreHigh extends SequentialCommandGroup {
       new MovePivot(manipulator, ManipulatorConstants.PIVOT_HIGH_POSITION).withTimeout(2),
       new MoveTele(manipulator, ManipulatorConstants.TELE_HIGH_POSITION).withTimeout(1),
       new ScoreCube(manipulator).withTimeout(0.3),
-      new Retract(manipulator).withTimeout(3),
-      new InstantCommand(swerveSubsystem::heading180)
+      new Retract(manipulator).withTimeout(3)
     );
   }
 }

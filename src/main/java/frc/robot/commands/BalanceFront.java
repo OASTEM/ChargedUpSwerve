@@ -35,8 +35,9 @@ public class BalanceFront extends CommandBase {
                
     swerve.stop();
     swerve.zeroHeading();
+    System.out.println("BalanceFront Init: " + swerve.getPitch());
     }
-
+    System.out.println("***************************************************************Line 39, BalanceFront.java, asdf");
   } 
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,9 +47,9 @@ public class BalanceFront extends CommandBase {
     // swerve.setLeftSpeed(0.3);
     // swerve.setBackLeftSpeed();
     // swerve.setRightSpeed(0.3);
-    //ERRROR
+    //ERROR
     error = swerve.getPitch(); // + 2; //calibration constant
-    // System.out.println(error);
+    System.out.println("****************************" + error);
     double effort = balancePID.calculate(goal, error);
     if (effort < -maxEffort) {
       effort = -maxEffort;
@@ -58,12 +59,15 @@ public class BalanceFront extends CommandBase {
     
     double speed = effort * 5;
     swerve.drive(speed, 0, 0, true);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     swerve.stop();
+    swerve.heading180();
+    System.out.println("*************************************balance front stpop");
     // balancePID = new PID(p, i, d,0);
   }
 
@@ -73,5 +77,3 @@ public class BalanceFront extends CommandBase {
     return false;
   }
 }
-
-

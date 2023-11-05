@@ -19,21 +19,21 @@ import frc.robot.subsystems.SwerveSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class HighScoreBalance extends SequentialCommandGroup {
-  /** Creates a new HighScoreBalance. */
-  public HighScoreBalance(SwerveSubsystem swerveSubsystem, Manipulator manipulator) {
+public class LowScoreBalance extends SequentialCommandGroup {
+  /** Creates a new LowScoreBalance. */
+  public LowScoreBalance(SwerveSubsystem swerveSubsystem, Manipulator manipulator) {
     // Add your commands in the addCommands() call, e.g.
-    // addCommands(\new FooCommand(), new BarCommand());
+    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(swerveSubsystem::zeroHeading),
       new InstantCommand(swerveSubsystem::addRotorPositionsforModules).withTimeout(0.5),
-      new MovePivot(manipulator, ManipulatorConstants.PIVOT_HIGH_POSITION).withTimeout(2),
-      new MoveTele(manipulator, ManipulatorConstants.TELE_HIGH_POSITION).withTimeout(1),
-      new ScoreCube(manipulator).withTimeout(0.3),
+      new MovePivot(manipulator, ManipulatorConstants.PIVOT_LOW_POSITION).withTimeout(2),
+      new MoveTele(manipulator, ManipulatorConstants.TELE_LOW_POSITION).withTimeout(0.2),
+      new ScoreCube(manipulator).withTimeout(1),
       new Retract(manipulator).withTimeout(3),
-      new DriveStraight(swerveSubsystem, -1, manipulator).withTimeout(3.1), // wut this
-      new BalanceFront(swerveSubsystem).withTimeout(5)
-      // new InstantCommand(swerveSubsystem::heading180)
+      new DriveStraight(swerveSubsystem, -1, manipulator).withTimeout(3), // wut this
+      new BalanceFront(swerveSubsystem),
+      new InstantCommand(swerveSubsystem::heading180)
     );
   }
 }

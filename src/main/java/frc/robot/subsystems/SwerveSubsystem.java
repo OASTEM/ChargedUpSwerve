@@ -162,6 +162,10 @@ public class SwerveSubsystem extends SubsystemBase {
     pidggy.setYaw(180);
   }
 
+  // public void resetPitch(){
+  //   pidggy.setYawPitchRoll(0,0,0);
+  // }
+
   public void resetDriveEncoders() {
     for (int i = 0; i < modules.length; i++) {
       modules[i].resetEncoders();
@@ -263,6 +267,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void driveStraight(double speed){
     this.drive(speed, 0.0, 0.0, true);
+  }
+
+  public void driveSide(double speed){
+    this.drive(0.0, speed, 0.0, true);
   }
 
 // Assuming this method is part of a drivetrain subsystem that provides the necessary methods

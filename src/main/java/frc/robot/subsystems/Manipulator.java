@@ -53,8 +53,8 @@ public class Manipulator extends SubsystemBase {
   private SparkMaxPIDController pivotPIDController;
 
 
-  private DigitalInput cubeSensor;
-  private DigitalInput coneSensor;
+  // private DigitalInput cubeSensor;
+  // private DigitalInput coneSensor;
   private double printlol = 0;
   private VoltageOut m_request;
   private double telescopingPos;
@@ -66,8 +66,8 @@ public class Manipulator extends SubsystemBase {
     intakeMotor = new CANSparkMax(MotorConstants.INTAKE_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
     intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-    cubeSensor = new DigitalInput(0);
-    coneSensor = new DigitalInput(1);
+    // cubeSensor = new DigitalInput(0);
+    // coneSensor = new DigitalInput(1);
 
     pivotMotor = new CANSparkMax(MotorConstants.PIVOT_MOTOR_ID, CANSparkMax.MotorType.kBrushless);
     absoluteEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -96,18 +96,19 @@ public class Manipulator extends SubsystemBase {
     // TO DO add soft limits
     telescopingMotor.setRotorPosition(0);
 
-
     // Telescpoing Arm
     Slot0Configs teleSlot0configs = new Slot0Configs();
     telescopingConfig = new TalonFXConfiguration();
     motorOutputConfigs = new MotorOutputConfigs();
     motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
 
+
     telescopingLimitSwitchConfigs = new SoftwareLimitSwitchConfigs();
-    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
-    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_FORWARD;
-    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
-    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_REVERSE;
+      telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
+      telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_FORWARD;
+      telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
+      telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_REVERSE;
+
 
     telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
     telescopingMotor.getConfigurator().apply(telescopingConfig);
@@ -131,8 +132,8 @@ public class Manipulator extends SubsystemBase {
     rotorPositionSignal = telescopingMotor.getRotorPosition();
     telescopingPos = rotorPositionSignal.getValue();
 
-    SmartDashboard.putBoolean("Cone Sensor", coneSensor.get());
-    SmartDashboard.putBoolean("Cube Sensor", cubeSensor.get());
+    // SmartDashboard.putBoolean("Cone Sensor", coneSensor.get());
+    // SmartDashboard.putBoolean("Cube Sensor", cubeSensor.get());
     SmartDashboard.putNumber("Pivot Encoderr", absoluteEncoder.getPosition());
     SmartDashboard.putNumber("Telescoping Encoderr", telescopingPos);
     SmartDashboard.putNumber("ScorePos", Constants.ManipulatorConstants.scoring_pos);
@@ -235,11 +236,11 @@ public class Manipulator extends SubsystemBase {
   }
 
   // sensor functions
-  public boolean getConeSensor() {
-    return coneSensor.get();
-  }
+  // public boolean getConeSensor() {
+  //   return coneSensor.get();
+  // }
 
-  public boolean getCubeSensor() {
-    return cubeSensor.get();
-  }
+  // public boolean getCubeSensor() {
+  //   return cubeSensor.get();
+  // }
 }

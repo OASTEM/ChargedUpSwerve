@@ -200,7 +200,7 @@ public class ShuffleboardComponents extends SubsystemBase {
     private void updateDriver(){
         slowMode.getEntry().setBoolean(Constants.MotorConstants.SLOW_MODE);
         aacornMode.getEntry().setBoolean(Constants.MotorConstants.AACORN_MODE);
-        // pitch.getEntry().setDouble(swerveSubsystem.getHeading());
+        pitch.getEntry().setDouble(swerveSubsystem.getPitch());
         yaw.getEntry().setDouble(swerveSubsystem.getYaw());
         // fusedHeading.getEntry().setDouble(swerveSubsystem.getHeading());
         canCoder9.getEntry().setDouble(swerveSubsystem.getCanCoderValues(MotorConstants.FRONT_LEFT_CAN_CODER_ID));

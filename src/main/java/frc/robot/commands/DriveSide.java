@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Manipulator;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class DriveStraight extends CommandBase {
-  /** Creates a new DriveStraight. */
+public class DriveSide extends CommandBase {
+  /** Creates a new DriveSide. */
   private SwerveSubsystem swerveSubsystem;
   private double speed;
   private Manipulator manipulator;
 
-  public DriveStraight(SwerveSubsystem swerveSubsystem, double speed, Manipulator manipulator) {
+  public DriveSide(SwerveSubsystem swerveSubsystem, double speed, Manipulator manipulator) {
     this.swerveSubsystem = swerveSubsystem;
     this.speed = speed;
     this.manipulator = manipulator;
@@ -32,8 +32,8 @@ public class DriveStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    swerveSubsystem.driveStraight(speed);
-    System.out.println("DriveStraight: " + swerveSubsystem.getPitch());
+    swerveSubsystem.driveSide(speed);
+    System.out.println("DriveSide: " + swerveSubsystem.getPitch());
     manipulator.holdPivot();
   }
 

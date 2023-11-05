@@ -46,7 +46,9 @@ import frc.robot.Autos.BalanceAuto;
 import frc.robot.Autos.BalanceAutoBackward;
 import frc.robot.Autos.FullAuto;
 import frc.robot.Autos.HighScoreBalance;
-import frc.robot.Autos.HighScoreDriveOut;
+import frc.robot.Autos.HighScoreDriveOutLeft;
+import frc.robot.Autos.HighScoreDriveOutRight;
+import frc.robot.Autos.LowScoreBalance;
 import frc.robot.Autos.NoBalanceAuto;
 import frc.robot.Autos.ScoreHigh;
 import frc.robot.Constants.SwerveConstants;
@@ -102,8 +104,10 @@ public class RobotContainer {
   private final NoBalanceAuto noBalanceAuto;
   private final ScoreHigh scoreHigh;
   private final HighScoreBalance highScoreBalance;
-  private final HighScoreDriveOut highScoreDriveOut;
-  private final Jevois jevois = new Jevois();
+  private final HighScoreDriveOutRight highScoreDriveOutRight;
+  private final HighScoreDriveOutLeft highScoreDriveOutLeft;
+  private final LowScoreBalance lowScoreBalance;
+  // private final Jevois jevois = new Jevois();
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   /**
@@ -154,7 +158,9 @@ public class RobotContainer {
     noBalanceAuto = new NoBalanceAuto(swerveSubsystem, manipulator);
     scoreHigh = new ScoreHigh(swerveSubsystem, manipulator);
     highScoreBalance = new HighScoreBalance(swerveSubsystem, manipulator);
-    highScoreDriveOut = new HighScoreDriveOut(swerveSubsystem, manipulator);
+    highScoreDriveOutRight = new HighScoreDriveOutRight(swerveSubsystem, manipulator);
+    highScoreDriveOutLeft = new HighScoreDriveOutLeft(swerveSubsystem, manipulator);
+    lowScoreBalance = new LowScoreBalance(swerveSubsystem, manipulator);
     //Configure auto chooser
     m_chooser.setDefaultOption("Balance Auto", balanceAuto);
     m_chooser.addOption("Balance Auto Backward", balanceAutoBackward);
@@ -162,7 +168,9 @@ public class RobotContainer {
     m_chooser.addOption("No Balance Auto", noBalanceAuto);
     m_chooser.addOption("Score High", scoreHigh);
     m_chooser.addOption("High Score Balance", highScoreBalance);
-    m_chooser.addOption("High Score Drive out", highScoreDriveOut);
+    m_chooser.addOption("High Score Drive out left", highScoreDriveOutLeft);
+    m_chooser.addOption("High Score Drive out right", highScoreDriveOutRight);
+    m_chooser.addOption("Low Score Balance", lowScoreBalance);
     SmartDashboard.putData("Auto Chooser", m_chooser);
 
     // Configure the button bindings
@@ -231,5 +239,8 @@ public class RobotContainer {
 
   public void addRotorPositions(){
     swerveSubsystem.addRotorPositionsforModules();
+  }
+  public void turnRobotHeading(){
+    new InstantCommand(swerveSubsystem::heading180);
   }
 }
