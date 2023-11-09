@@ -104,10 +104,10 @@ public class Manipulator extends SubsystemBase {
 
 
     telescopingLimitSwitchConfigs = new SoftwareLimitSwitchConfigs();
-      telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
-      telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_FORWARD;
-      telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
-      telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_REVERSE;
+    telescopingLimitSwitchConfigs.ForwardSoftLimitEnable = true;  
+    telescopingLimitSwitchConfigs.ForwardSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_FORWARD;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitEnable = true;
+    telescopingLimitSwitchConfigs.ReverseSoftLimitThreshold = ManipulatorConstants.TELESCOPING_SOFT_LIMIT_REVERSE;
 
 
     telescopingConfig.SoftwareLimitSwitch = telescopingLimitSwitchConfigs;
